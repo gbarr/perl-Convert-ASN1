@@ -7,7 +7,7 @@
 use Convert::ASN1;
 BEGIN { require 't/funcs.pl' }
 
-print "1..7\n";
+print "1..10\n";
 
 btest 1, $asn  = Convert::ASN1->new;
 btest 2, $asn->prepare( <<'[TheEnd]' ) or warn $asn->error;
