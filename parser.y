@@ -26,7 +26,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.y,v 1.10 2003/05/06 21:29:07 gbarr Exp $
+;# $Id: parser.y,v 1.11 2003/05/07 15:13:27 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -133,10 +133,10 @@ seqset	: SEQUENCE
 	| SET
 	;
 
-selem	: seqset OF class plicit sselem
+selem	: seqset OF class plicit sselem optional
 		{
 		  $5->[cTAG] = $3;
-		  @{$$ = []}[cTYPE,cCHILD,cLOOP] = ($1, [$5], 1);
+		  @{$$ = []}[cTYPE,cCHILD,cLOOP,cOPT] = ($1, [$5], 1, $6);
 		  $$ = explicit($$) if $4;
 		}
 	;

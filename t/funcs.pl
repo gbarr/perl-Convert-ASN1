@@ -34,5 +34,19 @@ sub btest ($$) {
   $_[1]
 }
 
+use Data::Dumper;
+
+sub rtest ($$$) {
+  local $Data::Dumper::Sortkeys = 1;
+  my $ok = Dumper($_[1]) eq Dumper($_[2]);
+
+  unless ($ok) {
+    printf "#line %d %s\n",(caller)[2,1];
+    print "not ";
+  }
+  print "ok $_[0]\n";
+  $ok;
+}
+
 1;
 
