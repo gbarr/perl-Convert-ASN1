@@ -42,10 +42,7 @@ ntest 11, 1, $ret->{seq}{integer};
 ntest 12, 0, $ret->{seq}{bool};
 stest 13, "A string", $ret->{seq}{str};
 
-
-$result = pack("C*", 0x30, 0x16, 0x09, 0x09, 0x80, 0xCB, 0xD8, 0xF5,
-                     0xC2, 0x8F, 0x5C, 0x28, 0xF8, 0x09, 0x09, 0x80,
-                     0xCC, 0xC5, 0x70, 0xA3, 0xD7, 0x0A, 0x3D, 0x70);
+$result = pack "H*", '300b090380fbcc090480fa9c34';
 
 btest 14, $asn->prepare(q(
                         SEQUENCE {
@@ -53,7 +50,7 @@ btest 14, $asn->prepare(q(
                                 real2 REAL
                         }
 )) or warn $asn->error;
-stest 15, $result, $asn->encode( real => 6.78, real2 => 12.34) or warn $asn->error;
+stest 15, $result, $asn->encode( real => 6.375, real2 => 624.8125) or warn $asn->error;
 btest 16, $ret = $asn->decode($result) or warn $asn->error;
-ntest 17, 6.78,  $ret->{real};
-ntest 18, 12.34, $ret->{real2};
+ntest 17, 6.375,  $ret->{real};
+ntest 18, 624.8125, $ret->{real2};
