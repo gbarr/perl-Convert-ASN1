@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.1 2000/05/03 12:24:54 gbarr Exp $
+# $Id: _encode.pm,v 1.2 2000/05/11 09:22:34 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -78,7 +78,7 @@ sub _enc_integer {
   my $len = num_length($neg ? ~ $_[3] : $_[3]);
   my $msb = $_[3] & (0x80 << (($len - 1) * 8));
 
-  $len++ unless not($msb) == not($neg);
+  $len++ if $neg ? !$msb : $msb;
 
   $_[4] .= asn_encode_length($len);
   $_[4] .= substr(pack("N",$_[3]), -$len);

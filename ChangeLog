@@ -1,3 +1,8 @@
+Change 514 on 2000/05/11 by <gbarr@pobox.com> (Graham Barr)
+
+	Fix bug in encoding an integer where one to few bytes would be
+	encoded causing the sign to change on decode.
+
 Change 513 on 2000/05/09 by <gbarr@pobox.com> (Graham Barr)
 
 	Fix to asn_read for unit warning when first char of L is > 0x80

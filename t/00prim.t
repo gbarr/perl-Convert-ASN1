@@ -6,7 +6,7 @@
 
 use Convert::ASN1 qw(:all);
 
-print "1..125\n";
+print "1..137\n";
 
 BEGIN { require 't/funcs.pl' }
 
@@ -76,6 +76,9 @@ foreach $val (0,1,-99) {
 ntest 39, 39, $test++;
 
 my %INTEGER = (
+  pack("C*", 0x02, 0x02, 0x00, 0x80), 	      128,
+  pack("C*", 0x02, 0x01, 0x80), 	      -128,
+  pack("C*", 0x02, 0x02, 0xff, 0x01), 	      -255,
   pack("C*", 0x02, 0x01, 0x00), 	      0,
   pack("C*", 0x02, 0x03, 0x66, 0x77, 0x99),   0x667799,
   pack("C*", 0x02, 0x02, 0xFE, 0x37),	     -457,
@@ -95,7 +98,7 @@ while(($result,$val) = each %INTEGER) {
 ## STRING
 ##
 
-ntest 52, 52, $test++;
+ntest 64, 64, $test++;
 
 my %STRING = (
   pack("C*",   0x04, 0x00),		  "",
@@ -115,7 +118,7 @@ while(($result,$val) = each %STRING) {
 ## OBJECT_ID
 ##
 
-ntest 61, 61, $test++;
+ntest 73, 73, $test++;
 
 my %OBJECT_ID = (
   pack("C*", 0x06, 0x04, 0x2A, 0x03, 0x04, 0x05), "1.2.3.4.5",
@@ -132,7 +135,7 @@ while(($result,$val) = each %OBJECT_ID) {
   stest $test++, $val, $ret->{'oid'};
 }
 
-ntest 70, 70, $test++;
+ntest 82, 82, $test++;
 
 ##
 ## ENUM
@@ -153,7 +156,7 @@ while(($result,$val) = each %ENUM) {
   ntest $test++, $val, $ret->{'enum'};
 }
 
-ntest 83, 83, $test++;
+ntest 95, 95, $test++;
 
 ##
 ## BIT STRING
@@ -185,7 +188,7 @@ while(($result,$val) = each %BSTR) {
 
 }
 
-ntest 104, 104, $test++;
+ntest 116, 116, $test++;
 
 ##
 ## REAL
@@ -209,5 +212,5 @@ while(($result,$val) = each %REAL) {
   ntest $test++, $val, $ret->{'real'};
 }
 
-ntest 125, 125, $test++;
+ntest 137, 137, $test++;
 
