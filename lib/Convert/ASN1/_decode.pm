@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.14 2002/03/25 07:46:08 gbarr Exp $
+# $Id: _decode.pm,v 1.15 2002/03/25 09:06:16 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -156,6 +156,36 @@ sub _decode {
 		  $nstash->{$cop->[cVAR]},
 		  $buf,$npos,$len,$indef ? $larr : []
 		);
+
+		$pos = $npos+$len+$indef;
+
+		redo CHOICELOOP if $seqof && $pos < $end;
+		next OP;
+	      }
+
+	      unless (length $cop->[cTAG]) {
+		eval {
+		  _decode(
+		    $optn,
+		    [$cop],
+		    (\my %tmp_stash),
+		    $pos,
+		    $npos+$len+$indef,
+		    undef,
+		    $indef ? $larr : [],
+		    $buf,
+		  );
+
+		  my $nstash = $seqof
+			  ? ($seqof->[$idx++]={})
+			  : defined($var)
+				  ? ($stash->{$var}={})
+				  : ref($stash) eq 'SCALAR'
+					  ? ($$stash={}) : $stash;
+
+		  @{$nstash}{keys %tmp_stash} = values %tmp_stash;
+
+		} or next;
 
 		$pos = $npos+$len+$indef;
 

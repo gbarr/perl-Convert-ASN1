@@ -25,4 +25,6 @@ t/06bigint.t
 t/07io.t
 t/08set.t
 t/09contr.t
+t/10choice.t
+t/11indef.t
 t/funcs.pl
