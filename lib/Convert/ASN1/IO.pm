@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: IO.pm,v 1.6 2000/08/16 11:06:03 gbarr Exp $
+# $Id: IO.pm,v 1.7 2001/04/19 19:51:53 gbarr Exp $
 
 use strict;
 use Socket;
@@ -193,7 +193,7 @@ sub asn_read { # $fh, $buffer, $offset
   return length $_[1];
 
 READ_ERR:
-    $@ = "I/O Error $! " . CORE::unpack("H*",$_[0]);
+    $@ = "I/O Error $! " . CORE::unpack("H*",$_[1]);
     return undef;
 }
 
