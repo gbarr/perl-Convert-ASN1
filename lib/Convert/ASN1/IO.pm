@@ -1,10 +1,10 @@
-# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# Copyright (c) 2000-2004 Graham Barr <gbarr@pobox.com>. All rights reserved.
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
 
-# $Id: IO.pm,v 1.8 2002/01/22 11:24:28 gbarr Exp $
+# $Id$
 
 use strict;
 use Socket;
@@ -128,23 +128,24 @@ sub asn_read { # $fh, $buffer, $offset
   my $depth = 0;
   my $ch;
   my $n;
-
-  while(($n = $need - length $_[1]) > 0) {
-    sysread($_[0],$_[1],$n,length $_[1]) or
-	goto READ_ERR;
-  }
-
+  my $e;
+  
   while(1) {
-    $need = $pos + 2;
-    my $tch = ord(substr($_[1],$pos++,1));
+    $need = ($pos + 2*$depth) || 2;
 
+    while(($n = $need - length $_[1]) > 0) {
+      $e = sysread($_[0],$_[1],$n,length $_[1]) or
+	goto READ_ERR;
+    }
+
+    my $tch = ord(substr($_[1],$pos++,1));
     # Tag may be multi-byte
     if(($tch & 0x1f) == 0x1f) {
       my $ch;
       do {
         $need++;
 	while(($n = $need - length $_[1]) > 0) {
-	  sysread($_[0],$_[1],$n,length $_[1]) or
+	  $e = sysread($_[0],$_[1],$n,length $_[1]) or
 	      goto READ_ERR;
 	}
 	$ch = ord(substr($_[1],$pos++,1));
@@ -154,7 +155,7 @@ sub asn_read { # $fh, $buffer, $offset
     $need = $pos + 1;
 
     while(($n = $need - length $_[1]) > 0) {
-      sysread($_[0],$_[1],$n,length $_[1]) or
+      $e = sysread($_[0],$_[1],$n,length $_[1]) or
 	  goto READ_ERR;
     }
 
@@ -168,7 +169,7 @@ sub asn_read { # $fh, $buffer, $offset
       $need = $pos + $len;
 
       while(($n = $need - length $_[1]) > 0) {
-	sysread($_[0],$_[1],$n,length $_[1]) or
+	$e = sysread($_[0],$_[1],$n,length $_[1]) or
 	    goto READ_ERR;
       }
 
@@ -183,20 +184,12 @@ sub asn_read { # $fh, $buffer, $offset
     else {
       $pos += $len;
     }
-
-    $need = $pos + 2*$depth;
-
-    while(($n = $need - length $_[1]) > 0) {
-      sysread($_[0],$_[1],$n,length $_[1]) or
-	  goto READ_ERR;
-    }
-    last unless $depth;
   }
 
   return length $_[1];
 
 READ_ERR:
-    $@ = "I/O Error $! " . CORE::unpack("H*",$_[1]);
+    $@ = defined($e) ? "Unexpected EOF" : "I/O Error $!"; # . CORE::unpack("H*",$_[1]);
     return undef;
 }
 
