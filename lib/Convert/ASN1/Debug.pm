@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: Debug.pm,v 1.7 2002/01/22 11:24:28 gbarr Exp $
+# $Id: Debug.pm,v 1.8 2003/05/06 14:17:43 gbarr Exp $
 
 ##
 ## just for debug :-)
@@ -126,7 +126,7 @@ sub asn_dump {
       };
 
       /^(?:(OBJECT ID)|(RELATIVE-OID))/ && do {
-	my @op; $op[opTYPE] = $1 ? opOBJID : opROID;
+	my @op; $op[cTYPE] = $1 ? opOBJID : opROID;
 	Convert::ASN1::_dec_object_id({},\@op,{},$tmp,$_[0],$pos,$len);
 	printf " = %s\n",$tmp;
         last;
