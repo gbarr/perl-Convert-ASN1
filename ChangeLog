@@ -1,16 +1,54 @@
-2001-02-05 22:31  gbarr
+2001-04-19 23:52  Graham Barr
+
+	* lib/Convert/ASN1.pm, lib/Convert/ASN1.pod,
+	lib/Convert/ASN1/_decode.pm, lib/Convert/ASN1/_encode.pm,
+	t/funcs.pl:
+
+	Added support to use Math::BigInt, Thanks to Benjamin Trott
+	
+2001-04-19 23:50  Graham Barr
+
+	* t/05time.t:
+
+	Tests for UTCTime and GeneralizedTime (The previous was really for bigint tests)
+	
+2001-04-19 23:32  Graham Barr
+
+	* t/06bigint.t:
+
+	Tests for UTCTime and GeneralizedTime
+	
+2001-04-19 20:51  Graham Barr
+
+	* lib/Convert/ASN1/IO.pm:
+
+	Fix error message
+	
+2001-04-19 20:51  Graham Barr
+
+	* lib/Convert/ASN1/_decode.pm:
+
+	Get timezone right when decoding
+	
+2001-04-19 20:51  Graham Barr
+
+	* t/funcs.pl:
+
+	Useful debug enhancements
+	
+2001-02-05 22:31  Graham Barr
 
 	* lib/Convert/ASN1/parser.pm:
 
 	Added CharacterString UniversalString BMPString
 	
-2001-01-29 22:35  gbarr
+2001-01-29 22:35  Graham Barr
 
 	* OldChanges:
 
 	Move perforce changelog aside and now generate with cvs2cl
 	
-2000-05-03 13:24  gbarr
+2000-05-03 13:24  Graham Barr
 
 	* Makefile.PL, README, mkparse, parser.y, examples/ldap,
 	examples/ldap-search, lib/Convert/ASN1.pm, lib/Convert/ASN1.pod,

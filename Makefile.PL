@@ -1,5 +1,5 @@
 # This -*- perl -*- script makes the Makefile
-# $Id: Makefile.PL,v 1.2 2000/05/22 11:07:35 gbarr Exp $
+# $Id: Makefile.PL,v 1.3 2001/04/19 23:00:46 gbarr Exp $
 
 use 5.004;
 use ExtUtils::MakeMaker;
@@ -20,26 +20,8 @@ WriteMakefile(
 
 sub MY::postamble {
 
-  my $ppd = $] >= 5.00503 ? 'ppd' : '';
-  my $mkhtml = "../bin/mkhtml";
-  my $html = '';
-
-  if ( -x $mkhtml ) {
-    $mkhtml = <<EDQ;
-mkhtml :
-	$mkhtml
-EDQ
-    $html = 'mkhtml';
-  }
-  else { $mkhtml = '' }
-
-  return '' unless length($ppd.$html);
 
 <<"EDQ";
-
-distdir : $ppd $html
-
-$mkhtml
 
 run_byacc:
 	\$(PERL) mkparse parser.y lib/Convert/ASN1/parser.pm
