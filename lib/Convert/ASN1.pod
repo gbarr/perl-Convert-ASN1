@@ -418,10 +418,6 @@ the elements outside of the {...}.
 
 =item *
 
-Indefinite length encoding
-
-=item *
-
 XS implementation.
 
 =item *
@@ -436,7 +432,7 @@ More tests.
 
 =head1 AUTHOR
 
-Graham Barr <gbarr@pobox.xom>
+Graham Barr <gbarr@pobox.com>, Report bugs via <bugs-Convert-ASN1@rt.cpan.org>
 
 =head1 COPYRIGHT
 
