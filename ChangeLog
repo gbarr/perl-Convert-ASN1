@@ -1,3 +1,78 @@
+2002-08-20 01:00  Graham Barr
+
+	* lib/Convert/ASN1.pm:
+
+	Release 0.16
+	
+2002-08-20 00:59  Graham Barr
+
+	* README, lib/Convert/ASN1.pod:
+
+	Update search.cpan.org link and add CPAN RT email address
+	
+2002-08-20 00:53  Graham Barr
+
+	* t/10choice.t:
+
+	Fix test count
+	
+2002-08-20 00:51  Graham Barr
+
+	* parser.y, lib/Convert/ASN1/_encode.pm,
+	lib/Convert/ASN1/parser.pm, t/10choice.t:
+
+	Fix for nested CHOICEs and tagged CHOICEs in SEQUENCES
+	
+2002-03-25 14:59  Graham Barr
+
+	* t/: 00prim.t, 01tag.t, 02seq.t, 03seqof.t, 04opt.t, 05time.t,
+	06bigint.t, 08set.t, 09contr.t, 11indef.t:
+
+	Add more detail when tests fail
+	
+2002-03-25 09:06  Graham Barr
+
+	* lib/Convert/ASN1/_decode.pm, t/10choice.t, t/11indef.t, MANIFEST:
+
+	Patch from Wolfgang Laun
+	Fix bug in decode when there are nested CHOICEs
+	Add tests t/10choice.t t/11indef.t
+	
+2002-03-25 07:46  Graham Barr
+
+	* lib/Convert/: ASN1.pm, ASN1.pod, ASN1/_decode.pm:
+
+	Patch from Wolfgang Laun
+	Addition of prepare_file and the change prepare to accept a filehandle.
+	POD updates.
+	Fix decode of nested indefinate lengths
+	
+2002-03-25 07:39  Graham Barr
+
+	* mkparse, parser.y, lib/Convert/ASN1/parser.pm:
+
+	Allow '-'s in names and fix an uninit warning in the generated parser
+	
+2002-02-15 06:51  Graham Barr
+
+	* lib/Convert/ASN1/_encode.pm:
+
+	Use ::isa to determine if stash argument is a HASH
+	
+2002-02-10 16:41  Graham Barr
+
+	* MANIFEST, examples/x509decode:
+
+	Added x509decode from Norbert Klasen
+	
+2002-02-10 16:12  Graham Barr
+
+	* lib/Convert/ASN1.pm, lib/Convert/ASN1/_decode.pm,
+	lib/Convert/ASN1/_encode.pm, t/00prim.t, t/03seqof.t:
+
+	Add support for units with one sinlge, unamed entry
+	eg  test ::= INTEGER or list ::= SEQUENCE OF OCTET STRING
+	
 2002-01-22 11:24  Graham Barr
 
 	* README, parser.y, lib/Convert/ASN1.pm, lib/Convert/ASN1.pod,
