@@ -5,6 +5,7 @@ sub ntest ($$$) {
     my $fmt = (int($_[1]) && $_[1] && ($_[1] > 255 || $_[2] > 255)) ? "0x%x" : "%g";
     printf "#$_[0]: expecting $fmt\n",$_[1];
     printf "#$_[0]:       got $fmt\n",$_[2];
+    printf "#line %d %s\n",(caller)[2,1];
     print "not ";
     $ret = 0;
   }
@@ -17,6 +18,7 @@ sub stest ($$$) {
   unless (defined $_[2] && $_[1] eq $_[2]) {
     printf "#$_[0]: expecting %s\n", $_[1] =~ /[^\.\d\w]/ ? "hex:".unpack("H*",$_[1]) : $_[1];
     printf "#$_[0]:       got %s\n", defined($_[2]) ? $_[2] =~  /[^\.\d\w]/ ? "hex:".unpack("H*",$_[2]) : $_[2] : 'undef';
+    printf "#line %d %s\n",(caller)[2,1];
     print "not ";
     $ret = 0;
   }
@@ -25,7 +27,10 @@ sub stest ($$$) {
 }
 
 sub btest ($$) {
-  print "not " unless $_[1];
+  unless ($_[1]) {
+    printf "#line %d %s\n",(caller)[2,1];
+    print "not ";
+  }
   print "ok $_[0]\n";
   $_[1]
 }
