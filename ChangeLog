@@ -1,0 +1,84 @@
+Change 497 on 2000/04/28 by <gbarr@pobox.com> (Graham Barr)
+
+	* Fix undef warnings in asn_dump (patch from Chris Ridd
+	* Change output of asn_dump for tags to [APPLICATION %d], etc
+
+Change 477 on 2000/04/03 by <gbarr@pobox.com> (Graham Barr)
+
+	Release 0.04
+
+Change 476 on 2000/03/31 by <gbarr@pobox.com> (Graham Barr)
+
+	More documentation additions
+
+Change 475 on 2000/03/31 by <gbarr@pobox.com> (Graham Barr)
+
+	Added IO tests
+	Fixed bugs in asn_read and asn_get
+
+Change 474 on 2000/03/31 by <gbarr@pobox.com> (Graham Barr)
+
+	- Ensure perl-5.6.0 always works in bytes, except in
+	  _decode_utf8
+	- Add workaround for bug in 5.6 by mentioning $1..$9 explicitly
+	  in the code
+
+Change 473 on 2000/03/30 by <gbarr@pobox.com> (Graham Barr)
+
+	Added missing \ to quot $(PERL)
+
+Change 465 on 2000/03/29 by <gbarr@pobox.com> (Graham Barr)
+
+	Add HTML generation
+
+Change 423 on 2000/03/28 by <gbarr@pobox.com> (Graham Barr)
+
+	Documentation updates
+
+Change 406 on 2000/03/28 by <gbarr@pobox.com> (Graham Barr)
+
+	Major code reorg, getting ready for an XS implementation
+
+Change 405 on 2000/03/27 by <gbarr@pobox.com> (Graham Barr)
+
+	A few more optimization tweaks
+	Moved utf8 code into ASN1.pm
+	Added use strict
+
+Change 404 on 2000/03/24 by <gbarr@pobox.com> (Graham Barr)
+
+	Rework of decoding, now upto 2X faster
+
+Change 403 on 2000/03/24 by <gbarr@pobox.com> (Graham Barr)
+
+	Check for defined not truth on return from recv()
+
+Change 396 on 2000/03/22 by <gbarr@pobox.com> (Graham Barr)
+
+	Fix for loops
+
+Change 386 on 2000/03/21 by <gbarr@pobox.com> (Graham Barr)
+
+	- fix for undef warning in compile_one
+	- moved options down a level in the object
+	- added find, to create new objects referencing a given macro
+	- added ldap example
+	- add Debug module
+	- fix for xx OF loop in _decode
+	- fix typos in IO module
+	- ensure CONSTRUCTOR bit is set
+
+Change 384 on 2000/03/18 by <gbarr@pobox.com> (Graham Barr)
+
+	Add encode/decode routines fro UTF8 strings if running
+	perl 5.6 or later.
+
+Change 383 on 2000/03/18 by <gbarr@pobox.com> (Graham Barr)
+
+	Now supports hierarchical definition. It is now possible
+	to copy ASN.1 from rfcs with minimal change
+
+Change 382 on 2000/03/14 by <gbarr@pobox.com> (Graham Barr)
+
+	Initial version
+
