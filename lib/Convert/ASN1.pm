@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.5 2000/08/03 17:07:02 gbarr Exp $
+# $Id: ASN1.pm,v 1.6 2001/01/29 21:09:16 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -10,7 +10,7 @@ use Exporter;
 
 BEGIN {
   @ISA = qw(Exporter);
-  $VERSION = '0.07';
+  $VERSION = '0.08';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
@@ -104,7 +104,7 @@ sub configure {
   for my $type (qw(encode decode)) {
     if (exists $opt{$type}) {
       while(my($what,$value) = each %{$opt{$type}}) {
-	$self->{options}{"${$type}_${what}"} = $value;
+	$self->{options}{"${type}_${what}"} = $value;
       }
     }
   }
