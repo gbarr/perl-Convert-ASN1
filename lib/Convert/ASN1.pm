@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.17 2001/09/22 00:16:49 gbarr Exp $
+# $Id: ASN1.pm,v 1.18 2001/09/24 23:05:56 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -10,7 +10,7 @@ use Exporter;
 
 BEGIN {
   @ISA = qw(Exporter);
-  $VERSION = '0.14_02';
+  $VERSION = '0.14_03';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
@@ -152,8 +152,8 @@ sub encode {
   my $stash = @_ == 1 ? shift : { @_ };
   my $buf = '';
   local $SIG{__DIE__};
-  eval { _encode($self->{options}, $self->{script}, $stash, $buf) }
-    or do { $self->{error} = $@; undef }
+  eval { _encode($self->{options}, $self->{script}, $stash, [], $buf) }
+    or do { warn $self->{error} = $@; undef }
 }
 
 
