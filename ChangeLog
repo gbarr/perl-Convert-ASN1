@@ -1,3 +1,15 @@
+2001-07-31 18:04  Graham Barr
+
+	* lib/Convert/ASN1/_encode.pm:
+
+	Make sure value passed to enc_integer is treated as a number and not a string
+	
+2001-07-31 18:03  Graham Barr
+
+	* parser.y, lib/Convert/ASN1/parser.pm:
+
+	Report which type cannot be found on error
+	
 2001-06-11 14:13  Graham Barr
 
 	* lib/Convert/ASN1.pm:
