@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.14 2001/09/06 17:54:51 gbarr Exp $
+# $Id: ASN1.pm,v 1.15 2001/09/10 18:03:47 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -10,7 +10,7 @@ use Exporter;
 
 BEGIN {
   @ISA = qw(Exporter);
-  $VERSION = '0.13';
+  $VERSION = '0.14';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
@@ -47,9 +47,6 @@ BEGIN {
       *{__PACKAGE__ . '::' . $name} = sub () { $j }
     }
   }
-
-  # Workaround for a bug in perl-5.6.0
-  $1 || $2 || $3 || $4 || $5 || $6 || $7 || $8 || 0;
 }
 
 sub _internal_syms {
@@ -281,7 +278,7 @@ sub num_length {
 
 sub i2osp {
     my($num, $biclass) = @_;
-    eval "require $biclass";
+    eval "use $biclass";
     $num = $biclass->new($num);
     my $neg = $num < 0
       and $num = abs($num+1);

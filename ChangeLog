@@ -1,3 +1,40 @@
+2001-09-10 19:03  Graham Barr
+
+	* README, lib/Convert/ASN1.pm:
+
+	Release 0.14
+	
+2001-09-10 15:35  Graham Barr
+
+	* MANIFEST, t/08set.t, t/09contr.t:
+
+	Add tests for contructed elements and SETs
+	
+2001-09-10 15:34  Graham Barr
+
+	* lib/Convert/ASN1/_decode.pm:
+
+	Add support for decoding contructed elements
+	
+2001-09-07 20:04  Graham Barr
+
+	* lib/Convert/: ASN1.pod, ASN1/_decode.pm:
+
+	Implement the decode of SETs
+	
+2001-09-06 18:54  Graham Barr
+
+	* lib/Convert/: ASN1.pm, ASN1/Debug.pm:
+
+	Change asn_dump to putput the correct tag number for long tags
+	and also warn when a length is incorrect
+	
+2001-09-06 18:41  Graham Barr
+
+	* lib/Convert/ASN1/_decode.pm:
+
+	Fix for indefinite decoding
+	
 2001-08-26 08:12  Graham Barr
 
 	* lib/Convert/ASN1.pm:
