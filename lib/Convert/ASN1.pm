@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.13 2001/08/26 07:12:59 gbarr Exp $
+# $Id: ASN1.pm,v 1.14 2001/09/06 17:54:51 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -24,7 +24,7 @@ BEGIN {
 		 ASN_UNIVERSAL   ASN_APPLICATION  ASN_CONTEXT      ASN_PRIVATE
 		 ASN_PRIMITIVE   ASN_CONSTRUCTOR  ASN_LONG_LEN     ASN_EXTENSION_ID ASN_BIT)],
 
-    tag   => [qw(asn_tag asn_decode_tag asn_encode_tag asn_decode_length asn_encode_length)]
+    tag   => [qw(asn_tag asn_decode_tag2 asn_decode_tag asn_encode_tag asn_decode_length asn_encode_length)]
   );
 
   @EXPORT_OK = map { @$_ } values %EXPORT_TAGS;
@@ -238,6 +238,26 @@ sub asn_decode_tag {
     } while($b & 0x80);
   }
   ($n, $tag);
+}
+
+
+sub asn_decode_tag2 {
+  return unless length $_[0];
+
+  my $tag = ord $_[0];
+  my $num = $tag & 0x1f;
+  my $len = 1;
+
+  if($num == 0x1f) {
+    $num = 0;
+    my $b;
+    do {
+      return if $len >= length $_[0];
+      $b = ord substr($_[0],$len++,1);
+      $num = ($num << 7) + ($b & 0x7f);
+    } while($b & 0x80);
+  }
+  ($len, $tag, $num);
 }
 
 

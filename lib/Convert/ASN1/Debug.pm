@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: Debug.pm,v 1.4 2000/08/03 17:07:02 gbarr Exp $
+# $Id: Debug.pm,v 1.5 2001/09/06 17:54:51 gbarr Exp $
 
 ##
 ## just for debug :-)
@@ -72,27 +72,27 @@ sub asn_dump {
   while(1) {
     while (@seqend && $pos >= $seqend[0]) {
       $indent = substr($indent,2);
-      shift @seqend;
-      printf "$fmt        : %s}\n",$pos,$indent;
+      warn "Bad sequence length " unless $pos == shift @seqend;
+      printf "$fmt     : %s}\n",$pos,$indent;
     }
     last unless $pos < $length;
     
     my $start = $pos;
-    my($tb,$tag) = asn_decode_tag(substr($_[0],$pos,10));
+    my($tb,$tag,$tnum) = asn_decode_tag2(substr($_[0],$pos,10));
     $pos += $tb;
     my($lb,$len) = asn_decode_length(substr($_[0],$pos,10));
     $pos += $lb;
 
     if($tag == 0 && $len == 0) {
-      $seqend[0] = 0;
+      $seqend[0] = $pos;
       redo;
     }
-    printf $fmt. " %02X %4d: %s",$start,$tag,$len,$indent;
+    printf $fmt. " %4d: %s",$start,$len,$indent;
 
     my $label = $type{sprintf("%02X",$tag & ~0x20)}
 		|| $type{sprintf("%02X",$tag & 0xC0)}
 		|| "[UNIVERSAL %d]";
-    printf $label, $tag & ~0xE0;
+    printf $label, $tnum;
 
     if ($tag & ASN_CONSTRUCTOR) {
       print " {\n";
@@ -135,7 +135,7 @@ sub asn_dump {
       /^STRING/ && do {
 	Convert::ASN1::_dec_string({},[],{},$tmp,$_[0],$pos,$len);
 	if ($tmp =~ /[\x00-\x1f\x7f-\xff]/s) {
-  	  _hexdump($tmp,$fmt . "        :   ".$indent, $pos);
+  	  _hexdump($tmp,$fmt . "     :   ".$indent, $pos);
 	}
 	else {
 	  printf " = '%s'\n",$tmp;
@@ -150,7 +150,7 @@ sub asn_dump {
 #      };
 
       # default -- dump hex data
-      _hexdump(substr($_[0],$pos,$len),$fmt . "        :   ".$indent, $pos);
+      _hexdump(substr($_[0],$pos,$len),$fmt . "     :   ".$indent, $pos);
     }
     $pos += $len;
   }
