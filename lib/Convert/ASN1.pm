@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.9 2001/04/20 06:26:37 gbarr Exp $
+# $Id: ASN1.pm,v 1.10 2001/04/26 06:52:04 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -285,7 +285,9 @@ sub os2ip {
     my $result = $biclass->new(0);
     my $neg = ord($os) >= 0x80
       and $os ^= chr(255) x length($os);
-    $result = ($result * $base) + $_ for unpack("C*",$os);
+    for (unpack("C*",$os)) {
+      $result = ($result * $base) + $_;
+    }
     return $neg ? ($result + 1) * -1 : $result;
 }
 

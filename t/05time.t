@@ -54,7 +54,7 @@ $result = pack("C*",
   0x32, 0x32, 0x31, 0x31, 0x30, 0x38, 0x5A
 );
 
-$asn->configure( encode => { time => 'utctime' } );
+$asn->configure( encode => { 'time' => 'utctime' } );
 stest $t++, $result, $asn->encode(date => $time);
 btest $t++, $ret = $asn->decode($result);
 ntest $t++, $time, $ret->{date};

@@ -2,7 +2,6 @@
 sub ntest ($$$) {
   my $ret = 1;
   if ($_[1] != $_[2]) {
-    my $fmt = (int($_[1]) && $_[1] && ($_[1] > 255 || $_[2] > 255)) ? "0x%x" : "%g";
     printf "#$_[0]: expecting $_[1]\n";
     printf "#$_[0]:       got $_[2]\n";
     printf "#line %d %s\n",(caller)[2,1];

@@ -7,6 +7,11 @@
 use Convert::ASN1;
 BEGIN { require 't/funcs.pl' }
 
+if ($] < 5.005) {
+  print "1..0\n";
+  exit;
+}
+
 print "1..35\n";
 
 btest 1, $asn = Convert::ASN1->new;
