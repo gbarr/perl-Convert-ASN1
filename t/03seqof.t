@@ -8,7 +8,7 @@ BEGIN { require 't/funcs.pl' }
 
 use Convert::ASN1;
 
-print "1..16\n";
+print "1..29\n";
 
 btest 1, $asn = Convert::ASN1->new;
 btest 2, $asn->prepare(' ints SEQUENCE OF INTEGER ');
@@ -58,3 +58,51 @@ stest 14, 'joe', $ret->{'seq'}[1]{'str'};
 stest 15, "a:b:c", join(":", @{$ret->{'seq'}[0]{'val'}});
 stest 16, "q:w:e", join(":", @{$ret->{'seq'}[1]{'val'}});
 
+btest 17, $asn = Convert::ASN1->new;
+btest 18, $asn->prepare(<<'EOS');
+
+AttributeTypeAndValue ::= SEQUENCE {
+	type    STRING,
+	value   STRING }
+
+RelativeDistinguishedName ::= SET OF AttributeTypeAndValue
+
+RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+
+Name  ::= CHOICE { -- only one possibility for now --
+	rdnSequence  RDNSequence }
+
+Issuer ::= SEQUENCE { issuer Name }
+
+EOS
+
+btest 19, $asn = $asn->find('Issuer');
+
+$result = pack("C*",
+ 0x30, 0x26, 0x30, 0x24, 0x31, 0x10, 0x30, 0x06,
+ 0x04, 0x01, 0x31, 0x04, 0x01, 0x61, 0x30, 0x06,
+ 0x04, 0x01, 0x32, 0x04, 0x01, 0x62, 0x31, 0x10,
+ 0x30, 0x06, 0x04, 0x01, 0x33, 0x04, 0x01, 0x63,
+ 0x30, 0x06, 0x04, 0x01, 0x34, 0x04, 0x01, 0x64
+);
+
+stest 20, $result, $asn->encode(
+  issuer => {
+    rdnSequence => [
+      [{ type => "1", value => "a" }, { type => "2", value => "b" }],
+      [{ type => "3", value => "c" }, { type => "4", value => "d" }],
+    ]
+  }
+);
+
+btest 21, $ret = $asn->decode($result);
+
+ntest 22, 1, $ret->{issuer}{rdnSequence}[0][0]{type};
+ntest 23, 2, $ret->{issuer}{rdnSequence}[0][1]{type};
+ntest 24, 3, $ret->{issuer}{rdnSequence}[1][0]{type};
+ntest 25, 4, $ret->{issuer}{rdnSequence}[1][1]{type};
+
+stest 26, 'a', $ret->{issuer}{rdnSequence}[0][0]{value};
+stest 27, 'b', $ret->{issuer}{rdnSequence}[0][1]{value};
+stest 28, 'c', $ret->{issuer}{rdnSequence}[1][0]{value};
+stest 29, 'd', $ret->{issuer}{rdnSequence}[1][1]{value};

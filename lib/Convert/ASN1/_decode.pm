@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.9 2001/09/10 14:34:53 gbarr Exp $
+# $Id: _decode.pm,v 1.10 2001/09/21 22:24:44 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -36,29 +36,21 @@ my @ctr;
 
 
 sub _decode {
-  my $optn  = shift;
-  my $ops = shift;
-  my $stash = shift;
-  my $pos = shift;
-  my $end = shift;
-  my $larr = $_[2] || [];
+  my ($optn, $ops, $stash, $pos, $end, $seqof, $larr) = @_;
+  my $idx = 0;
 
   # we try not to copy the input buffer at any time
-  foreach my $buf ($_[0]) {
+  foreach my $buf ($_[-1]) {
     OP:
     foreach my $op (@{$ops}) {
-      my $var;
-      my @arr;
-      my $idx = defined($var = $_[1])
-			? (($stash->{$var} = \@arr),0)
-			: (($var = $op->[cVAR]),-99);
+      my $var = $op->[cVAR];
 
       if (length $op->[cTAG]) {
 
 	TAGLOOP: {
 	  my($tag,$len,$npos,$indef) = _decode_tl($buf,$pos,$end,$larr)
 	    or do {
-	      next OP if $pos==$end and ($idx >= 0 || defined $op->[cOPT]);
+	      next OP if $pos==$end and ($seqof || defined $op->[cOPT]);
 	      die "decode error";
 	    };
 
@@ -71,13 +63,13 @@ sub _decode {
 	      # We send 1 if there is not var as if there is the decode
 	      # should be getting undef. So if it does not get undef
 	      # it knows it has no variable
-	      (($idx >= 0) ? $arr[$idx++] : defined($var) ? $stash->{$var} : 1),
+	      ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : 1),
 	      $buf,$npos,$len, $indef ? $larr : []
 	    );
 
 	    $pos = $npos+$len+$indef;
 
-	    redo TAGLOOP if $idx >= 0 && $pos < $end;
+	    redo TAGLOOP if $seqof && $pos < $end;
 	    next OP;
 	  }
 
@@ -87,24 +79,24 @@ sub _decode {
 	    _decode(
 	      $optn,
 	      [$op],
-	      (my $tmp_stash={}),
+	      undef,
 	      $npos,
 	      $npos+$len,
+	      (\my @ctrlist),
+	      $indef ? $larr : [],
 	      $buf,
-	      'ctr',
-	      $indef ? $larr : []
 	    );
 
-	    (($idx >= 0) ? $arr[$idx++] : defined($var) ? $stash->{$var} : undef)
-		= &{$ctr}(@{$tmp_stash->{ctr}});
+	    ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : undef)
+		= &{$ctr}(@ctrlist);
 	    $pos = $npos+$len+$indef;
 
-	    redo TAGLOOP if $idx >= 0 && $pos < $end;
+	    redo TAGLOOP if $seqof && $pos < $end;
 	    next OP;
 
 	  }
 
-	  if ($idx >= 0 || defined $op->[cOPT]) {
+	  if ($seqof || defined $op->[cOPT]) {
 	    unshift @$larr, $len if $indef;
 	    next OP;
 	  }
@@ -120,18 +112,18 @@ sub _decode {
 
 	    my($tag,$len,$npos,$indef) = _decode_tl($buf,$pos,$end,$larr)
 	      or do {
-		next OP if $pos==$end and ($idx >= 0 || defined $op->[cOPT]);
+		next OP if $pos==$end and ($seqof || defined $op->[cOPT]);
 		die "decode error";
 	      };
 
 	    $len += $npos-$pos;
 
-	    (($idx >= 0) ? $arr[$idx++] : $stash->{$var})
+	    ($seqof ? $seqof->[$idx++] : $stash->{$var})
 	      = substr($buf,$pos,$len);
 
 	    $pos += $len + $indef;
 
-	    redo ANYLOOP if $idx >= 0 && $pos < $end;
+	    redo ANYLOOP if $seqof && $pos < $end;
 	  }
 	}
 	else {
@@ -139,15 +131,15 @@ sub _decode {
 	  CHOICELOOP: {
 	    my($tag,$len,$npos,$indef) = _decode_tl($buf,$pos,$end,$larr)
 	      or do {
-		next OP if $pos==$end and ($idx >= 0 || defined $op->[cOPT]);
+		next OP if $pos==$end and ($seqof || defined $op->[cOPT]);
 		die "decode error";
 	      };
 	    foreach my $cop (@{$op->[cCHILD]}) {
 
 	      if ($tag eq $cop->[cTAG]) {
 
-		my $nstash = $idx >= 0
-			? ($arr[$idx++]={})
+		my $nstash = $seqof
+			? ($seqof->[$idx++]={})
 			: defined($var)
 				? ($stash->{$var}={}) : $stash;
 
@@ -161,33 +153,33 @@ sub _decode {
 
 		$pos = $npos+$len+$indef;
 
-		redo CHOICELOOP if $idx >= 0 && $pos < $end;
+		redo CHOICELOOP if $seqof && $pos < $end;
 		next OP;
 	      }
 
 	      if ($tag eq ($cop->[cTAG] | chr(ASN_CONSTRUCTOR))
 		  and my $ctr = $ctr[$cop->[cTYPE]]) 
 	      {
-		my $nstash = $idx >= 0
-			? ($arr[$idx++]={})
+		my $nstash = $seqof
+			? ($seqof->[$idx++]={})
 			: defined($var)
 				? ($stash->{$var}={}) : $stash;
 
 		_decode(
 		  $optn,
 		  [$cop],
-		  (my $tmp_stash={}),
+		  undef,
 		  $npos,
 		  $npos+$len,
+		  (\my @ctrlist),
+		  $indef ? $larr : [],
 		  $buf,
-		  'ctr',
-		  $indef ? $larr : []
 		);
 
-		$nstash->{$cop->[cVAR]} = &{$ctr}(@{$tmp_stash->{ctr}});
+		$nstash->{$cop->[cVAR]} = &{$ctr}(@ctrlist);
 		$pos = $npos+$len+$indef;
 
-		redo CHOICELOOP if $idx >= 0 && $pos < $end;
+		redo CHOICELOOP if $seqof && $pos < $end;
 		next OP;
 	      }
 	    }
@@ -326,9 +318,9 @@ sub _dec_sequence {
       (defined($_[3]) || $_[1]->[cLOOP]) ? $_[2] : ($_[3]= {}), #stash
       $_[5], #pos
       $_[5]+$_[6], #end
+      $_[1]->[cLOOP] && ($_[3]=[]), #loop
+      $_[7],
       $_[4], #buf
-      $_[1]->[cLOOP] && $_[1]->[cVAR], #loop
-      $_[7]
     );
   }
   else {
@@ -379,19 +371,18 @@ SET_OP:
 	if ($tag eq ($op->[cTAG] | chr(ASN_CONSTRUCTOR))
 	    and my $ctr = $ctr[$op->[cTYPE]]) 
 	{
-	  my $tmp_stash={};
 	  _decode(
 	    $optn,
 	    [$op],
-	    $tmp_stash,
+	    undef,
 	    $npos,
 	    $npos+$len,
+	    (\my @ctrlist),
+	    $indef ? $larr : [],
 	    $_[4],
-	    'ctr',
-	    $indef ? $larr : []
 	  );
 
-	  $stash->{$op->[cVAR]} = &{$ctr}(@{$tmp_stash->{ctr}})
+	  $stash->{$op->[cVAR]} = &{$ctr}(@ctrlist)
 	    if defined $op->[cVAR];
 	  $done = $idx;
 	  last SET_OP;
@@ -424,15 +415,15 @@ SET_OP:
 	    _decode(
 	      $optn,
 	      [$cop],
-	      (my $tmp_stash={}),
+	      undef,
 	      $npos,
 	      $npos+$len,
+	      (\my @ctrlist),
+	      $indef ? $larr : [],
 	      $_[4],
-	      'ctr',
-	      $indef ? $larr : []
 	    );
 
-	    $nstash->{$cop->[cVAR]} = &{$ctr}(@{$tmp_stash->{ctr}});
+	    $nstash->{$cop->[cVAR]} = &{$ctr}(@ctrlist);
 	    $done = $idx;
 	    last SET_OP;
 	  }
