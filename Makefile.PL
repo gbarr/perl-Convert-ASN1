@@ -7,10 +7,11 @@ abstract('Convert between perl data structures and ASN.1 encoded packets');
 author('Graham Barr <gbarr@cpan.org>');
 version_from('lib/Convert/ASN1.pm');
 license('perl');
+requires( perl => 5.005 );
 
 clean_files(qw(y.tab.pl));
 
-include_deps('Test::More', 5.004);
+include_deps('Test::More');
 
 check_nmake();      # check and download nmake.exe for Win32
 
