@@ -3,7 +3,7 @@
 use Convert::ASN1 qw(:io);
 use IO::Socket;
 
-print "1..9\n";
+print "1..11\n";
 
 my  $result = pack("C*", 0x30, 0x3D, 0x04, 0x04, 0x46, 0x72, 0x65, 0x64,
 			 0x30, 0x13, 0x04, 0x11, 0x41, 0x20, 0x73, 0x74,
@@ -71,3 +71,11 @@ print "ok 8\n";
 print "not " unless $in2 && $in2 eq $result;
 print "ok 9\n";
   
+open(IN,"t/07input.dat") or die "Cannot open 07input.dat: $!\n";
+undef $input;
+my $n = asn_read(*IN,$input);
+print "not " unless $n and $n == length($input);
+print "ok 10\n";
+print "not " unless $n == 1283;
+print "ok 11\n";
+

@@ -112,8 +112,6 @@ sub asn_read { # $fh, $buffer, $offset
   # we have enough to decode a tag and a length. We then know
   # how many more bytes to read
 
-  my $pos = 0;
-  my $need = 0;
   if ($_[2]) {
     if ($_[2] > length $_[1]) {
       require Carp;
@@ -125,13 +123,17 @@ sub asn_read { # $fh, $buffer, $offset
   else {
     $_[1] = '';
   }
+
+  my $pos = 0;
+  my $need = 0;
   my $depth = 0;
   my $ch;
   my $n;
   my $e;
   
+
   while(1) {
-    $need = ($pos + 2*$depth) || 2;
+    $need = ($pos + ($depth * 2)) || 2;
 
     while(($n = $need - length $_[1]) > 0) {
       $e = sysread($_[0],$_[1],$n,length $_[1]) or
@@ -184,6 +186,13 @@ sub asn_read { # $fh, $buffer, $offset
     else {
       $pos += $len;
     }
+
+    last unless $depth;
+  }
+
+  while(($n = $pos - length $_[1]) > 0) {
+    $e = sysread($_[0],$_[1],$n,length $_[1]) or
+      goto READ_ERR;
   }
 
   return length $_[1];
