@@ -1,3 +1,22 @@
+2001-08-26 08:12  Graham Barr
+
+	* lib/Convert/ASN1.pm:
+
+	Release 0.13
+	
+2001-08-24 15:13  Graham Barr
+
+	* parser.y, lib/Convert/ASN1/parser.pm:
+
+	Remove an unwanted warn statement
+	
+2001-08-01 19:02  Graham Barr
+
+	* lib/Convert/ASN1/_encode.pm, t/00prim.t:
+
+	Fix boundary condition where we switch over to using Math::BigInt to
+	encode integers
+	
 2001-07-31 18:05  Graham Barr
 
 	* MANIFEST, lib/Convert/ASN1.pm:
