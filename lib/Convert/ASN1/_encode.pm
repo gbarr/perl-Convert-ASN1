@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.9 2001/07/31 17:04:00 gbarr Exp $
+# $Id: _encode.pm,v 1.10 2001/08/01 18:02:38 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -73,7 +73,7 @@ sub _enc_boolean {
 sub _enc_integer {
 # 0      1    2       3     4     5
 # $optn, $op, $stash, $var, $buf, $loop
-  if (abs($_[3]) > 2**32) {
+  if (abs($_[3]) >= 2**31) {
     my $os = i2osp($_[3], ref($_[3]) || $_[0]->{encode_bigint} || 'Math::BigInt');
     my $len = length $os;
     my $msb = (vec($os, 0, 8) & 0x80) ? 0 : 255;

@@ -6,7 +6,7 @@
 
 use Convert::ASN1 qw(:all);
 
-print "1..137\n";
+print "1..154\n";
 
 BEGIN { require 't/funcs.pl' }
 
@@ -73,8 +73,6 @@ foreach $val (0,1,-99) {
 ## INTEGER (tests 13 - 21)
 ##
 
-ntest 39, 39, $test++;
-
 my %INTEGER = (
   pack("C*", 0x02, 0x02, 0x00, 0x80), 	      128,
   pack("C*", 0x02, 0x01, 0x80), 	      -128,
@@ -82,6 +80,12 @@ my %INTEGER = (
   pack("C*", 0x02, 0x01, 0x00), 	      0,
   pack("C*", 0x02, 0x03, 0x66, 0x77, 0x99),   0x667799,
   pack("C*", 0x02, 0x02, 0xFE, 0x37),	     -457,
+  pack("C*", 0x02, 0x04, 0x40, 0x00, 0x00, 0x00),	     2**30,
+  pack("C*", 0x02, 0x05, 0x00, 0x80, 0x00, 0x00, 0x00),	     2**31,
+  pack("C*", 0x02, 0x05, 0x01, 0x00, 0x00, 0x00, 0x00),	     2**32,
+  pack("C*", 0x02, 0x04, 0xC0, 0x00, 0x00, 0x00),	     -2**30,
+  pack("C*", 0x02, 0x04, 0x80, 0x00, 0x00, 0x00),	     -2**31,
+  pack("C*", 0x02, 0x05, 0xFF, 0x00, 0x00, 0x00, 0x00),	     -2**32,
 );
 
 while(($result,$val) = each %INTEGER) {
@@ -97,8 +101,6 @@ while(($result,$val) = each %INTEGER) {
 ##
 ## STRING
 ##
-
-ntest 64, 64, $test++;
 
 my %STRING = (
   pack("C*",   0x04, 0x00),		  "",
@@ -118,8 +120,6 @@ while(($result,$val) = each %STRING) {
 ## OBJECT_ID
 ##
 
-ntest 73, 73, $test++;
-
 my %OBJECT_ID = (
   pack("C*", 0x06, 0x04, 0x2A, 0x03, 0x04, 0x05), "1.2.3.4.5",
   pack("C*", 0x06, 0x03, 0x55, 0x83, 0x49),       "2.5.457",  
@@ -134,8 +134,6 @@ while(($result,$val) = each %OBJECT_ID) {
   btest $test++, $ret = $asn->decode($result);
   stest $test++, $val, $ret->{'oid'};
 }
-
-ntest 82, 82, $test++;
 
 ##
 ## ENUM
@@ -155,8 +153,6 @@ while(($result,$val) = each %ENUM) {
   btest $test++, $ret = $asn->decode($result);
   ntest $test++, $val, $ret->{'enum'};
 }
-
-ntest 95, 95, $test++;
 
 ##
 ## BIT STRING
@@ -188,8 +184,6 @@ while(($result,$val) = each %BSTR) {
 
 }
 
-ntest 116, 116, $test++;
-
 ##
 ## REAL
 ##
@@ -211,6 +205,4 @@ while(($result,$val) = each %REAL) {
   btest $test++, $ret = $asn->decode($result);
   ntest $test++, $val, $ret->{'real'};
 }
-
-ntest 137, 137, $test++;
 
