@@ -14,8 +14,8 @@ BEGIN { require 't/funcs.pl' }
 
 my $t = 1;
 
-btest $t++, $asn = Convert::ASN1->new;
-btest $t++, $asn->prepare('date UTCTime');
+btest $t++, $asn = Convert::ASN1->new or warn $asn->error;
+btest $t++, $asn->prepare('date UTCTime') or warn $asn->error;
 
 my $time = 987718268; # 2001-04-19 22:11:08 GMT
 my $result;
@@ -30,8 +30,8 @@ $result = pack("C*",
 );
 
 $asn->configure( encode => { timezone => +3600 } );
-stest $t++, $result, $asn->encode(date => $time);
-btest $t++, $ret = $asn->decode($result);
+stest $t++, $result, $asn->encode(date => $time) or warn $asn->error;
+btest $t++, $ret = $asn->decode($result) or warn $asn->error;
 ntest $t++, $time, $ret->{date};
 
 # 2 hours ahead
@@ -43,8 +43,8 @@ $result = pack("C*",
 );
 
 $asn->configure( encode => { timezone => +7200 } );
-stest $t++, $result, $asn->encode(date => $time);
-btest $t++, $ret = $asn->decode($result);
+stest $t++, $result, $asn->encode(date => $time) or warn $asn->error;
+btest $t++, $ret = $asn->decode($result) or warn $asn->error;
 ntest $t++, $time, $ret->{date};
 
 # zulu
@@ -55,14 +55,14 @@ $result = pack("C*",
 );
 
 $asn->configure( encode => { 'time' => 'utctime' } );
-stest $t++, $result, $asn->encode(date => $time);
-btest $t++, $ret = $asn->decode($result);
+stest $t++, $result, $asn->encode(date => $time) or warn $asn->error;
+btest $t++, $ret = $asn->decode($result) or warn $asn->error;
 ntest $t++, $time, $ret->{date};
 
 # 1 hour ahead
 
-btest $t++, $asn = Convert::ASN1->new;
-btest $t++, $asn->prepare('date GeneralizedTime');
+btest $t++, $asn = Convert::ASN1->new or warn $asn->error;
+btest $t++, $asn->prepare('date GeneralizedTime') or warn $asn->error;
 $result = pack("C*",
   0x18, 0x13, 0x32, 0x30, 0x30, 0x31, 0x30, 0x34, 0x31, 0x39,
   0x32, 0x33, 0x31, 0x31, 0x30, 0x38, 0x2B, 0x30,
@@ -70,14 +70,14 @@ $result = pack("C*",
 );
 
 $asn->configure( encode => { timezone => +3600 } );
-stest $t++, $result, $asn->encode(date => $time);
-btest $t++, $ret = $asn->decode($result);
+stest $t++, $result, $asn->encode(date => $time) or warn $asn->error;
+btest $t++, $ret = $asn->decode($result) or warn $asn->error;
 ntest $t++, $time, $ret->{date};
 
 # 4 hours behind
 
-btest $t++, $asn = Convert::ASN1->new;
-btest $t++, $asn->prepare('date GeneralizedTime');
+btest $t++, $asn = Convert::ASN1->new or warn $asn->error;
+btest $t++, $asn->prepare('date GeneralizedTime') or warn $asn->error;
 $result = pack("C*",
   0x18, 0x13, 0x32, 0x30, 0x30, 0x31, 0x30, 0x34, 0x31, 0x39,
   0x31, 0x38, 0x31, 0x31, 0x30, 0x38, 0x2D, 0x30,
@@ -85,8 +85,8 @@ $result = pack("C*",
 );
 
 $asn->configure( encode => { timezone => -14400 } );
-stest $t++, $result, $asn->encode(date => $time);
-btest $t++, $ret = $asn->decode($result);
+stest $t++, $result, $asn->encode(date => $time) or warn $asn->error;
+btest $t++, $ret = $asn->decode($result) or warn $asn->error;
 ntest $t++, $time, $ret->{date};
 
 # fractional second
@@ -99,7 +99,7 @@ $result = pack("C*",
 );
 
 $asn->configure( encode => { timezone => +3600 } );
-stest $t++, $result, $asn->encode(date => $time);
-btest $t++, $ret = $asn->decode($result);
+stest $t++, $result, $asn->encode(date => $time) or warn $asn->error;
+btest $t++, $ret = $asn->decode($result) or warn $asn->error;
 ntest $t++, $time, $ret->{date};
 

@@ -47,7 +47,7 @@ btest 22, $asn = Convert::ASN1->new;
 print "# NULL\n";
 
 $buf = pack("C*", 0x05, 0x00);
-btest 23, $asn->prepare(' null NULL ');
+btest 23, $asn->prepare(' null NULL ') or warn $asn->error;
 stest 24, $buf, $asn->encode(null => 1) or warn $asn->error;
 btest 25, $ret = $asn->decode($buf) or warn $asn->error;
 btest 26, $ret->{'null'};
@@ -63,9 +63,9 @@ foreach $val (0,1,-99) {
 
   my $result = pack("C*", 0x01, 0x01, $val ? 0xFF : 0);
 
-  btest $test++, $asn->prepare(' bool BOOLEAN');
-  stest $test++, $result, $asn->encode(bool => $val);
-  btest $test++, $ret = $asn->decode($result);
+  btest $test++, $asn->prepare(' bool BOOLEAN') or warn $asn->error;
+  stest $test++, $result, $asn->encode(bool => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   ntest $test++, !!$val, !!$ret->{'bool'};
 }
 
@@ -87,9 +87,9 @@ my %INTEGER = (
 while(($result,$val) = each %INTEGER) {
   print "# INTEGER $val\n";
 
-  btest $test++, $asn->prepare(' integer INTEGER');
-  stest $test++, $result, $asn->encode(integer => $val);
-  btest $test++, $ret = $asn->decode($result);
+  btest $test++, $asn->prepare(' integer INTEGER') or warn $asn->error;
+  stest $test++, $result, $asn->encode(integer => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   ntest $test++, $val, $ret->{integer};
 
 }
@@ -98,8 +98,8 @@ btest $test++, $asn->prepare('test ::= INTEGER ');
 
 $result = pack("C*", 0x02, 0x01, 0x09);
 
-stest $test++, $result, $asn->encode(9);
-btest $test++, $ret = $asn->decode($result);
+stest $test++, $result, $asn->encode(9) or warn $asn->error;
+btest $test++, $ret = $asn->decode($result) or warn $asn->error;
 btest $test++, $ret == 9;
 
 ##
@@ -114,9 +114,9 @@ my %STRING = (
 while(($result,$val) = each %STRING) {
   print "# STRING '$val'\n";
 
-  btest $test++, $asn->prepare('str STRING');
-  stest $test++, $result, $asn->encode(str => $val);
-  btest $test++, $ret = $asn->decode($result);
+  btest $test++, $asn->prepare('str STRING') or warn $asn->error;
+  stest $test++, $result, $asn->encode(str => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   stest $test++, $val, $ret->{'str'};
 }
 
@@ -133,9 +133,9 @@ my %OBJECT_ID = (
 while(($result,$val) = each %OBJECT_ID) {
   print "# OBJECT_ID $val\n";
 
-  btest $test++, $asn->prepare('oid OBJECT IDENTIFIER');
-  stest $test++, $result, $asn->encode(oid => $val);
-  btest $test++, $ret = $asn->decode($result);
+  btest $test++, $asn->prepare('oid OBJECT IDENTIFIER') or warn $asn->error;
+  stest $test++, $result, $asn->encode(oid => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   stest $test++, $val, $ret->{'oid'};
 }
 
@@ -152,9 +152,9 @@ my %ENUM = (
 while(($result,$val) = each %ENUM) {
   print "# ENUM $val\n";
 
-  btest $test++, $asn->prepare('enum ENUMERATED');
-  stest $test++, $result, $asn->encode(enum => $val);
-  btest $test++, $ret = $asn->decode($result);
+  btest $test++, $asn->prepare('enum ENUMERATED') or warn $asn->error;
+  stest $test++, $result, $asn->encode(enum => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   ntest $test++, $val, $ret->{'enum'};
 }
 
@@ -180,9 +180,9 @@ while(($result,$val) = each %BSTR) {
     print "# BIT STRING ", unpack("B*", ref($val) ? $val->[0] : $val),
 	" ",(ref($val) ? $val->[1] : $val),"\n";
 
-  btest $test++, $asn->prepare('bit BIT STRING');
-  stest $test++, $result, $asn->encode( bit => $val);
-  btest $test++, $ret = $asn->decode($result);
+  btest $test++, $asn->prepare('bit BIT STRING') or warn $asn->error;
+  stest $test++, $result, $asn->encode( bit => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   stest $test++, (ref($val) ? $val->[2] : $val), $ret->{'bit'}[0];
   ntest $test++, (ref($val) ? $val->[1] : 8*length$val), $ret->{'bit'}[1];
 
@@ -204,9 +204,9 @@ my %REAL = (
 
 while(($result,$val) = each %REAL) {
   print "# REAL $val\n";
-  btest $test++, $asn->prepare('real REAL');
-  stest $test++, $result, $asn->encode( real => $val);
-  btest $test++, $ret = $asn->decode($result);
+  btest $test++, $asn->prepare('real REAL') or warn $asn->error;
+  stest $test++, $result, $asn->encode( real => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   ntest $test++, $val, $ret->{'real'};
 }
 
@@ -223,9 +223,9 @@ my %ROID = (
 while(($result,$val) = each %ROID) {
   print "# RELATIVE-OID $val\n";
 
-  btest $test++, $asn->prepare('roid RELATIVE-OID');
-  stest $test++, $result, $asn->encode(roid => $val);
-  btest $test++, $ret = $asn->decode($result);
+  btest $test++, $asn->prepare('roid RELATIVE-OID') or warn $asn->error;
+  stest $test++, $result, $asn->encode(roid => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   stest $test++, $val, $ret->{'roid'};
 }
 

@@ -1,7 +1,7 @@
 #!/usr/local/bin/perl
 
 #
-# Test the use of sets
+# Test the decode on constructed values
 #
 
 use Convert::ASN1;
@@ -10,7 +10,7 @@ BEGIN { require 't/funcs.pl' }
 print "1..4\n";
 
 
-btest 1, $asn  = Convert::ASN1->new;
+btest 1, $asn  = Convert::ASN1->new or warn $asn->error;
 btest 2, $asn->prepare(q(
     str STRING
 )) or warn $asn->error;

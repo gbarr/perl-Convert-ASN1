@@ -10,14 +10,14 @@ use Convert::ASN1;
 
 print "1..35\n";
 
-btest 1, $asn = Convert::ASN1->new;
-btest 2, $asn->prepare(' ints SEQUENCE OF INTEGER ');
+btest 1, $asn = Convert::ASN1->new or warn $asn->error;
+btest 2, $asn->prepare(' ints SEQUENCE OF INTEGER ') or warn $asn->error;
 
 $result = pack("C*", 0x30, 0x0C, 0x02, 0x01, 0x09, 0x02, 0x01, 0x05,
 		     0x02, 0x01, 0x03, 0x02, 0x01, 0x01);
 
-stest 3, $result, $asn->encode(ints => [9,5,3,1]);
-btest 4, $ret = $asn->decode($result);
+stest 3, $result, $asn->encode(ints => [9,5,3,1]) or warn $asn->error;
+btest 4, $ret = $asn->decode($result) or warn $asn->error;
 btest 5, exists $ret->{'ints'};
 stest 6, "9:5:3:1", join(":", @{$ret->{'ints'}});
 
@@ -47,9 +47,9 @@ stest 8, $result, $asn->encode(
 		seq => [
 		  { str => 'fred', val => [qw(a b c)] },
 		  { str => 'joe',  val => [qw(q w e)] }
-		]);
+		]) or warn $asn->error;
 
-btest 9, $ret = $asn->decode($result);
+btest 9, $ret = $asn->decode($result) or warn $asn->error;
 ntest 10, 1, scalar keys %$ret;
 btest 11, exists $ret->{'seq'};
 ntest 12, 2, scalar @{$ret->{'seq'}};
@@ -58,8 +58,8 @@ stest 14, 'joe', $ret->{'seq'}[1]{'str'};
 stest 15, "a:b:c", join(":", @{$ret->{'seq'}[0]{'val'}});
 stest 16, "q:w:e", join(":", @{$ret->{'seq'}[1]{'val'}});
 
-btest 17, $asn = Convert::ASN1->new;
-btest 18, $asn->prepare(<<'EOS');
+btest 17, $asn = Convert::ASN1->new or warn $asn->error;
+btest 18, $asn->prepare(<<'EOS') or warn $asn->error;
 
 AttributeTypeAndValue ::= SEQUENCE {
 	type    STRING,
@@ -76,7 +76,7 @@ Issuer ::= SEQUENCE { issuer Name }
 
 EOS
 
-btest 19, $asn = $asn->find('Issuer');
+btest 19, $asn = $asn->find('Issuer') or warn $asn->error;
 
 $result = pack("C*",
  0x30, 0x26, 0x30, 0x24, 0x31, 0x10, 0x30, 0x06,
@@ -93,9 +93,9 @@ stest 20, $result, $asn->encode(
       [{ type => "3", value => "c" }, { type => "4", value => "d" }],
     ]
   }
-);
+) or warn $asn->error;
 
-btest 21, $ret = $asn->decode($result);
+btest 21, $ret = $asn->decode($result) or warn $asn->error;
 
 ntest 22, 1, $ret->{issuer}{rdnSequence}[0][0]{type};
 ntest 23, 2, $ret->{issuer}{rdnSequence}[0][1]{type};
@@ -108,13 +108,13 @@ stest 28, 'c', $ret->{issuer}{rdnSequence}[1][0]{value};
 stest 29, 'd', $ret->{issuer}{rdnSequence}[1][1]{value};
 
 
-btest 30, $asn = Convert::ASN1->new;
-btest 31, $asn->prepare('test ::= SEQUENCE OF INTEGER ');
+btest 30, $asn = Convert::ASN1->new or warn $asn->error;
+btest 31, $asn->prepare('test ::= SEQUENCE OF INTEGER ') or warn $asn->error;
 
 $result = pack("C*", 0x30, 0x0C, 0x02, 0x01, 0x09, 0x02, 0x01, 0x05,
 		     0x02, 0x01, 0x03, 0x02, 0x01, 0x01);
 
-stest 32, $result, $asn->encode([9,5,3,1]);
-btest 33, $ret = $asn->decode($result);
+stest 32, $result, $asn->encode([9,5,3,1]) or warn $asn->error;
+btest 33, $ret = $asn->decode($result) or warn $asn->error;
 btest 34, ref($ret) eq 'ARRAY';
 stest 35, "9:5:3:1", join(":", @{$ret});
