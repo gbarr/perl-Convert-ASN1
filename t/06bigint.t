@@ -70,8 +70,7 @@ ntest 27, $num, $ret->{integer};
 
 
 ## Test most-significant bit bug in 0.09.
-$num = 
-Math::BigInt->new("1333280603684579469575805266526464216433260889799");
+$num =  Math::BigInt->new("1333280603684579469575805266526464216433260889799");
 $result = pack("C*", 0x2,  0x15, 0x00, 0xe9, 0x8a, 0x5e, 0xb8, 0x3a,
                      0xfa, 0x3d, 0x4,  0x13, 0x7d, 0x19, 0xfc, 0x39,
                      0x36, 0xa3, 0x2b, 0xd2, 0x22, 0x06, 0xc7);
@@ -80,8 +79,7 @@ btest 29, $ret = $asn->decode($result);
 btest 30, exists $ret->{integer};
 ntest 31, $num, $ret->{integer};
 
-$num = 
-Math::BigInt->new(-1 * (1<<24) * (1<<24));
+$num = Math::BigInt->new(-1 * (1<<24)) * Math::BigInt->new(1<<24);
 $result = pack("C*", 0x2,  0x7, 0xff, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0);
 stest 32, $result, $asn->encode(integer => $num);
 btest 33, $ret = $asn->decode($result);
