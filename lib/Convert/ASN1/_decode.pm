@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.17 2003/05/06 21:29:07 gbarr Exp $
+# $Id: _decode.pm,v 1.18 2003/05/07 09:26:36 gbarr Exp $
 
 BEGIN {
   unless (CHECK_UTF8) {
@@ -294,7 +294,7 @@ sub _dec_object_id {
 
   my @data = unpack("w*",substr($_[4],$_[5],$_[6]));
   splice(@data,0,1,int($data[0]/40),$data[0] % 40)
-    if $_[1]->[cTYPE] == opOBJID and $data[0];
+    if $_[1]->[cTYPE] == opOBJID and @data > 1;
   $_[3] = join(".", @data);
   1;
 }
