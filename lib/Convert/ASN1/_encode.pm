@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.18 2003/05/06 21:29:07 gbarr Exp $
+# $Id: _encode.pm,v 1.19 2003/10/08 12:28:09 gbarr Exp $
 
 BEGIN {
   unless (CHECK_UTF8) {
@@ -106,21 +106,27 @@ sub _enc_integer {
 sub _enc_bitstring {
 # 0      1    2       3     4     5      6
 # $optn, $op, $stash, $var, $buf, $loop, $path
+  my $vref = ref($_[3]) ? \($_[3]->[0]) : \$_[3];
+
+  if (CHECK_UTF8 and Encode::is_utf8($$vref)) {
+    utf8::encode(my $tmp = $$vref);
+    $vref = \$tmp;
+  }
 
   if (ref($_[3])) {
     my $less = (8 - ($_[3]->[1] & 7)) & 7;
     my $len = ($_[3]->[1] + 7)/8;
     $_[4] .= asn_encode_length(1+$len);
     $_[4] .= chr($less);
-    $_[4] .= substr($_[3]->[0], 0, $len);
+    $_[4] .= substr($$vref, 0, $len);
     if ($less && $len) {
-      substr($_[4],-1) &= chr(0xff << $less);
+      substr($_[4],-1) &= chr((0xff << $less) & 0xff);
     }
   }
   else {
-    $_[4] .= asn_encode_length(1+length $_[3]);
+    $_[4] .= asn_encode_length(1+length $$vref);
     $_[4] .= chr(0);
-    $_[4] .= $_[3];
+    $_[4] .= $$vref;
   }
 }
 
