@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.3 2000/08/03 17:07:02 gbarr Exp $
+# $Id: _decode.pm,v 1.4 2001/04/19 19:51:36 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -318,7 +318,7 @@ sub _dec_time {
   if ($bits[7] ne 'Z') {
     $offset = $bits[9] * 3600 + $bits[10] * 60;
     $offset = -$offset if $bits[8] eq '-';
-    $time += $offset;
+    $time -= $offset;
   }
   $_[3] = $mode ? [$time,$offset] : $time;
 }
