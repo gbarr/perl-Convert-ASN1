@@ -1,3 +1,9 @@
+2001-07-31 18:05  Graham Barr
+
+	* MANIFEST, lib/Convert/ASN1.pm:
+
+	Release 0.12
+	
 2001-07-31 18:04  Graham Barr
 
 	* lib/Convert/ASN1/_encode.pm:
