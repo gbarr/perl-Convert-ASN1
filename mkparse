@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl
 
-# $Id: mkparse,v 1.1 2000/05/03 12:24:43 gbarr Exp $
+# $Id: mkparse,v 1.2 2002/03/25 07:39:46 gbarr Exp $
 
 my($source,$dest) = @ARGV;
 
@@ -48,6 +48,9 @@ while(<IN>) {
   if ( $ln ) {
     s/^if \(\$yyn == (\d+)\s*\)/State$1:/ and $state{"State$1"} = '';
   }
+
+  # fix an uninit bug
+  s/^(\s*)(?=\$yycheck\[\$yyn\]\s+==)/$1\$yyn <= \$#yycheck && /;
 
   print OUT;
 

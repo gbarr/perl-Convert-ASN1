@@ -9,7 +9,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.pm,v 1.7 2002/01/22 11:24:28 gbarr Exp $
+;# $Id: parser.pm,v 1.8 2002/03/25 07:39:46 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -210,7 +210,7 @@ sub yy_err_recover
     {
       if (($yyn = $yysindex[$yyss[$yyssp]]) && 
           ($yyn += constYYERRCODE()) >= 0 && 
-          $yycheck[$yyn] == constYYERRCODE())
+          $yyn <= $#yycheck && $yycheck[$yyn] == constYYERRCODE())
       {
 
 
@@ -271,7 +271,7 @@ yyloop: while(1)
 
       }
       if (($yyn = $yysindex[$yystate]) && ($yyn += $yychar) >= 0 &&
-              $yycheck[$yyn] == $yychar)
+              $yyn <= $#yycheck && $yycheck[$yyn] == $yychar)
       {
 
 
@@ -284,7 +284,7 @@ yyloop: while(1)
         next yyloop;
       }
       if (($yyn = $yyrindex[$yystate]) && ($yyn += $yychar) >= 0 &&
-            $yycheck[$yyn] == $yychar)
+            $yyn <= $#yycheck && $yycheck[$yyn] == $yychar)
       {
         $yyn = $yytable[$yyn];
         last yyreduce;
@@ -835,7 +835,7 @@ sub yylex {
 	    RELATIVE-OID
 	  )\b
 	|
-	  (\w+)
+	  (\w+(?:-\w+)*)
 	|
 	    \[\s*
 	  (
@@ -899,12 +899,12 @@ sub yyerror {
 
 # 947 "y.tab.pl"
 
-%yystate = ('State20','','State21','','State43','','State27','','State28',
-'','State45','','State29','','State46','','State47','','State48','',
-'State1','','State3','','State4','','State5','','State11','','State14','',
-'State30','','State31','','State32','','State33','','State18','','State34',
-'','State50','','State19','','State35','','State51','','State36','',
-'State52','','State37','','State53','','State38','','State54','','State39',
-'','State55','','State56','','State57','');
+%yystate = ('State20','','State11','','State30','','State21','','State31',
+'','State50','','State32','','State14','','State51','','State33','',
+'State52','','State43','','State34','','State53','','State35','','State54',
+'','State45','','State36','','State18','','State27','','State55','',
+'State46','','State37','','State19','','State28','','State56','','State47',
+'','State38','','State29','','State57','','State48','','State39','',
+'State1','','State3','','State4','','State5','');
 
 1;

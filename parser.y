@@ -24,7 +24,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.y,v 1.6 2002/01/22 11:24:28 gbarr Exp $
+;# $Id: parser.y,v 1.7 2002/03/25 07:39:46 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -493,7 +493,7 @@ sub yylex {
 	    RELATIVE-OID
 	  )\b
 	|
-	  (\w+)
+	  (\w+(?:-\w+)*)
 	|
 	    \[\s*
 	  (
