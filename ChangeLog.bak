@@ -1,0 +1,74 @@
+2000-08-16 12:06  gbarr
+
+	* ChangeLog (1.10), lib/Convert/ASN1/IO.pm (1.6): Change 561
+
+2000-08-03 18:07  gbarr
+
+	* ChangeLog (1.9), lib/Convert/ASN1.pm (1.5), lib/Convert/ASN1.pod
+	(1.2), lib/Convert/ASN1/Debug.pm (1.4), lib/Convert/ASN1/IO.pm
+	(1.5), lib/Convert/ASN1/_decode.pm (1.3),
+	lib/Convert/ASN1/_encode.pm (1.5): Change 558
+
+2000-06-08 09:31  gbarr
+
+	* ChangeLog (1.8), lib/Convert/ASN1.pm (1.4),
+	lib/Convert/ASN1/Debug.pm (1.3), lib/Convert/ASN1/_encode.pm (1.4):
+	Change 534
+
+2000-05-22 21:56  gbarr
+
+	* ChangeLog (1.7), lib/Convert/ASN1/Debug.pm (1.2): 528
+
+2000-05-22 12:07  gbarr
+
+	* ChangeLog (1.6), Makefile.PL (1.2), parser.y (1.2),
+	lib/Convert/ASN1.pm (1.3), lib/Convert/ASN1/IO.pm (1.4),
+	lib/Convert/ASN1/_decode.pm (1.2), lib/Convert/ASN1/_encode.pm
+	(1.3), lib/Convert/ASN1/parser.pm (1.2), t/00prim.t (1.3),
+	t/01tag.t (1.2), t/02seq.t (1.2), t/04opt.t (1.2): 523
+
+2000-05-12 11:17  gbarr
+
+	* ChangeLog (1.5), lib/Convert/ASN1.pm (1.2): 515
+
+2000-05-11 10:22  gbarr
+
+	* ChangeLog (1.4), lib/Convert/ASN1/_encode.pm (1.2), t/00prim.t
+	(1.2): 514
+
+2000-05-09 17:08  gbarr
+
+	* ChangeLog (1.3), lib/Convert/ASN1/IO.pm (1.3): 513
+
+2000-05-04 09:39  gbarr
+
+	* ChangeLog (1.2), lib/Convert/ASN1/IO.pm (1.2): 509
+
+2000-05-03 14:22  gbarr
+
+	* ChangeLog (1.1): ChangeLog
+
+2000-05-03 13:24  gbarr
+
+	* MANIFEST (1.1), Makefile.PL (1.1), README (1.1), mkparse (1.1),
+	parser.y (1.1), examples/ldap (1.1), examples/ldap-search (1.1),
+	lib/Convert/ASN1.pm (1.1), lib/Convert/ASN1.pod (1.1),
+	lib/Convert/ASN1/Debug.pm (1.1), lib/Convert/ASN1/IO.pm (1.1),
+	lib/Convert/ASN1/_decode.pm (1.1), lib/Convert/ASN1/_encode.pm
+	(1.1), lib/Convert/ASN1/parser.pm (1.1), t/00prim.t (1.1),
+	t/01tag.t (1.1), t/02seq.t (1.1), t/03seqof.t (1.1), t/04opt.t
+	(1.1), t/07io.t (1.1), t/funcs.pl (1.1): Initial revision
+
+2000-05-03 13:24  gbarr
+
+	* MANIFEST (1.1.1.1), Makefile.PL (1.1.1.1), README (1.1.1.1),
+	mkparse (1.1.1.1), parser.y (1.1.1.1), examples/ldap (1.1.1.1),
+	examples/ldap-search (1.1.1.1), lib/Convert/ASN1.pm (1.1.1.1),
+	lib/Convert/ASN1.pod (1.1.1.1), lib/Convert/ASN1/Debug.pm
+	(1.1.1.1), lib/Convert/ASN1/IO.pm (1.1.1.1),
+	lib/Convert/ASN1/_decode.pm (1.1.1.1), lib/Convert/ASN1/_encode.pm
+	(1.1.1.1), lib/Convert/ASN1/parser.pm (1.1.1.1), t/00prim.t
+	(1.1.1.1), t/01tag.t (1.1.1.1), t/02seq.t (1.1.1.1), t/03seqof.t
+	(1.1.1.1), t/04opt.t (1.1.1.1), t/07io.t (1.1.1.1), t/funcs.pl
+	(1.1.1.1): import
+
