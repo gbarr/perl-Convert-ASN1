@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: IO.pm,v 1.5 2000/08/03 17:07:02 gbarr Exp $
+# $Id: IO.pm,v 1.6 2000/08/16 11:06:03 gbarr Exp $
 
 use strict;
 use Socket;
@@ -169,7 +169,7 @@ sub asn_read { # $fh, $buffer, $offset
 	    goto READ_ERR;
       }
 
-      $pos += $len + unpack("N", "\0" x (4 - $len) . substr($_[0],$pos,$len));
+      $pos += $len + unpack("N", "\0" x (4 - $len) . substr($_[1],$pos,$len));
     }
     elsif (!$len && !$tch) {
       die "Bad ASN PDU" unless $depth;
