@@ -27,4 +27,7 @@ t/08set.t
 t/09contr.t
 t/10choice.t
 t/11indef.t
+t/12der.t
+t/13utf8.t
+t/14any.t
 t/funcs.pl
