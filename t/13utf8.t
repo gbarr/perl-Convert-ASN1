@@ -7,7 +7,7 @@
 use Convert::ASN1;
 BEGIN { require 't/funcs.pl' }
 
-if ($] < 5.006) {
+if ($] < 5.007) {
   print "1..0\n";
   exit;
 }
@@ -37,8 +37,8 @@ stest 7, $result, $asn->encode(str => $utf_str) or warn $asn->error;
 btest 8, $ret = $asn->decode($result) or warn $asn->error;
 stest 9, $utf_str, $ret->{str};
 
-# Test that UTF8String will upgrade on encoding, except in 5.6
-$result = $] > 5.007 ? pack("C*", 0x0c, 0x02, 0xc2, 0x81) : pack("C*", 0x0c, 0x01, 0x81);
+# Test that UTF8String will upgrade on encoding
+$result = pack("C*", 0x0c, 0x02, 0xc2, 0x81);
 stest 10, $result, $asn->encode(str => chr(0x81)) or warn $asn->error;
 
 btest 11, $ret = $asn->decode($result) or warn $asn->error;

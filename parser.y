@@ -24,7 +24,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.y,v 1.8 2002/08/19 23:51:37 gbarr Exp $
+;# $Id: parser.y,v 1.9 2003/05/06 12:40:32 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -364,6 +364,17 @@ sub compile_one {
         ;# Here we need to flatten CHOICEs and check that SET and CHOICE
         ;# do not contain duplicate tags
         ;#}
+	if ($op->[cTYPE] == opSET) {
+	  ;# In case we do CER encoding we order the SET elements by thier tags
+	  my @tags = map { 
+	    length($_->[cTAG])
+		? $_->[cTAG]
+		: $_->[cTYPE] == opCHOICE
+			? (sort map { $_->[cTAG] } $_->[cCHILD])[0]
+			: ''
+	  } @{$op->[cCHILD]};
+	  @{$op->[cCHILD]} = @{$op->[cCHILD]}[sort { $tags[$a] cmp $tags[$b] } 0..$#tags];
+	}
       }
       else {
 	;# A SET of one element can be treated the same as a SEQUENCE

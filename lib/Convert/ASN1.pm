@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.24 2003/05/06 11:07:19 gbarr Exp $
+# $Id: ASN1.pm,v 1.25 2003/05/06 12:40:32 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -21,7 +21,7 @@ BEGIN {
   }
 
   @ISA = qw(Exporter);
-  $VERSION = '0.16_01';
+  $VERSION = '0.16_02';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
@@ -109,7 +109,14 @@ sub new {
 sub configure {
   my $self = shift;
   my %opt = @_;
-  
+
+  $self->{options}{encoding} = uc($opt{encoding} || 'BER');
+
+  unless ($self->{options}{encoding} =~ /^[BD]ER$/) {
+    require Carp;
+    Carp::croak("Unsupported encoding format '$opt{encoding}'");
+  }
+
   for my $type (qw(encode decode)) {
     if (exists $opt{$type}) {
       while(my($what,$value) = each %{$opt{$type}}) {

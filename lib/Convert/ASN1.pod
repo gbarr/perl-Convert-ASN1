@@ -63,7 +63,7 @@ Reference to a hash which contains various decode options.
 
 =item encoding
 
-One of 'ber', 'der', 'per'. I<Currently not used>
+One of 'BER' or 'DER'. The default is 'BER'
 
 =back
 
@@ -432,7 +432,7 @@ More tests.
 
 =head1 AUTHOR
 
-Graham Barr <gbarr@pobox.com>, Report bugs via <bugs-Convert-ASN1@rt.cpan.org>
+Graham Barr <gbarr@pobox.com>, Report bugs via <bug-Convert-ASN1@rt.cpan.org>
 
 =head1 COPYRIGHT
 
