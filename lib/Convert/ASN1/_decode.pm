@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.8 2001/09/07 19:04:48 gbarr Exp $
+# $Id: _decode.pm,v 1.9 2001/09/10 14:34:53 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -31,6 +31,9 @@ my @decode = (
   undef, # CHOICE
 );
 
+my @ctr;
+@ctr[opBITSTR, opSTRING, opUTF8] = (\&_ctr_bitstring,\&_ctr_string,\&_ctr_string);
+
 
 sub _decode {
   my $optn  = shift;
@@ -59,28 +62,54 @@ sub _decode {
 	      die "decode error";
 	    };
 
-	  if ($tag ne $op->[cTAG]) {
-	    if ($idx >= 0 || defined $op->[cOPT]) {
-	      unshift @$larr, $len if $indef;
-	      next OP;
-	    }
-	    die "decode error " . unpack("H*",$tag) ."<=>" . unpack("H*",$op->[cTAG]);
+	  if ($tag eq $op->[cTAG]) {
+
+	    &{$decode[$op->[cTYPE]]}(
+	      $optn,
+	      $op,
+	      $stash,
+	      # We send 1 if there is not var as if there is the decode
+	      # should be getting undef. So if it does not get undef
+	      # it knows it has no variable
+	      (($idx >= 0) ? $arr[$idx++] : defined($var) ? $stash->{$var} : 1),
+	      $buf,$npos,$len, $indef ? $larr : []
+	    );
+
+	    $pos = $npos+$len+$indef;
+
+	    redo TAGLOOP if $idx >= 0 && $pos < $end;
+	    next OP;
 	  }
 
-	  &{$decode[$op->[cTYPE]]}(
-	    $optn,
-	    $op,
-	    $stash,
-	    # We send 1 if there is not var as if there is the decode
-	    # should be getting undef. So if it does not get undef
-	    # it knows it has no variable
-	    (($idx >= 0) ? $arr[$idx++] : defined($var) ? $stash->{$var} : 1),
-	    $buf,$npos,$len, $indef ? $larr : []
-	  );
+	  if ($tag eq ($op->[cTAG] | chr(ASN_CONSTRUCTOR))
+	      and my $ctr = $ctr[$op->[cTYPE]]) 
+	  {
+	    _decode(
+	      $optn,
+	      [$op],
+	      (my $tmp_stash={}),
+	      $npos,
+	      $npos+$len,
+	      $buf,
+	      'ctr',
+	      $indef ? $larr : []
+	    );
 
-	  $pos = $npos+$len+$indef;
+	    (($idx >= 0) ? $arr[$idx++] : defined($var) ? $stash->{$var} : undef)
+		= &{$ctr}(@{$tmp_stash->{ctr}});
+	    $pos = $npos+$len+$indef;
 
-	  redo TAGLOOP if $idx >= 0 && $pos < $end;
+	    redo TAGLOOP if $idx >= 0 && $pos < $end;
+	    next OP;
+
+	  }
+
+	  if ($idx >= 0 || defined $op->[cOPT]) {
+	    unshift @$larr, $len if $indef;
+	    next OP;
+	  }
+
+	  die "decode error " . unpack("H*",$tag) ."<=>" . unpack("H*",$op->[cTAG]);
         }
       }
       else { # opTag length is zero, so it must be an ANY or CHOICE
@@ -130,6 +159,32 @@ sub _decode {
 		  $buf,$npos,$len,$indef ? $larr : []
 		);
 
+		$pos = $npos+$len+$indef;
+
+		redo CHOICELOOP if $idx >= 0 && $pos < $end;
+		next OP;
+	      }
+
+	      if ($tag eq ($cop->[cTAG] | chr(ASN_CONSTRUCTOR))
+		  and my $ctr = $ctr[$cop->[cTYPE]]) 
+	      {
+		my $nstash = $idx >= 0
+			? ($arr[$idx++]={})
+			: defined($var)
+				? ($stash->{$var}={}) : $stash;
+
+		_decode(
+		  $optn,
+		  [$cop],
+		  (my $tmp_stash={}),
+		  $npos,
+		  $npos+$len,
+		  $buf,
+		  'ctr',
+		  $indef ? $larr : []
+		);
+
+		$nstash->{$cop->[cVAR]} = &{$ctr}(@{$tmp_stash->{ctr}});
 		$pos = $npos+$len+$indef;
 
 		redo CHOICELOOP if $idx >= 0 && $pos < $end;
@@ -306,20 +361,42 @@ SET_OP:
     foreach my $op (@$ch) {
       $idx++;
       if (length($op->[cTAG])) {
-	next unless $op->[cTAG] eq $tag;
-        my $var = $op->[cVAR];
-	&{$decode[$op->[cTYPE]]}(
-	  $optn,
-	  $op,
-	  $stash,
-	  # We send 1 if there is not var as if there is the decode
-	  # should be getting undef. So if it does not get undef
-	  # it knows it has no variable
-	  (defined($var) ? $stash->{$var} : 1),
-	  $_[4],$npos,$len,$indef ? $larr : []
-	);
-	$done = $idx;
-	last SET_OP;
+	if ($tag eq $op->[cTAG]) {
+	  my $var = $op->[cVAR];
+	  &{$decode[$op->[cTYPE]]}(
+	    $optn,
+	    $op,
+	    $stash,
+	    # We send 1 if there is not var as if there is the decode
+	    # should be getting undef. So if it does not get undef
+	    # it knows it has no variable
+	    (defined($var) ? $stash->{$var} : 1),
+	    $_[4],$npos,$len,$indef ? $larr : []
+	  );
+	  $done = $idx;
+	  last SET_OP;
+	}
+	if ($tag eq ($op->[cTAG] | chr(ASN_CONSTRUCTOR))
+	    and my $ctr = $ctr[$op->[cTYPE]]) 
+	{
+	  my $tmp_stash={};
+	  _decode(
+	    $optn,
+	    [$op],
+	    $tmp_stash,
+	    $npos,
+	    $npos+$len,
+	    $_[4],
+	    'ctr',
+	    $indef ? $larr : []
+	  );
+
+	  $stash->{$op->[cVAR]} = &{$ctr}(@{$tmp_stash->{ctr}})
+	    if defined $op->[cVAR];
+	  $done = $idx;
+	  last SET_OP;
+	}
+	next SET_OP;
       }
       elsif ($op->[cTYPE] == opANY) {
 	$any = $idx;
@@ -336,6 +413,26 @@ SET_OP:
 	      $nstash->{$cop->[cVAR]},
 	      $_[4],$npos,$len,$indef ? $larr : []
 	    );
+	    $done = $idx;
+	    last SET_OP;
+	  }
+	  if ($tag eq ($cop->[cTAG] | chr(ASN_CONSTRUCTOR))
+	      and my $ctr = $ctr[$cop->[cTYPE]]) 
+	  {
+	    my $nstash = defined($var) ? ($stash->{$var}={}) : $stash;
+
+	    _decode(
+	      $optn,
+	      [$cop],
+	      (my $tmp_stash={}),
+	      $npos,
+	      $npos+$len,
+	      $_[4],
+	      'ctr',
+	      $indef ? $larr : []
+	    );
+
+	    $nstash->{$cop->[cVAR]} = &{$ctr}(@{$tmp_stash->{ctr}});
 	    $done = $idx;
 	    last SET_OP;
 	  }
@@ -508,6 +605,12 @@ sub _scan_indef {
   }
 
   1;
+}
+
+sub _ctr_string { join '', @_ }
+
+sub _ctr_bitstring {
+  [ join('', map { $_->[0] } @_), $_[-1]->[1] ]
 }
 
 1;
