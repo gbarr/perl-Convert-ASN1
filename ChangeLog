@@ -1,3 +1,48 @@
+2002-01-21 20:00  Graham Barr
+
+	* t/06bigint.t:
+
+	Be safer in creating BigInt objects
+	
+2002-01-02 16:56  Graham Barr
+
+	* lib/Convert/ASN1/_encode.pm:
+
+	Change the encode errors to include the hierarchical name of the
+	element in the ASN.1 which is causing the problem
+	
+2002-01-02 16:31  Graham Barr
+
+	* lib/Convert/ASN1.pm:
+
+	Remove unwanted warn statement
+	
+2001-09-25 00:05  Graham Barr
+
+	* lib/Convert/ASN1.pm:
+
+	Better error reporting for encoding
+	
+2001-09-22 01:16  Graham Barr
+
+	* parser.y, lib/Convert/ASN1.pm, lib/Convert/ASN1/Debug.pm,
+	lib/Convert/ASN1/_decode.pm, lib/Convert/ASN1/_encode.pm,
+	lib/Convert/ASN1/parser.pm, t/00prim.t:
+
+	Add support for RELATIVE-OID
+	
+2001-09-22 01:14  Graham Barr
+
+	* t/: 00prim.t, 06bigint.t:
+
+	Move some integer tests that really use bigint from 00prim.t into 06bigint.t
+	
+2001-09-21 23:24  Graham Barr
+
+	* lib/Convert/ASN1.pm, lib/Convert/ASN1/_decode.pm, t/03seqof.t:
+
+	Support for nested SEQUENCE/SET OF's
+	
 2001-09-10 19:03  Graham Barr
 
 	* README, lib/Convert/ASN1.pm:

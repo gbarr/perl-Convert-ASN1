@@ -435,7 +435,7 @@ Graham Barr <gbarr@pobox.xom>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2000-2001 Graham Barr <gbarr@pobox.com>. All rights reserved.
+Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 

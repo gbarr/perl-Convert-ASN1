@@ -18,9 +18,13 @@
 %token POSTRBRACE 18
 
 %{
+# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# This program is free software; you can redistribute it and/or
+# modify it under the same terms as Perl itself.
+
 package Convert::ASN1::parser;
 
-;# $Id: parser.y,v 1.5 2001/09/22 00:16:49 gbarr Exp $
+;# $Id: parser.y,v 1.6 2002/01/22 11:24:28 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);

@@ -1,7 +1,10 @@
+# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# This program is free software; you can redistribute it and/or
+# modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.12 2002/01/02 16:56:47 gbarr Exp $
+# $Id: _encode.pm,v 1.13 2002/01/22 11:24:28 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};

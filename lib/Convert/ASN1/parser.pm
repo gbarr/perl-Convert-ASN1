@@ -3,9 +3,13 @@
 
 # 20 "parser.y"
 
+;# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+;# This program is free software; you can redistribute it and/or
+;# modify it under the same terms as Perl itself.
+
 package Convert::ASN1::parser;
 
-;# $Id: parser.pm,v 1.6 2001/09/22 00:16:49 gbarr Exp $
+;# $Id: parser.pm,v 1.7 2002/01/22 11:24:28 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -69,7 +73,7 @@ sub explicit {
   \@seq;
 }
 
-# 70 "y.tab.pl"
+# 74 "y.tab.pl"
 
 sub constWORD () { 1 }
 sub constCLASS () { 2 }
@@ -192,7 +196,7 @@ sub constYYFINAL () { 4 }
 
 
 sub constYYMAXTOKEN () { 18 }
-# 258 "y.tab.pl"
+# 262 "y.tab.pl"
 
 sub yyclearin { $yychar = -1; }
 sub yyerrok { $yyerrflag = 0; }
@@ -231,7 +235,7 @@ sub yy_err_recover
   else
   {
     return (1) if $yychar == 0;
-# 309 "y.tab.pl"
+# 313 "y.tab.pl"
 
     $yychar = -1;
     next yyloop;
@@ -263,7 +267,7 @@ yyloop: while(1)
       if ($yychar < 0)
       {
         if (($yychar = &yylex) < 0) { $yychar = 0; }
-# 348 "y.tab.pl"
+# 352 "y.tab.pl"
 
       }
       if (($yyn = $yysindex[$yystate]) && ($yyn += $yychar) >= 0 &&
@@ -303,13 +307,13 @@ my $label = "State$yyn";
 goto $label if exists $yystate{$label};
 last switch;
 State1: {
-# 90 "parser.y"
+# 94 "parser.y"
 
 { $yyval = { '' => $yyvs[$yyvsp-0] }; 
 last switch;
 } }
 State3: {
-# 95 "parser.y"
+# 99 "parser.y"
 
 {
 		  $yyval = { $yyvs[$yyvsp-2], [$yyvs[$yyvsp-0]] };
@@ -317,7 +321,7 @@ State3: {
 last switch;
 } }
 State4: {
-# 99 "parser.y"
+# 103 "parser.y"
 
 {
 		  $yyval=$yyvs[$yyvsp-3];
@@ -326,7 +330,7 @@ State4: {
 last switch;
 } }
 State5: {
-# 106 "parser.y"
+# 110 "parser.y"
 
 {
 		  $yyvs[$yyvsp-1]->[cTAG] = $yyvs[$yyvsp-3];
@@ -335,7 +339,7 @@ State5: {
 last switch;
 } }
 State11: {
-# 120 "parser.y"
+# 124 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('COMPONENTS', $yyvs[$yyvsp-0]);
@@ -343,7 +347,7 @@ State11: {
 last switch;
 } }
 State14: {
-# 130 "parser.y"
+# 134 "parser.y"
 
 {
 		  $yyvs[$yyvsp-0]->[cTAG] = $yyvs[$yyvsp-2];
@@ -353,7 +357,7 @@ State14: {
 last switch;
 } }
 State18: {
-# 143 "parser.y"
+# 147 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('SEQUENCE', $yyvs[$yyvsp-1]);
@@ -361,7 +365,7 @@ State18: {
 last switch;
 } }
 State19: {
-# 147 "parser.y"
+# 151 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('SET', $yyvs[$yyvsp-1]);
@@ -369,7 +373,7 @@ State19: {
 last switch;
 } }
 State20: {
-# 151 "parser.y"
+# 155 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('CHOICE', $yyvs[$yyvsp-1]);
@@ -377,7 +381,7 @@ State20: {
 last switch;
 } }
 State21: {
-# 157 "parser.y"
+# 161 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE] = ('ENUM');
@@ -385,7 +389,7 @@ State21: {
 last switch;
 } }
 State27: {
-# 170 "parser.y"
+# 174 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE] = ($yyvs[$yyvsp-0]);
@@ -393,19 +397,19 @@ State27: {
 last switch;
 } }
 State28: {
-# 175 "parser.y"
+# 179 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-0]; 
 last switch;
 } }
 State29: {
-# 176 "parser.y"
+# 180 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-1]; 
 last switch;
 } }
 State30: {
-# 180 "parser.y"
+# 184 "parser.y"
 
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
@@ -413,14 +417,6 @@ State30: {
 last switch;
 } }
 State31: {
-# 184 "parser.y"
-
-{
-		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
-		
-last switch;
-} }
-State32: {
 # 188 "parser.y"
 
 {
@@ -428,8 +424,16 @@ State32: {
 		
 last switch;
 } }
+State32: {
+# 192 "parser.y"
+
+{
+		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
+		
+last switch;
+} }
 State33: {
-# 194 "parser.y"
+# 198 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
@@ -438,19 +442,19 @@ State33: {
 last switch;
 } }
 State34: {
-# 201 "parser.y"
+# 205 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-0]; 
 last switch;
 } }
 State35: {
-# 202 "parser.y"
+# 206 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-1]; 
 last switch;
 } }
 State36: {
-# 206 "parser.y"
+# 210 "parser.y"
 
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
@@ -458,14 +462,6 @@ State36: {
 last switch;
 } }
 State37: {
-# 210 "parser.y"
-
-{
-		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
-		
-last switch;
-} }
-State38: {
 # 214 "parser.y"
 
 {
@@ -473,8 +469,16 @@ State38: {
 		
 last switch;
 } }
+State38: {
+# 218 "parser.y"
+
+{
+		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
+		
+last switch;
+} }
 State39: {
-# 220 "parser.y"
+# 224 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-1]}[cOPT] = ($yyvs[$yyvsp-0]);
@@ -482,7 +486,7 @@ State39: {
 last switch;
 } }
 State43: {
-# 229 "parser.y"
+# 233 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
@@ -492,7 +496,7 @@ State43: {
 last switch;
 } }
 State45: {
-# 236 "parser.y"
+# 240 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cTAG] = ($yyvs[$yyvsp-2]);
@@ -501,72 +505,72 @@ State45: {
 last switch;
 } }
 State46: {
-# 242 "parser.y"
+# 246 "parser.y"
 
 { $yyval = undef; 
 last switch;
 } }
 State47: {
-# 243 "parser.y"
+# 247 "parser.y"
 
 { $yyval = 1;     
 last switch;
 } }
 State48: {
-# 247 "parser.y"
-
-{ $yyval = undef; 
-last switch;
-} }
-State50: {
 # 251 "parser.y"
 
 { $yyval = undef; 
 last switch;
 } }
+State50: {
+# 255 "parser.y"
+
+{ $yyval = undef; 
+last switch;
+} }
 State51: {
-# 252 "parser.y"
+# 256 "parser.y"
 
 { $yyval = 1;     
 last switch;
 } }
 State52: {
-# 253 "parser.y"
+# 257 "parser.y"
 
 { $yyval = 0;     
 last switch;
 } }
 State53: {
-# 256 "parser.y"
-
-{
-last switch;
-} }
-State54: {
-# 257 "parser.y"
-
-{
-last switch;
-} }
-State55: {
 # 260 "parser.y"
 
 {
 last switch;
 } }
-State56: {
-# 263 "parser.y"
+State54: {
+# 261 "parser.y"
 
 {
 last switch;
 } }
-State57: {
+State55: {
 # 264 "parser.y"
 
 {
 last switch;
 } }
-# 611 "y.tab.pl"
+State56: {
+# 267 "parser.y"
+
+{
+last switch;
+} }
+State57: {
+# 268 "parser.y"
+
+{
+last switch;
+} }
+# 615 "y.tab.pl"
 
     } # switch
     $yyssp -= $yym;
@@ -585,7 +589,7 @@ last switch;
       if ($yychar < 0)
       {
         if (($yychar = &yylex) < 0) { $yychar = 0; }
-# 637 "y.tab.pl"
+# 641 "y.tab.pl"
 
       }
       return $yyvs[$yyvsp] if $yychar == 0;
@@ -606,7 +610,7 @@ last switch;
     $yyvs[++$yyvsp] = $yyval;
   } # yyloop
 } # yyparse
-# 268 "parser.y"
+# 272 "parser.y"
 
 
 my %reserved = (
@@ -893,14 +897,14 @@ sub yyerror {
 
 1;
 
-# 943 "y.tab.pl"
+# 947 "y.tab.pl"
 
-%yystate = ('State20','','State11','','State30','','State21','','State31',
-'','State50','','State32','','State14','','State51','','State33','',
-'State52','','State43','','State34','','State53','','State35','','State54',
-'','State45','','State36','','State18','','State27','','State55','',
-'State46','','State37','','State19','','State28','','State56','','State47',
-'','State38','','State29','','State57','','State48','','State39','',
-'State1','','State3','','State4','','State5','');
+%yystate = ('State20','','State21','','State43','','State27','','State28',
+'','State45','','State29','','State46','','State47','','State48','',
+'State1','','State3','','State4','','State5','','State11','','State14','',
+'State30','','State31','','State32','','State33','','State18','','State34',
+'','State50','','State19','','State35','','State51','','State36','',
+'State52','','State37','','State53','','State38','','State54','','State39',
+'','State55','','State56','','State57','');
 
 1;

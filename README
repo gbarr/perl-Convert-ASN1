@@ -1,13 +1,13 @@
 I consider Convert::ASN1 a replacement for my earlier Convert::BER
 module. While ASN1.pm is not as flexable as BER.pm, because PDUs must
-be described up fronta, it is also more powerful.  For example an LDAP
+be described up front, it is also more powerful.  For example an LDAP
 filter is a recursive structure, BER.pm cannot encode or decode this in
 a single pass, ASN1.pm can.
 
 Convert::ASN1 will parse ASN.1 descriptions and will encode from and
 decode to perl data structures using a hierarchy of references.
 
-Copyright (c) 2000-2001 Graham Barr. All rights reserved.
+Copyright (c) 2000-2002 Graham Barr. All rights reserved.
 This package is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
@@ -28,4 +28,4 @@ that you have downloaded
   make test
   make install
 
-$Id: README,v 1.2 2001/09/10 18:03:47 gbarr Exp $
+$Id: README,v 1.3 2002/01/22 11:24:28 gbarr Exp $

@@ -1,7 +1,10 @@
+# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# This program is free software; you can redistribute it and/or
+# modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
 
-# $Id: IO.pm,v 1.7 2001/04/19 19:51:53 gbarr Exp $
+# $Id: IO.pm,v 1.8 2002/01/22 11:24:28 gbarr Exp $
 
 use strict;
 use Socket;

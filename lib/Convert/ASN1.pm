@@ -1,7 +1,10 @@
+# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# This program is free software; you can redistribute it and/or
+# modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.19 2002/01/02 16:31:37 gbarr Exp $
+# $Id: ASN1.pm,v 1.20 2002/01/22 11:24:28 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -10,7 +13,7 @@ use Exporter;
 
 BEGIN {
   @ISA = qw(Exporter);
-  $VERSION = '0.14_03';
+  $VERSION = '0.15';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
