@@ -5,7 +5,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.pm,v 1.1 2000/05/03 12:24:59 gbarr Exp $
+;# $Id: parser.pm,v 1.2 2000/05/22 11:07:36 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -842,38 +842,31 @@ sub yylex {
 
     next if defined $1; # comment or whitespace
 
-    my $paren = 1;
-    {
-      no strict 'refs';
-      #only one paren will be defined
-      $paren++ until defined ${$paren}; # $#- in perl-5.6
-    }
-
-    if ($paren <= 3) {
+    if (defined $2 or defined $3) {
       #A comma is not required after a '}' so to aid the
       #parser we insert a fake token after any '}'
-      push @stacked, constPOSTRBRACE() if $paren == 2 && $+ eq '}';
+      push @stacked, constPOSTRBRACE() if defined $2 and $+ eq '}';
 
       return $reserved{$yylval = $+};
     }
 
-    if ($paren == 4) {
+    if (defined $4) {
       ($yylval = $+) =~ s/\s+/_/g;
       return constWORD();
     }
 
-    if ($paren == 5) {
+    if (defined $5) {
       $yylval = $+;
       return constWORD();
     }
 
-    if ($paren == 6) {
+    if (defined $6) {
       my($class,$num) = ($+ =~ /^([A-Z]*)\s*(\d+)$/);
       $yylval = asn_tag($tag_class{$class}, $num); 
       return constCLASS();
     }
 
-    if ($paren == 7) {
+    if (defined $7) {
       $yylval = $+;
       return constNUMBER();
     }
@@ -894,7 +887,7 @@ sub yyerror {
 
 1;
 
-# 944 "y.tab.pl"
+# 937 "y.tab.pl"
 
 %yystate = ('State20','','State11','','State30','','State21','','State31',
 '','State50','','State32','','State14','','State51','','State33','',

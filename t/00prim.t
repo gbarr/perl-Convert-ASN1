@@ -87,10 +87,10 @@ my %INTEGER = (
 while(($result,$val) = each %INTEGER) {
   print "# INTEGER $val\n";
 
-  btest $test++, $asn->prepare(' int INTEGER');
-  stest $test++, $result, $asn->encode(int => $val);
+  btest $test++, $asn->prepare(' integer INTEGER');
+  stest $test++, $result, $asn->encode(integer => $val);
   btest $test++, $ret = $asn->decode($result);
-  ntest $test++, $val, $ret->{'int'};
+  ntest $test++, $val, $ret->{integer};
 
 }
 

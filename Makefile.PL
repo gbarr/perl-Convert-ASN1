@@ -1,15 +1,21 @@
 # This -*- perl -*- script makes the Makefile
-# $Id: Makefile.PL,v 1.1 2000/05/03 12:24:43 gbarr Exp $
+# $Id: Makefile.PL,v 1.2 2000/05/22 11:07:35 gbarr Exp $
 
 use 5.004;
 use ExtUtils::MakeMaker;
 
+my @ppd;
+
+@ppd = (
+  AUTHOR    	=> 'Graham Barr <gbarr@pobox.com>',
+  ABSTRACT  	=> 'Convert between perl data structures and ASN.1 encoded packets',
+) if $] >= 5.00503;
+
 WriteMakefile(
   VERSION_FROM  => 'lib/Convert/ASN1.pm',
   NAME          => 'Convert::ASN1',
-  AUTHOR    	=> 'Graham Barr <gbarr@pobox.com>',
-  ABSTRACT  	=> 'Convert between perl data structures and ASN.1 encoded packets',
   clean         => { FILES => 'y.tab.pl' },
+  @ppd,
 );
 
 sub MY::postamble {

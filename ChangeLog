@@ -1,3 +1,11 @@
+Change 524 on 2000/05/22 by <gbarr@pobox.com> (Graham Barr)
+
+	Release 0.06
+
+Change 523 on 2000/05/22 by <gbarr@pobox.com> (Graham Barr)
+
+	Now works with 5.004, tested on 5.004, 5.005_03, 5.6.0
+
 Change 515 on 2000/05/12 by <gbarr@pobox.com> (Graham Barr)
 
 	Release 0.05
