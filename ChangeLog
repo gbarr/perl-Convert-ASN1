@@ -1,3 +1,7 @@
+Change 515 on 2000/05/12 by <gbarr@pobox.com> (Graham Barr)
+
+	Release 0.05
+
 Change 514 on 2000/05/11 by <gbarr@pobox.com> (Graham Barr)
 
 	Fix bug in encoding an integer where one to few bytes would be
