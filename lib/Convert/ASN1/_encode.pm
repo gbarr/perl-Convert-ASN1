@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.15 2002/02/15 06:51:45 gbarr Exp $
+# $Id: _encode.pm,v 1.16 2002/08/19 23:51:38 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -348,7 +348,8 @@ sub _enc_choice {
 
   my $stash = defined($_[3]) ? $_[3] : $_[2];
   for my $op (@{$_[1]->[cCHILD]}) {
-    my $var = $op->[cVAR];
+    my $var = defined $op->[cVAR] ? $op->[cVAR] : $op->[cCHILD]->[0]->[cVAR];
+
     if (exists $stash->{$var}) {
       push @{$_[6]}, $var;
       _encode($_[0],[$op], $stash, $_[6], $_[4]);

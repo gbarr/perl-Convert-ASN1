@@ -42,3 +42,12 @@ btest 4, defined( $seq ) && exists( $seq->{list} );
 ntest 5, 13, $seq->{list}->[0]->{prime};
 ntest 6, 28, $seq->{list}->[1]->{product}->{perfect};
 ntest 7, 42, $seq->{list}->[2]->{product}->{plain};
+
+
+btest 8, $asn->prepare( 'Foo ::= [1] EXPLICIT CHOICE { a  NULL }' ) or warn $asn->error;
+$nl = $asn->find('Foo');
+$buf = $nl->encode( a => 1 );
+$result = pack 'C*', map hex, qw(A1 02 05 00);
+stest 9, $result, $buf;
+$seq = $nl->decode( $result )  or warn $asn->error;
+btest 10, $seq->{a};
