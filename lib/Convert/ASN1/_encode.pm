@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.6 2001/01/29 21:09:16 gbarr Exp $
+# $Id: _encode.pm,v 1.7 2001/04/19 22:52:10 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -73,15 +73,24 @@ sub _enc_boolean {
 sub _enc_integer {
 # 0      1    2       3     4     5
 # $optn, $op, $stash, $var, $buf, $loop
+  if (abs($_[3]) > 2**32) {
+    my $os = i2osp($_[3], ref($_[3]) || $_[0]->{encode_bigint} || 'Math::BigInt');
+    my $len = length $os;
+    my $msb = (vec($os, 0, 8) & 0x80) ? 1 : 0;
+    $len++, $os = chr($msb) . $os if $msb and $_[3] > 0;
+    $_[4] .= asn_encode_length($len);
+    $_[4] .= $os;
+  }
+  else {
+    my $neg = ($_[3] < 0);
+    my $len = num_length($neg ? ~ $_[3] : $_[3]);
+    my $msb = $_[3] & (0x80 << (($len - 1) * 8));
 
-  my $neg = ($_[3] < 0);
-  my $len = num_length($neg ? ~ $_[3] : $_[3]);
-  my $msb = $_[3] & (0x80 << (($len - 1) * 8));
+    $len++ if $neg ? !$msb : $msb;
 
-  $len++ if $neg ? !$msb : $msb;
-
-  $_[4] .= asn_encode_length($len);
-  $_[4] .= substr(pack("N",$_[3]), -$len);
+    $_[4] .= asn_encode_length($len);
+    $_[4] .= substr(pack("N",$_[3]), -$len);
+  }
 }
 
 

@@ -107,6 +107,14 @@ in seconds.  This option can be overriden by passing a reference to a
 list of two values as the time value. The list should contain the time
 value and the offset from UTC in seconds.
 
+=item bigint
+
+If during encoding an value greater than 32 bits is discovered and
+is not already a big integer object, then the value will first be
+converted into a big integer object. This option controls the big
+integer class into which the objects will be blessed. The default
+is to use Math::BigInt
+
 =back
 
 Decode options
@@ -135,6 +143,13 @@ used in the encoding.
 The value returned will be the raw encoding as extracted from the PDU.
 
 =back
+
+=item bigint
+
+If during decoding any big integers are discovered (integers greater
+than 32 bits), they will be decoded into big integer objects. This option
+controls the big integer class into which the objects will be blessed.
+The default is to use Math::BigInt.
 
 =back
 

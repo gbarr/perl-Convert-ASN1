@@ -20,5 +20,6 @@ t/01tag.t
 t/02seq.t
 t/03seqof.t
 t/04opt.t
+t/06bigint.t
 t/07io.t
 t/funcs.pl

@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.6 2001/01/29 21:09:16 gbarr Exp $
+# $Id: ASN1.pm,v 1.7 2001/04/19 22:52:10 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -255,6 +255,38 @@ sub num_length {
 	: 3
       : 2
     : 1
+}
+
+# Convert from a bigint to an octet string
+
+sub i2osp {
+    my($num, $biclass) = @_;
+    eval "require $biclass";
+    $num = $biclass->new($num);
+    my $neg = $num < 0
+      and $num = abs($num+1);
+    my $base = $biclass->new(256);
+    my $result = '';
+    while($num != 0) {
+        my $r = $num % $base;
+        $num = ($num-$r) / $base;
+        $result .= chr($r);
+    }
+    $result ^= chr(255) x length($result) if $neg;
+    return scalar reverse $result;
+}
+
+# Convert from an octet string to a bigint
+
+sub os2ip {
+    my($os, $biclass) = @_;
+    eval "require $biclass";
+    my $base = $biclass->new(256);
+    my $result = $biclass->new(0);
+    my $neg = ord($os) >= 0x80
+      and $os ^= chr(255) x length($os);
+    $result = ($result * $base) + $_ for unpack("C*",$os);
+    return $neg ? ($result + 1) * -1 : $result;
 }
 
 # Given a class and a tag, calculate an integer which when encoded
