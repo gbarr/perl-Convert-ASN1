@@ -7,12 +7,9 @@
 use Convert::ASN1;
 BEGIN { require 't/funcs.pl' }
 
-if ($] < 5.005) {
-  print "1..0\n";
-  exit;
-}
+$^W=0 if $] < 5.005; # BigInt in 5.004 has undef issues
 
-print "1..35\n";
+print "1..59\n";
 
 btest 1, $asn = Convert::ASN1->new;
 btest 2, $asn->prepare(q(
@@ -90,4 +87,25 @@ stest 32, $result, $asn->encode(integer => $num);
 btest 33, $ret = $asn->decode($result);
 btest 34, exists $ret->{integer};
 ntest 35, $num, $ret->{integer};
+
+my $test = 36;
+
+my %INTEGER = (
+  pack("C*", 0x02, 0x04, 0x40, 0x00, 0x00, 0x00),	     2**30,
+  pack("C*", 0x02, 0x05, 0x00, 0x80, 0x00, 0x00, 0x00),	     2**31,
+  pack("C*", 0x02, 0x05, 0x01, 0x00, 0x00, 0x00, 0x00),	     2**32,
+  pack("C*", 0x02, 0x04, 0xC0, 0x00, 0x00, 0x00),	     -2**30,
+  pack("C*", 0x02, 0x04, 0x80, 0x00, 0x00, 0x00),	     -2**31,
+  pack("C*", 0x02, 0x05, 0xFF, 0x00, 0x00, 0x00, 0x00),	     -2**32,
+);
+
+while(($result,$val) = each %INTEGER) {
+  print "# INTEGER $val\n";
+
+  btest $test++, $asn->prepare(' integer INTEGER');
+  stest $test++, $result, $asn->encode(integer => $val);
+  btest $test++, $ret = $asn->decode($result);
+  ntest $test++, $val, $ret->{integer};
+
+}
 
