@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.13 2002/01/22 11:24:28 gbarr Exp $
+# $Id: _encode.pm,v 1.14 2002/02/10 16:12:17 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -53,8 +53,9 @@ sub _encode {
     &{$encode[$op->[cTYPE]]}(
       $optn,
       $op,
-      $stash,
-      defined($var) ? $stash->{$var} : undef,
+      (ref($stash) ne 'HASH'
+	? ({}, $stash)
+	: ($stash, defined($var) ? $stash->{$var} : undef)),
       $_[4],
       $op->[cLOOP],
       $path,

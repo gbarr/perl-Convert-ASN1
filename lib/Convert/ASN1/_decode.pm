@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.12 2002/01/22 11:24:28 gbarr Exp $
+# $Id: _decode.pm,v 1.13 2002/02/10 16:12:16 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -67,7 +67,7 @@ sub _decode {
 	      # We send 1 if there is not var as if there is the decode
 	      # should be getting undef. So if it does not get undef
 	      # it knows it has no variable
-	      ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : 1),
+	      ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : ref($stash) eq 'SCALAR' ? $$stash : 1),
 	      $buf,$npos,$len, $indef ? $larr : []
 	    );
 
@@ -91,7 +91,7 @@ sub _decode {
 	      $buf,
 	    );
 
-	    ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : undef)
+	    ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : ref($stash) eq 'SCALAR' ? $$stash : undef)
 		= &{$ctr}(@ctrlist);
 	    $pos = $npos+$len+$indef;
 
@@ -122,7 +122,7 @@ sub _decode {
 
 	    $len += $npos-$pos;
 
-	    ($seqof ? $seqof->[$idx++] : $stash->{$var})
+	    ($seqof ? $seqof->[$idx++] : ref($stash) eq 'SCALAR' ? $$stash : $stash->{$var})
 	      = substr($buf,$pos,$len);
 
 	    $pos += $len + $indef;
@@ -145,7 +145,9 @@ sub _decode {
 		my $nstash = $seqof
 			? ($seqof->[$idx++]={})
 			: defined($var)
-				? ($stash->{$var}={}) : $stash;
+				? ($stash->{$var}={})
+				: ref($stash) eq 'SCALAR'
+					? ($$stash={}) : $stash;
 
 		&{$decode[$cop->[cTYPE]]}(
 		  $optn,
@@ -167,7 +169,9 @@ sub _decode {
 		my $nstash = $seqof
 			? ($seqof->[$idx++]={})
 			: defined($var)
-				? ($stash->{$var}={}) : $stash;
+				? ($stash->{$var}={})
+				: ref($stash) eq 'SCALAR'
+					? ($$stash={}) : $stash;
 
 		_decode(
 		  $optn,

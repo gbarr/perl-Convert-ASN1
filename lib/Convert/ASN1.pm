@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.20 2002/01/22 11:24:28 gbarr Exp $
+# $Id: ASN1.pm,v 1.21 2002/02/10 16:12:16 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -13,7 +13,7 @@ use Exporter;
 
 BEGIN {
   @ISA = qw(Exporter);
-  $VERSION = '0.15';
+  $VERSION = '0.15_01';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
@@ -197,14 +197,28 @@ sub asn_encode_length {
 
 sub decode {
   my $self  = shift;
-  my $stash = {};
 
   local $SIG{__DIE__};
-  eval { _decode($self->{options}, $self->{script}, $stash, 0, length $_[0], undef, [], $_[0]); $stash }
-  or do {
-    $self->{'error'} = $@;
-    undef;
+  my $ret = eval { 
+    my (%stash, $result);
+    my $script = $self->{script};
+    my $stash = (1 == @$script && !$self->{script}[0][cVAR]) ? \$result : ($result=\%stash);
+    _decode(
+	$self->{options},
+	$script,
+	$stash,
+	0,
+	length $_[0], 
+	undef,
+	[],
+	$_[0]);
+    $result;
   };
+  if ($@) {
+    $self->{'error'} = $@;
+    return undef;
+  }
+  $ret;
 }
 
 

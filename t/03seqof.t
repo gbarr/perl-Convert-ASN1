@@ -8,7 +8,7 @@ BEGIN { require 't/funcs.pl' }
 
 use Convert::ASN1;
 
-print "1..29\n";
+print "1..35\n";
 
 btest 1, $asn = Convert::ASN1->new;
 btest 2, $asn->prepare(' ints SEQUENCE OF INTEGER ');
@@ -106,3 +106,15 @@ stest 26, 'a', $ret->{issuer}{rdnSequence}[0][0]{value};
 stest 27, 'b', $ret->{issuer}{rdnSequence}[0][1]{value};
 stest 28, 'c', $ret->{issuer}{rdnSequence}[1][0]{value};
 stest 29, 'd', $ret->{issuer}{rdnSequence}[1][1]{value};
+
+
+btest 30, $asn = Convert::ASN1->new;
+btest 31, $asn->prepare('test ::= SEQUENCE OF INTEGER ');
+
+$result = pack("C*", 0x30, 0x0C, 0x02, 0x01, 0x09, 0x02, 0x01, 0x05,
+		     0x02, 0x01, 0x03, 0x02, 0x01, 0x01);
+
+stest 32, $result, $asn->encode([9,5,3,1]);
+btest 33, $ret = $asn->decode($result);
+btest 34, ref($ret) eq 'ARRAY';
+stest 35, "9:5:3:1", join(":", @{$ret});

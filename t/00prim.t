@@ -6,7 +6,7 @@
 
 use Convert::ASN1 qw(:all);
 
-print "1..146\n";
+print "1..150\n";
 
 BEGIN { require 't/funcs.pl' }
 
@@ -93,6 +93,14 @@ while(($result,$val) = each %INTEGER) {
   ntest $test++, $val, $ret->{integer};
 
 }
+
+btest $test++, $asn->prepare('test ::= INTEGER ');
+
+$result = pack("C*", 0x02, 0x01, 0x09);
+
+stest $test++, $result, $asn->encode(9);
+btest $test++, $ret = $asn->decode($result);
+btest $test++, $ret == 9;
 
 ##
 ## STRING
