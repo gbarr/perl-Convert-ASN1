@@ -5,7 +5,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.pm,v 1.4 2001/07/31 17:03:14 gbarr Exp $
+;# $Id: parser.pm,v 1.5 2001/08/24 14:13:52 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -526,7 +526,7 @@ last switch;
 State51: {
 # 248 "parser.y"
 
-{ warn ; $yyval = 1;     
+{ $yyval = 1;     
 last switch;
 } }
 State52: {

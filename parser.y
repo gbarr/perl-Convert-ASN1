@@ -20,7 +20,7 @@
 %{
 package Convert::ASN1::parser;
 
-;# $Id: parser.y,v 1.3 2001/07/31 17:03:14 gbarr Exp $
+;# $Id: parser.y,v 1.4 2001/08/24 14:13:51 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -246,7 +246,7 @@ class	:			{ $$ = undef; }
 	;
 
 plicit	:			{ $$ = undef; }
-	| EXPLICIT		{ warn ; $$ = 1;     }
+	| EXPLICIT		{ $$ = 1;     }
 	| IMPLICIT		{ $$ = 0;     }
 	;
 
