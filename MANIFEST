@@ -5,6 +5,7 @@ OldChanges
 README
 examples/ldap
 examples/ldap-search
+examples/x509decode
 lib/Convert/ASN1.pm
 lib/Convert/ASN1.pod
 lib/Convert/ASN1/Debug.pm
