@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.6 2001/06/11 13:04:11 gbarr Exp $
+# $Id: _decode.pm,v 1.7 2001/09/06 17:41:23 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -75,7 +75,7 @@ sub _decode {
 	    # should be getting undef. So if it does not get undef
 	    # it knows it has no variable
 	    (($idx >= 0) ? $arr[$idx++] : defined($var) ? $stash->{$var} : 1),
-	    $buf,$npos,$len,$larr
+	    $buf,$npos,$len, $indef ? $larr : []
 	  );
 
 	  $pos = $npos+$len+$indef;
@@ -127,7 +127,7 @@ sub _decode {
 		  $cop,
 		  $nstash,
 		  $nstash->{$cop->[cVAR]},
-		  $buf,$npos,$len,$larr
+		  $buf,$npos,$len,$indef ? $larr : []
 		);
 
 		$pos = $npos+$len+$indef;
@@ -393,8 +393,8 @@ sub _scan_indef {
 
     if (substr($_[0],$pos,2) eq "\0\0") {
       my $end = $pos;
-      $pos = shift @depth;
-      unshift @$larr, $end-$pos;
+      my $start = shift @depth;
+      unshift @$larr, $end-$start;
       $pos += 2;
       next;
     }
