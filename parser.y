@@ -20,7 +20,7 @@
 %{
 package Convert::ASN1::parser;
 
-;# $Id: parser.y,v 1.2 2000/05/22 11:07:35 gbarr Exp $
+;# $Id: parser.y,v 1.3 2001/07/31 17:03:14 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -322,7 +322,7 @@ sub compile_one {
       $op->[cTAG] = defined($op->[cTAG]) ? asn_encode_tag($op->[cTAG]): $base_type{$type}->[0];
     }
     else {
-      die "Internal error\n" unless exists $tree->{$type};
+      die "Unknown type '$type'\n" unless exists $tree->{$type};
       my $ref = compile_one(
 		  $tree,
 		  $tree->{$type},
