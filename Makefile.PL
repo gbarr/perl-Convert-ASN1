@@ -1,31 +1,32 @@
-# This -*- perl -*- script makes the Makefile
-# $Id: Makefile.PL,v 1.3 2001/04/19 23:00:46 gbarr Exp $
+# -*- perl -*-
 
-use 5.004;
-use ExtUtils::MakeMaker;
+use inc::Module::Install;
 
-my @ppd;
+name('Convert-ASN1');
+abstract('Convert between perl data structures and ASN.1 encoded packets');
+author('Graham Barr <gbarr@cpan.org>');
+version_from('lib/Convert/ASN1.pm');
+license('perl');
 
-@ppd = (
-  AUTHOR    	=> 'Graham Barr <gbarr@pobox.com>',
-  ABSTRACT  	=> 'Convert between perl data structures and ASN.1 encoded packets',
-) if $] >= 5.00503;
+clean_files(qw(y.tab.pl));
 
-WriteMakefile(
-  VERSION_FROM  => 'lib/Convert/ASN1.pm',
-  NAME          => 'Convert::ASN1',
-  clean         => { FILES => 'y.tab.pl' },
-  @ppd,
-);
+include_deps('Test::More', 5.004);
+
+check_nmake();      # check and download nmake.exe for Win32
+
+&Makefile->write;
+&Meta->write;
 
 sub MY::postamble {
 
+  return <<POSTAMBLE;
 
-<<"EDQ";
+distdir : distsign
 
 run_byacc:
 	\$(PERL) mkparse parser.y lib/Convert/ASN1/parser.pm
 
-EDQ
+POSTAMBLE
+
 }
 
