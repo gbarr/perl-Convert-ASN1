@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.25 2003/05/06 12:40:32 gbarr Exp $
+# $Id: ASN1.pm,v 1.26 2003/05/06 21:29:07 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -42,7 +42,7 @@ BEGIN {
   $EXPORT_TAGS{all} = \@EXPORT_OK;
 
   @opParts = qw(
-    cTAG cTYPE cVAR cLOOP cOPT cCHILD
+    cTAG cTYPE cVAR cLOOP cOPT cCHILD cDEFINE
   );
 
   @opName = qw(
@@ -177,6 +177,15 @@ sub prepare_file {
   $ret;
 }
 
+sub registeroid {
+  my $self = shift;
+  my $oid  = shift;
+  my $handler = shift;
+
+  $self->{options}{oidtable}{$oid}=$handler;
+  $self->{oidtable}{$oid}=$handler;
+}
+
 # In XS the will convert the tree between perl and C structs
 
 sub _pack_struct { $_[0] }
@@ -239,6 +248,7 @@ sub decode {
     my (%stash, $result);
     my $script = $self->{script};
     my $stash = (1 == @$script && !$self->{script}[0][cVAR]) ? \$result : ($result=\%stash);
+
     _decode(
 	$self->{options},
 	$script,
@@ -248,6 +258,7 @@ sub decode {
 	undef,
 	[],
 	$_[0]);
+
     $result;
   };
   if ($@) {

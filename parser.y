@@ -16,6 +16,8 @@
 %token ENUM 16
 %token COMPONENTS 17
 %token POSTRBRACE 18
+%token DEFINED 19
+%token BY 20
 
 %{
 # Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
@@ -24,7 +26,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.y,v 1.9 2003/05/06 12:40:32 gbarr Exp $
+;# $Id: parser.y,v 1.10 2003/05/06 21:29:07 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -164,17 +166,21 @@ eelem   : ENUM LBRACE elist RBRACE
 		}
 	;
 
-oielem	: WORD
-	| SEQUENCE
-	| SET
-	| ANY
-	| ENUM
+oielem	: WORD					{ @{$$ = []}[cTYPE] = $1; }
+	| SEQUENCE				{ @{$$ = []}[cTYPE] = $1; }
+	| SET					{ @{$$ = []}[cTYPE] = $1; }
+	| ANY defined
+		{
+		  @{$$ = []}[cTYPE,cCHILD,cDEFINE] = ('ANY',undef,$2);
+		}
+	| ENUM					{ @{$$ = []}[cTYPE] = $1; }
 	;
 
-oelem	: oielem
-		{
-		  @{$$ = []}[cTYPE] = ($1);
-		}
+defined :			{ $$=undef; }
+	| DEFINED BY WORD	{ $$=$3; }
+	;	
+
+oelem	: oielem 
 	;
 
 nlist	: nlist1		{ $$ = $1; }
@@ -287,6 +293,8 @@ my %reserved = (
   '}'		=> $RBRACE,
   ','		=> $COMMA,
   '::='         => $ASSIGN,
+  'DEFINED'     => $DEFINED,
+  'BY'		=> $BY
 );
 
 my $reserved = join("|", reverse sort grep { /\w/ } keys %reserved);

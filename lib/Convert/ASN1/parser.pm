@@ -1,7 +1,7 @@
 # 1 "y.tab.pl"
 #$yysccsid = "@(#)yaccpar 1.8 (Berkeley) 01/20/91 (Perl 2.0 12/31/92)";
 
-# 20 "parser.y"
+# 22 "parser.y"
 
 ;# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
 ;# This program is free software; you can redistribute it and/or
@@ -9,7 +9,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.pm,v 1.10 2003/05/06 12:40:32 gbarr Exp $
+;# $Id: parser.pm,v 1.11 2003/05/06 21:29:07 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -93,110 +93,114 @@ sub constNUMBER () { 15 }
 sub constENUM () { 16 }
 sub constCOMPONENTS () { 17 }
 sub constPOSTRBRACE () { 18 }
+sub constDEFINED () { 19 }
+sub constBY () { 20 }
 sub constYYERRCODE () { 256 }
 my @yylhs = (                                               -1,
     0,    0,    2,    2,    3,    3,    6,    6,    6,    6,
     8,   13,   13,   12,   14,   14,   14,    9,    9,    9,
-   10,   17,   17,   17,   17,   17,   11,   15,   15,   18,
-   18,   18,   19,    1,    1,   20,   20,   20,   22,   22,
-   22,   22,   21,   21,   21,   23,   23,    4,    4,    5,
-    5,    5,   16,   16,   24,    7,    7,
+   10,   17,   17,   17,   17,   17,   18,   18,   11,   15,
+   15,   19,   19,   19,   20,    1,    1,   21,   21,   21,
+   23,   23,   23,   23,   22,   22,   22,   24,   24,    4,
+    4,    5,    5,    5,   16,   16,   25,    7,    7,
 );
 my @yylen = (                                                2,
     1,    1,    3,    4,    4,    1,    1,    1,    1,    1,
     3,    1,    1,    5,    1,    1,    1,    4,    4,    4,
-    4,    1,    1,    1,    1,    1,    1,    1,    2,    1,
-    3,    3,    4,    1,    2,    1,    3,    3,    2,    1,
-    1,    1,    4,    1,    3,    0,    1,    0,    1,    0,
-    1,    1,    1,    3,    2,    0,    1,
+    4,    1,    1,    1,    2,    1,    0,    3,    1,    1,
+    2,    1,    3,    3,    4,    1,    2,    1,    3,    3,
+    2,    1,    1,    1,    4,    1,    3,    0,    1,    0,
+    1,    0,    1,    1,    1,    3,    2,    0,    1,
 );
 my @yydefred = (                                             0,
-    0,   49,    0,    0,    1,    0,    0,   44,    0,   36,
-    0,    0,    0,    0,   52,   51,    0,    0,    0,    3,
-    0,    6,    0,   11,    0,    0,    0,    0,   45,    0,
-   37,   38,    0,   22,    0,    0,   25,    0,   42,   40,
-    0,   41,    0,   27,   43,    4,    0,    0,    0,    0,
-    7,    8,    9,   10,    0,   47,   39,    0,    0,    0,
-    0,    0,    0,   30,   57,    5,    0,    0,   53,    0,
-   18,   19,    0,   20,    0,    0,   55,   21,    0,    0,
-    0,   32,   31,   54,    0,    0,   17,   15,   16,   14,
-   33,
+    0,   51,    0,    0,    1,    0,    0,   46,    0,   38,
+    0,    0,    0,    0,   54,   53,    0,    0,    0,    3,
+    0,    6,    0,   11,    0,    0,    0,    0,   47,    0,
+   39,   40,    0,   22,    0,    0,    0,    0,   44,   42,
+    0,   43,    0,   29,   45,    4,    0,    0,    0,    0,
+    7,    8,    9,   10,    0,   25,    0,   49,   41,    0,
+    0,    0,    0,    0,    0,   32,   59,    5,    0,    0,
+    0,   55,    0,   18,   19,    0,   20,    0,    0,   28,
+   57,   21,    0,    0,    0,   34,   33,   56,    0,    0,
+   17,   15,   16,   14,   35,
 );
 my @yydgoto = (                                              4,
-    5,    6,   20,    7,   17,   50,   66,    8,   51,   52,
-   53,   54,   43,   90,   62,   68,   44,   63,   64,    9,
-   10,   45,   57,   69,
+    5,    6,   20,    7,   17,   50,   68,    8,   51,   52,
+   53,   54,   43,   94,   64,   71,   44,   56,   65,   66,
+    9,   10,   45,   59,   72,
 );
-my @yysindex = (                                            53,
-    5,    0,   -1,    0,    0,   12,   96,    0,   30,    0,
-    7,   96,   14,    4,    0,    0,   41,   70,   70,    0,
-   96,    0,   92,    0,    7,   17,   20,   43,    0,   33,
-    0,    0,   92,    0,   17,   20,    0,   82,    0,    0,
-   64,    0,   93,    0,    0,    0,   70,   70,   75,   91,
-    0,    0,    0,    0,  110,    0,    0,   33,  106,  117,
-   33,  131,   62,    0,    0,    0,  128,   95,    0,   96,
-    0,    0,   96,    0,   75,   75,    0,    0,  110,   97,
-   92,    0,    0,    0,   17,   20,    0,    0,    0,    0,
-    0,
+my @yysindex = (                                             7,
+    9,    0,   12,    0,    0,   19,   99,    0,   59,    0,
+   73,   99,   31,   -1,    0,    0,   88,   57,   57,    0,
+   99,    0,   95,    0,   73,   26,   34,   62,    0,   50,
+    0,    0,   95,    0,   26,   34,   64,   66,    0,    0,
+   86,    0,  106,    0,    0,    0,   57,   57,  101,  102,
+    0,    0,    0,    0,   94,    0,  135,    0,    0,   50,
+  120,  131,   50,  138,   61,    0,    0,    0,  149,  137,
+   98,    0,   99,    0,    0,   99,    0,  101,  101,    0,
+    0,    0,  135,  100,   95,    0,    0,    0,   26,   34,
+    0,    0,    0,    0,    0,
 );
-my @yyrindex = (                                           127,
-   78,    0,    0,    0,    0,  133,   85,    0,   21,    0,
-   78,  111,    0,    0,    0,    0,    0,  127,  118,    0,
-  111,    0,    0,    0,   78,    0,    0,    0,    0,   78,
-    0,    0,    0,    0,   11,   25,    0,   38,    0,    0,
-   57,    0,    0,    0,    0,    0,  127,  127,    0,  119,
-    0,    0,    0,    0,    0,    0,    0,   78,    0,    0,
-   78,    0,  134,    0,    0,    0,    0,    0,    0,  111,
-    0,    0,  111,    0,    0,  135,    0,    0,    0,    0,
-    0,    0,    0,    0,   40,   66,    0,    0,    0,    0,
-    0,
+my @yyrindex = (                                           130,
+   81,    0,    0,    0,    0,  151,  136,    0,   39,    0,
+   81,  114,    0,    0,    0,    0,    0,  130,  121,    0,
+  114,    0,    0,    0,   81,    0,    0,    0,    0,   81,
+    0,    0,    0,    0,   16,   29,   42,   69,    0,    0,
+   37,    0,    0,    0,    0,    0,  130,  130,    0,  122,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,   81,
+    0,    0,   81,    0,  142,    0,    0,    0,    0,    0,
+    0,    0,  114,    0,    0,  114,    0,    0,  143,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    3,   45,
+    0,    0,    0,    0,    0,
 );
 my @yygindex = (                                             0,
-   89,    0,  123,    3,  -11,   68,    0,   -9,  -17,  -20,
-  -15,  121,    0,    0,    0,    0,    0,    0,   63,    0,
-  122,    0,    0,   71,
+   96,    0,  132,    1,  -11,   70,    0,    8,  -17,  -18,
+  -16,  133,    0,    0,    0,    0,    0,    0,    0,   67,
+    0,  129,    0,    0,   75,
 );
-sub constYYTABLESIZE () { 150 }
+sub constYYTABLESIZE () { 158 }
 my @yytable = (                                             29,
-   23,   22,   40,   12,   13,   39,    2,   41,    2,   33,
-   23,   23,   14,   21,   24,   22,   12,   25,   11,   23,
-   34,   23,   23,    3,   24,   24,   47,   21,   23,   48,
-   13,   34,   12,   24,    2,   24,   24,   26,   26,   23,
-   23,   18,   24,   26,   27,   28,   26,   19,   26,   26,
-   23,   23,   49,    1,    2,   26,   46,   23,   80,   88,
-   70,   81,   87,   73,   89,   24,   24,   46,   46,    3,
-   30,    2,   56,   75,   46,   61,   24,   24,   48,   76,
-   48,   48,   48,   24,   48,   48,    3,   50,   50,   50,
-   48,   55,   34,   48,   35,   36,   28,   34,   58,   85,
-   86,   28,   15,   16,   37,   78,   79,   38,   65,   37,
-   67,   50,   38,   50,   50,   50,   71,   35,   56,   56,
-   48,   48,   48,   50,   48,   48,   50,   72,   35,   48,
-   48,   48,    2,   48,   48,   59,   60,   82,   83,   31,
-   32,   74,   77,   42,   28,   29,    0,   46,   91,   84,
+   23,   12,   23,   23,   40,   39,   41,    1,    2,   33,
+    2,   21,   25,   23,   23,   23,   23,   13,   22,   14,
+   23,   12,   11,    3,   23,   21,   23,   23,   24,   24,
+   12,   24,   22,   23,   13,   47,   48,   24,   36,   24,
+   24,   27,   27,   48,   24,   24,   24,   48,   48,   36,
+   27,    2,   27,   27,   48,   24,   24,   30,    2,   27,
+   73,   84,   24,   76,   85,   92,   91,   93,   26,   26,
+   18,   49,   78,    3,    2,   57,   19,   26,   79,   26,
+   26,   50,   55,   50,   50,   50,   26,   50,   50,    3,
+   26,   27,   28,   50,   58,   34,   50,   35,   36,   28,
+   34,   63,   89,   90,   28,   15,   16,   37,   82,   83,
+   38,   60,   37,   69,   52,   38,   52,   52,   52,   67,
+   37,   58,   58,   50,   50,   50,   52,   50,   50,   52,
+   74,   37,   50,   50,   50,   70,   50,   50,   52,   52,
+   52,   75,   61,   62,   86,   87,   31,   32,   77,   80,
+    2,   81,   30,   31,   95,   42,   46,   88,
 );
 my @yycheck = (                                             17,
-   12,   11,   23,    1,    6,   23,    2,   23,    2,   21,
-    0,    1,    1,   11,    1,   25,    6,   14,   14,    9,
-    0,   11,   12,   17,    0,    1,   10,   25,   18,   10,
-    6,   11,   30,    9,    2,   11,   12,    0,    1,    0,
-    1,   12,   18,    3,    4,    5,    9,   18,   11,   12,
-   11,   12,   10,    1,    2,   18,    0,   18,   70,   80,
-   58,   73,   80,   61,   80,    0,    1,   11,   12,   17,
-    1,    2,    9,   12,   18,    1,   11,   12,    1,   18,
-    3,    4,    5,   18,    7,    8,   17,    3,    4,    5,
-   13,   10,    1,   16,    3,    4,    5,    1,    6,    3,
-    4,    5,    7,    8,   13,   11,   12,   16,   18,   13,
-    1,    1,   16,    3,    4,    5,   11,    0,    0,    1,
-    3,    4,    5,   13,    7,    8,   16,   11,   11,    3,
-    4,    5,    0,    7,    8,   47,   48,   75,   76,   18,
-   19,   11,   15,   23,   11,   11,   -1,   25,   81,   79,
+   12,    1,    0,    1,   23,   23,   23,    1,    2,   21,
+    2,   11,   14,   11,   12,    0,    1,    6,   11,    1,
+   18,    6,   14,   17,    9,   25,   11,   12,    0,    1,
+   30,    1,   25,   18,    6,   10,    0,    9,    0,   11,
+   12,    0,    1,   10,    0,    1,   18,   11,   12,   11,
+    9,    2,   11,   12,   18,   11,   12,    1,    2,   18,
+   60,   73,   18,   63,   76,   84,   84,   84,    0,    1,
+   12,   10,   12,   17,    2,   10,   18,    9,   18,   11,
+   12,    1,   19,    3,    4,    5,   18,    7,    8,   17,
+    3,    4,    5,   13,    9,    1,   16,    3,    4,    5,
+    1,    1,    3,    4,    5,    7,    8,   13,   11,   12,
+   16,    6,   13,   20,    1,   16,    3,    4,    5,   18,
+    0,    0,    1,    3,    4,    5,   13,    7,    8,   16,
+   11,   11,    3,    4,    5,    1,    7,    8,    3,    4,
+    5,   11,   47,   48,   78,   79,   18,   19,   11,    1,
+    0,   15,   11,   11,   85,   23,   25,   83,
 );
 sub constYYFINAL () { 4 }
 
 
 
-sub constYYMAXTOKEN () { 18 }
-# 262 "y.tab.pl"
+sub constYYMAXTOKEN () { 20 }
+# 268 "y.tab.pl"
 
 sub yyclearin { $yychar = -1; }
 sub yyerrok { $yyerrflag = 0; }
@@ -235,7 +239,7 @@ sub yy_err_recover
   else
   {
     return (1) if $yychar == 0;
-# 313 "y.tab.pl"
+# 319 "y.tab.pl"
 
     $yychar = -1;
     next yyloop;
@@ -267,7 +271,7 @@ yyloop: while(1)
       if ($yychar < 0)
       {
         if (($yychar = &yylex) < 0) { $yychar = 0; }
-# 352 "y.tab.pl"
+# 358 "y.tab.pl"
 
       }
       if (($yyn = $yysindex[$yystate]) && ($yyn += $yychar) >= 0 &&
@@ -307,13 +311,13 @@ my $label = "State$yyn";
 goto $label if exists $yystate{$label};
 last switch;
 State1: {
-# 94 "parser.y"
+# 96 "parser.y"
 
 { $yyval = { '' => $yyvs[$yyvsp-0] }; 
 last switch;
 } }
 State3: {
-# 99 "parser.y"
+# 101 "parser.y"
 
 {
 		  $yyval = { $yyvs[$yyvsp-2], [$yyvs[$yyvsp-0]] };
@@ -321,7 +325,7 @@ State3: {
 last switch;
 } }
 State4: {
-# 103 "parser.y"
+# 105 "parser.y"
 
 {
 		  $yyval=$yyvs[$yyvsp-3];
@@ -330,7 +334,7 @@ State4: {
 last switch;
 } }
 State5: {
-# 110 "parser.y"
+# 112 "parser.y"
 
 {
 		  $yyvs[$yyvsp-1]->[cTAG] = $yyvs[$yyvsp-3];
@@ -339,7 +343,7 @@ State5: {
 last switch;
 } }
 State11: {
-# 124 "parser.y"
+# 126 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('COMPONENTS', $yyvs[$yyvsp-0]);
@@ -347,7 +351,7 @@ State11: {
 last switch;
 } }
 State14: {
-# 134 "parser.y"
+# 136 "parser.y"
 
 {
 		  $yyvs[$yyvsp-0]->[cTAG] = $yyvs[$yyvsp-2];
@@ -357,7 +361,7 @@ State14: {
 last switch;
 } }
 State18: {
-# 147 "parser.y"
+# 149 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('SEQUENCE', $yyvs[$yyvsp-1]);
@@ -365,7 +369,7 @@ State18: {
 last switch;
 } }
 State19: {
-# 151 "parser.y"
+# 153 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('SET', $yyvs[$yyvsp-1]);
@@ -373,7 +377,7 @@ State19: {
 last switch;
 } }
 State20: {
-# 155 "parser.y"
+# 157 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('CHOICE', $yyvs[$yyvsp-1]);
@@ -381,59 +385,95 @@ State20: {
 last switch;
 } }
 State21: {
-# 161 "parser.y"
+# 163 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE] = ('ENUM');
 		
 last switch;
 } }
-State27: {
-# 174 "parser.y"
+State22: {
+# 168 "parser.y"
+
+{ @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
+last switch;
+} }
+State23: {
+# 169 "parser.y"
+
+{ @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
+last switch;
+} }
+State24: {
+# 170 "parser.y"
+
+{ @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
+last switch;
+} }
+State25: {
+# 172 "parser.y"
 
 {
-		  @{$yyval = []}[cTYPE] = ($yyvs[$yyvsp-0]);
+		  @{$yyval = []}[cTYPE,cCHILD,cDEFINE] = ('ANY',undef,$yyvs[$yyvsp-0]);
 		
+last switch;
+} }
+State26: {
+# 175 "parser.y"
+
+{ @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
+last switch;
+} }
+State27: {
+# 178 "parser.y"
+
+{ $yyval=undef; 
 last switch;
 } }
 State28: {
 # 179 "parser.y"
 
+{ $yyval=$yyvs[$yyvsp-0]; 
+last switch;
+} }
+State30: {
+# 185 "parser.y"
+
 { $yyval = $yyvs[$yyvsp-0]; 
 last switch;
 } }
-State29: {
-# 180 "parser.y"
+State31: {
+# 186 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-1]; 
 last switch;
 } }
-State30: {
-# 184 "parser.y"
+State32: {
+# 190 "parser.y"
 
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
 		
 last switch;
 } }
-State31: {
-# 188 "parser.y"
-
-{
-		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
-		
-last switch;
-} }
-State32: {
-# 192 "parser.y"
-
-{
-		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
-		
-last switch;
-} }
 State33: {
+# 194 "parser.y"
+
+{
+		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
+		
+last switch;
+} }
+State34: {
 # 198 "parser.y"
+
+{
+		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
+		
+last switch;
+} }
+State35: {
+# 204 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
@@ -441,52 +481,52 @@ State33: {
 		
 last switch;
 } }
-State34: {
-# 205 "parser.y"
+State36: {
+# 211 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-0]; 
 last switch;
 } }
-State35: {
-# 206 "parser.y"
+State37: {
+# 212 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-1]; 
 last switch;
 } }
-State36: {
-# 210 "parser.y"
+State38: {
+# 216 "parser.y"
 
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
 		
 last switch;
 } }
-State37: {
-# 214 "parser.y"
-
-{
-		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
-		
-last switch;
-} }
-State38: {
-# 218 "parser.y"
-
-{
-		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
-		
-last switch;
-} }
 State39: {
+# 220 "parser.y"
+
+{
+		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
+		
+last switch;
+} }
+State40: {
 # 224 "parser.y"
+
+{
+		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
+		
+last switch;
+} }
+State41: {
+# 230 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-1]}[cOPT] = ($yyvs[$yyvsp-0]);
 		
 last switch;
 } }
-State43: {
-# 233 "parser.y"
+State45: {
+# 239 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
@@ -495,8 +535,8 @@ State43: {
 		
 last switch;
 } }
-State45: {
-# 240 "parser.y"
+State47: {
+# 246 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cTAG] = ($yyvs[$yyvsp-2]);
@@ -504,56 +544,44 @@ State45: {
 		
 last switch;
 } }
-State46: {
-# 246 "parser.y"
+State48: {
+# 252 "parser.y"
 
 { $yyval = undef; 
 last switch;
 } }
-State47: {
-# 247 "parser.y"
+State49: {
+# 253 "parser.y"
 
 { $yyval = 1;     
-last switch;
-} }
-State48: {
-# 251 "parser.y"
-
-{ $yyval = undef; 
 last switch;
 } }
 State50: {
-# 255 "parser.y"
+# 257 "parser.y"
 
 { $yyval = undef; 
 last switch;
 } }
-State51: {
-# 256 "parser.y"
+State52: {
+# 261 "parser.y"
+
+{ $yyval = undef; 
+last switch;
+} }
+State53: {
+# 262 "parser.y"
 
 { $yyval = 1;     
 last switch;
 } }
-State52: {
-# 257 "parser.y"
+State54: {
+# 263 "parser.y"
 
 { $yyval = 0;     
 last switch;
 } }
-State53: {
-# 260 "parser.y"
-
-{
-last switch;
-} }
-State54: {
-# 261 "parser.y"
-
-{
-last switch;
-} }
 State55: {
-# 264 "parser.y"
+# 266 "parser.y"
 
 {
 last switch;
@@ -565,12 +593,24 @@ State56: {
 last switch;
 } }
 State57: {
-# 268 "parser.y"
+# 270 "parser.y"
 
 {
 last switch;
 } }
-# 615 "y.tab.pl"
+State58: {
+# 273 "parser.y"
+
+{
+last switch;
+} }
+State59: {
+# 274 "parser.y"
+
+{
+last switch;
+} }
+# 651 "y.tab.pl"
 
     } # switch
     $yyssp -= $yym;
@@ -589,7 +629,7 @@ last switch;
       if ($yychar < 0)
       {
         if (($yychar = &yylex) < 0) { $yychar = 0; }
-# 641 "y.tab.pl"
+# 677 "y.tab.pl"
 
       }
       return $yyvs[$yyvsp] if $yychar == 0;
@@ -610,7 +650,7 @@ last switch;
     $yyvs[++$yyvsp] = $yyval;
   } # yyloop
 } # yyparse
-# 272 "parser.y"
+# 278 "parser.y"
 
 
 my %reserved = (
@@ -629,6 +669,8 @@ my %reserved = (
   '}'		=> constRBRACE(),
   ','		=> constCOMMA(),
   '::='         => constASSIGN(),
+  'DEFINED'     => constDEFINED(),
+  'BY'		=> constBY()
 );
 
 my $reserved = join("|", reverse sort grep { /\w/ } keys %reserved);
@@ -911,14 +953,15 @@ sub yyerror {
 
 1;
 
-# 950 "y.tab.pl"
+# 999 "y.tab.pl"
 
-%yystate = ('State20','','State11','','State30','','State21','','State31',
-'','State50','','State32','','State14','','State51','','State33','',
-'State52','','State43','','State34','','State53','','State35','','State54',
-'','State45','','State36','','State18','','State27','','State55','',
-'State46','','State37','','State19','','State28','','State56','','State47',
-'','State38','','State29','','State57','','State48','','State39','',
-'State1','','State3','','State4','','State5','');
+%yystate = ('State34','','State11','','State33','','State24','','State47',
+'','State40','','State31','','State37','','State23','','State22','',
+'State21','','State57','','State39','','State56','','State20','','State25',
+'','State38','','State14','','State19','','State5','','State53','',
+'State26','','State27','','State50','','State36','','State45','','State4',
+'','State3','','State32','','State49','','State30','','State35','',
+'State48','','State52','','State55','','State28','','State58','','State41',
+'','State18','','State59','','State1','','State54','');
 
 1;

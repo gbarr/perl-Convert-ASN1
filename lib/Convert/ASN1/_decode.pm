@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.16 2003/05/06 11:07:19 gbarr Exp $
+# $Id: _decode.pm,v 1.17 2003/05/06 21:29:07 gbarr Exp $
 
 BEGIN {
   unless (CHECK_UTF8) {
@@ -124,8 +124,11 @@ sub _decode {
 
 	    $len += $npos-$pos;
 
+	    $handler=($optn->{oidtable} && $op->[cDEFINE]) ?
+			$optn->{oidtable}{$stash->{$op->[cDEFINE]}} : undef;
+
 	    ($seqof ? $seqof->[$idx++] : ref($stash) eq 'SCALAR' ? $$stash : $stash->{$var})
-	      = substr($buf,$pos,$len);
+	      = $handler ? $handler->decode(substr($buf,$pos,$len)) : substr($buf,$pos,$len);
 
 	    $pos += $len + $indef;
 

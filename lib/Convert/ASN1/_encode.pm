@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.17 2003/05/06 11:07:20 gbarr Exp $
+# $Id: _encode.pm,v 1.18 2003/05/06 21:29:07 gbarr Exp $
 
 BEGIN {
   unless (CHECK_UTF8) {
@@ -356,7 +356,15 @@ sub _enc_any {
 # 0      1    2       3     4     5      6
 # $optn, $op, $stash, $var, $buf, $loop, $path
 
-  $_[4] .= $_[3];
+  my $handler;
+  if ($_[1]->[cDEFINE] && $_[2]->{$_[1]->[cDEFINE]}) {
+    $handler=$_[0]->{oidtable}{$_[2]->{$_[1]->[cDEFINE]}};
+  }
+  if ($handler) {
+    $_[4] .= $handler->encode($_[3]);
+  } else {
+    $_[4] .= $_[3];
+  }
 }
 
 
