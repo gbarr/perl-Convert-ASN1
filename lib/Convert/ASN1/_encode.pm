@@ -4,11 +4,13 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.16 2002/08/19 23:51:38 gbarr Exp $
+# $Id: _encode.pm,v 1.17 2003/05/06 11:07:20 gbarr Exp $
 
 BEGIN {
-  local $SIG{__DIE__};
-  eval { require bytes } and 'bytes'->import
+  unless (CHECK_UTF8) {
+    local $SIG{__DIE__};
+    eval { require bytes } and 'bytes'->import
+  }
 }
 
 # These are the subs which do the encoding, they are called with
@@ -127,8 +129,15 @@ sub _enc_string {
 # 0      1    2       3     4     5      6
 # $optn, $op, $stash, $var, $buf, $loop, $path
 
-  $_[4] .= asn_encode_length(length $_[3]);
-  $_[4] .= $_[3];
+  if (CHECK_UTF8 and Encode::is_utf8($_[3])) {
+    utf8::encode(my $tmp = $_[3]);
+    $_[4] .= asn_encode_length(length $tmp);
+    $_[4] .= $tmp;
+  }
+  else {
+    $_[4] .= asn_encode_length(length $_[3]);
+    $_[4] .= $_[3];
+  }
 }
 
 
@@ -329,8 +338,17 @@ sub _enc_utf8 {
 # 0      1    2       3     4     5      6
 # $optn, $op, $stash, $var, $buf, $loop, $path
 
-  $_[4] .= asn_encode_length(length $_[3]);
-  $_[4] .= $_[3];
+  if (CHECK_UTF8) {
+    my $tmp = $_[3];
+    utf8::upgrade($tmp) unless Encode::is_utf8($tmp);
+    utf8::encode($tmp);
+    $_[4] .= asn_encode_length(length $tmp);
+    $_[4] .= $tmp;
+  }
+  else {
+    $_[4] .= asn_encode_length(length $_[3]);
+    $_[4] .= $_[3];
+  }
 }
 
 

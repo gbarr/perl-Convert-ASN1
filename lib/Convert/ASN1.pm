@@ -4,16 +4,24 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.23 2002/08/20 00:00:57 gbarr Exp $
+# $Id: ASN1.pm,v 1.24 2003/05/06 11:07:19 gbarr Exp $
 
 use 5.004;
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS @opParts @opName $AUTOLOAD);
 use Exporter;
 
+use constant CHECK_UTF8 => $] > 5.007;
+
 BEGIN {
+
+  if (CHECK_UTF8) {
+    require Encode;
+    require utf8;
+  }
+
   @ISA = qw(Exporter);
-  $VERSION = '0.16';
+  $VERSION = '0.16_01';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],

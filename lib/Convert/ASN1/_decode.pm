@@ -4,11 +4,13 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.15 2002/03/25 09:06:16 gbarr Exp $
+# $Id: _decode.pm,v 1.16 2003/05/06 11:07:19 gbarr Exp $
 
 BEGIN {
-  local $SIG{__DIE__};
-  eval { require bytes } and 'bytes'->import
+  unless (CHECK_UTF8) {
+    local $SIG{__DIE__};
+    eval { require bytes } and 'bytes'->import
+  }
 }
 
 # These are the subs that do the decode, they are called with
@@ -536,12 +538,20 @@ sub _dec_utf8 {
 # $optn, $op, $stash, $var, $buf, $pos, $len
 
   BEGIN {
-    local $SIG{__DIE__};
-    eval { require bytes } and 'bytes'->unimport;
-    eval { require utf8  } and 'utf8'->import;
+    unless (CHECK_UTF8) {
+      local $SIG{__DIE__};
+      eval { require bytes } and 'bytes'->unimport;
+      eval { require utf8  } and 'utf8'->import;
+    }
   }
 
-  $_[3] = (substr($_[4],$_[5],$_[6]) =~ /(.*)/s)[0];
+  if (CHECK_UTF8) {
+    $_[3] = Encode::decode('utf8', substr($_[4],$_[5],$_[6]));
+  }
+  else {
+    $_[3] = (substr($_[4],$_[5],$_[6]) =~ /(.*)/s)[0];
+  }
+
   1;
 }
 
