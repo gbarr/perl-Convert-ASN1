@@ -5,7 +5,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.pm,v 1.2 2000/05/22 11:07:36 gbarr Exp $
+;# $Id: parser.pm,v 1.3 2001/02/05 22:31:41 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -42,12 +42,15 @@ my %base_type = (
   T61String         => [ asn_encode_tag(ASN_UNIVERSAL | 20), opSTRING ],
   VideotexString    => [ asn_encode_tag(ASN_UNIVERSAL | 21), opSTRING ],
   IA5String         => [ asn_encode_tag(ASN_UNIVERSAL | 22), opSTRING ],
+  UTCTime           => [ asn_encode_tag(ASN_UNIVERSAL | 23), opUTIME ],
+  GeneralizedTime   => [ asn_encode_tag(ASN_UNIVERSAL | 24), opGTIME ],
   GraphicString     => [ asn_encode_tag(ASN_UNIVERSAL | 25), opSTRING ],
   VisibleString     => [ asn_encode_tag(ASN_UNIVERSAL | 26), opSTRING ],
   ISO646String      => [ asn_encode_tag(ASN_UNIVERSAL | 26), opSTRING ],
   GeneralString     => [ asn_encode_tag(ASN_UNIVERSAL | 27), opSTRING ],
-  UTCTime           => [ asn_encode_tag(ASN_UNIVERSAL | 23), opUTIME ],
-  GeneralizedTime   => [ asn_encode_tag(ASN_UNIVERSAL | 24), opGTIME ],
+  CharacterString   => [ asn_encode_tag(ASN_UNIVERSAL | 28), opSTRING ],
+  UniversalString   => [ asn_encode_tag(ASN_UNIVERSAL | 28), opSTRING ],
+  BMPString         => [ asn_encode_tag(ASN_UNIVERSAL | 30), opSTRING ],
 
   CHOICE => [ '', opCHOICE ],
   ANY    => [ '', opANY ],
