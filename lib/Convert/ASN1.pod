@@ -75,13 +75,37 @@ Encode options
 
 Which encoding to use for real's. One of 'binary', 'nr1', 'nr2', 'nr3'
 
+=item time
+
+This controls how UTCTime and GeneralizedTime elements are encoded. The default
+is C<withzone>.
+
+=over 4
+
+=item utctime
+
+The value passed will be encoded without a zone, ie a UTC value.
+
+=item withzone
+
+The value will be encoded with a zone. By default it will be encoded
+using the local time offset. The offset may be set using the C<timezone>
+configure option.
+
+=item raw
+
+The value passed should already be in the correct format and will be copied
+into the PDU as-is.
+
+=back
+
 =item timezone
 
-By default UTCTime and GeneralizedTime will be encoded using the local time offset
-from UTC. This will over-ride that. It is an offset from UTC in seconds. Setting this
-to zero will make all Time values be passed as UTC. This option can be overriden
-by passing a reference to a list of two values as the time value. The list
-should contain the time value and the offset from UTC in seconds.
+By default UTCTime and GeneralizedTime will be encoded using the local
+time offset from UTC. This will over-ride that. It is an offset from UTC
+in seconds.  This option can be overriden by passing a reference to a
+list of two values as the time value. The list should contain the time
+value and the offset from UTC in seconds.
 
 =back
 
@@ -89,11 +113,28 @@ Decode options
 
 =over 4
 
-=item timezone
+=item time
 
-By default UTCTime and GeneralizedTime will return just a time value. If this option
-is set to true then these type will return a reference to an array of two values. The
-first value is the time value. The second value is the offset from UTC in seconds.
+This controls how a UTCTime or a GeneralizedTime element will be decoded. The default
+is C<utctime>.
+
+=over 4
+
+=item utctime
+
+The value returned will be a time value as returned by the C<time> function.
+
+=item withzone
+
+The value returned will be a reference to an array of two values. The first is the
+same as with C<utctime>, the second is the timezone offset, in seconds, that was
+used in the encoding.
+
+=item raw
+
+The value returned will be the raw encoding as extracted from the PDU.
+
+=back
 
 =back
 

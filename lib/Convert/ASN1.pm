@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.4 2000/06/08 08:31:17 gbarr Exp $
+# $Id: ASN1.pm,v 1.5 2000/08/03 17:07:02 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -213,7 +213,7 @@ sub asn_decode_length {
   my $len = ord substr($_[0],0,1);
 
   if($len & 0x80) {
-    $len &= 0x7f;
+    $len &= 0x7f or return (1,-1);
 
     return if $len >= length $_[0];
 

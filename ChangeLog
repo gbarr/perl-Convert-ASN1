@@ -1,3 +1,19 @@
+Change 558 on 2000/08/01 by <gbarr@pobox.com> (Graham Barr)
+
+	Added options for encode/decode of UTCTime and Generalized time
+
+Change 557 on 2000/08/01 by <gbarr@pobox.com> (Graham Barr)
+
+	Add support to decode indefinate lengths
+
+Change 556 on 2000/08/01 by <gbarr@pobox.com> (Graham Barr)
+
+	Performance tweaks to IO
+
+Change 555 on 2000/08/01 by <gbarr@pobox.com> (Graham Barr)
+
+	asn_decode_length(), return a length of -1 for indefinate lengths
+
 Change 534 on 2000/06/05 by <gbarr@pobox.com> (Graham Barr)
 
 	Another syntax change in Debug.pm for 5.004 support

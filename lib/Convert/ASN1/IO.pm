@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: IO.pm,v 1.4 2000/05/22 11:07:36 gbarr Exp $
+# $Id: IO.pm,v 1.5 2000/08/03 17:07:02 gbarr Exp $
 
 use strict;
 use Socket;
@@ -110,6 +110,7 @@ sub asn_read { # $fh, $buffer, $offset
   # how many more bytes to read
 
   my $pos = 0;
+  my $need = 0;
   if ($_[2]) {
     if ($_[2] > length $_[1]) {
       require Carp;
@@ -123,66 +124,68 @@ sub asn_read { # $fh, $buffer, $offset
   }
   my $depth = 0;
   my $ch;
-  my $mark;
+  my $n;
+
+  while(($n = $need - length $_[1]) > 0) {
+    sysread($_[0],$_[1],$n,length $_[1]) or
+	goto READ_ERR;
+  }
 
   while(1) {
-    unless ($pos < length $_[1]) {
-      # The first byte is the tag
-      sysread($_[0],$_[1],1,$pos) or
-	  goto READ_ERR;
-    }
+    $need = $pos + 2;
     my $tch = ord(substr($_[1],$pos++,1));
 
     # Tag may be multi-byte
     if(($tch & 0x1f) == 0x1f) {
+      my $ch;
       do {
-	my $ch;
-	unless ($pos < length $_[1]) {
-	  sysread($_[0], $_[1], 1, $pos) or
+        $need++;
+	while(($n = $need - length $_[1]) > 0) {
+	  sysread($_[0],$_[1],$n,length $_[1]) or
 	      goto READ_ERR;
 	}
 	$ch = ord(substr($_[1],$pos++,1));
       } while($ch & 0x80);
     }
 
-    # The next byte will be the first byte of the length
-    unless ($pos < length $_[1]) {
-      sysread($_[0], $_[1], 1, $pos) or
-	goto READ_ERR;
-    }
-    $mark = $pos;
-    my $lch = ord(substr($_[1],$pos++,1));
+    $need = $pos + 1;
 
-    # May be a multi-byte length
-    if($lch & 0x80) {
-      my $len = $lch & 0x7f;
-      unless ($len) {
+    while(($n = $need - length $_[1]) > 0) {
+      sysread($_[0],$_[1],$n,length $_[1]) or
+	  goto READ_ERR;
+    }
+
+    my $len = ord(substr($_[1],$pos++,1));
+
+    if($len & 0x80) {
+      unless ($len &= 0x7f) {
 	$depth++;
 	next;
       }
-      while($len) {
-	my $n = sysread($_[0], $_[1], $len, $pos) or
-	  goto READ_ERR;
-	$len -= $n;
-	$pos += $n;
+      $need = $pos + $len;
+
+      while(($n = $need - length $_[1]) > 0) {
+	sysread($_[0],$_[1],$n,length $_[1]) or
+	    goto READ_ERR;
       }
+
+      $pos += $len + unpack("N", "\0" x (4 - $len) . substr($_[0],$pos,$len));
     }
-    elsif (!$lch && !$tch && $depth) {
+    elsif (!$len && !$tch) {
+      die "Bad ASN PDU" unless $depth;
       unless (--$depth) {
 	last;
       }
     }
+    else {
+      $pos += $len;
+    }
 
-    my($lb,$len) = asn_decode_length(substr($_[1],$mark,$pos-$mark));
+    $need = $pos + 2*$depth;
 
-    while($len > 0) {
-      my $got;
-
-      goto READ_ERR
-	  unless $got = sysread($_[0], $_[1],$len,$pos );
-
-      $len -= $got;
-      $pos += $got;
+    while(($n = $need - length $_[1]) > 0) {
+      sysread($_[0],$_[1],$n,length $_[1]) or
+	  goto READ_ERR;
     }
     last unless $depth;
   }

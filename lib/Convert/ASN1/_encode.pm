@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.4 2000/06/08 08:31:17 gbarr Exp $
+# $Id: _encode.pm,v 1.5 2000/08/03 17:07:02 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -251,9 +251,19 @@ sub _enc_sequence {
 }
 
 
+my %_enc_time_opt = ( utctime => 1, withzone => 0, raw => 2);
+
 sub _enc_time {
 # 0      1    2       3     4     5
 # $optn, $op, $stash, $var, $buf, $loop
+
+  my $mode = $_enc_time_opt{$_[0]->{'encode_time'} || ''} || 0;
+
+  if ($mode == 2) {
+    $_[4] .= asn_encode_length(length $_[3]);
+    $_[4] .= $_[3];
+    return;
+  }
 
   my @time;
   my $offset;
@@ -261,33 +271,36 @@ sub _enc_time {
 
   if (ref($_[3])) {
     $offset = int($_[3]->[1] / 60);
-    @time = gmtime($_[3]->[0] + $offset*60);
+    $time = $_[3]->[0] + $_[3]->[1];
   }
-  elsif (exists $_[0]->{'encode_timezone'}) {
-    $offset = int($_[0]->{'encode_timezone'} / 60);
-    @time = gmtime($_[3] + $offset*60);
+  elsif ($mode == 0) {
+    if (exists $_[0]->{'encode_timezone'}) {
+      $offset = int($_[0]->{'encode_timezone'} / 60);
+      $time = $_[3] + $_[0]->{'encode_timezone'};
+    }
+    else {
+      @time = localtime($_[3]);
+      my @g = gmtime($_[3]);
+      
+      $offset = ($time[1] - $g[1]) + ($time[2] - $g[2]) * 60;
+      $time = $_[3] + $offset*60;
+    }
   }
   else {
-    @time = localtime($_[3]);
-    my @g = gmtime($_[3]);
-    
-    $offset = ($time[1] - $g[1]) + ($time[2] - $g[2]) * 60;
-    my $d = $time[7] - $g[7];
-    if($d == 1 || $d < -1) {
-      $offset += 1440;
-    }
-    elsif($d > 1) {
-      $offset -= 1440;
-    }
+    $time = $_[3];
   }
+  @time = gmtime($time);
   $time[4] += 1;
-  $time[5] = $isgen ? $time[5] + 1900 : $time[5] % 100;
-  $_[4] .= sprintf("%02d"x6, @time[5,4,3,2,1,0]);
+  $time[5] = $isgen ? ($time[5] + 1900) : ($time[5] % 100);
+
+  my $tmp = sprintf("%02d"x6, @time[5,4,3,2,1,0]);
   if ($isgen) {
-    my $sp = sprintf("%.03f",ref($_[3]) ? $_[3]->[1] : $_[3]);
-    $_[4] .= substr($sp,-4) unless $sp =~ /\.000$/;
+    my $sp = sprintf("%.03f",$time);
+    $tmp .= substr($sp,-4) unless $sp =~ /\.000$/;
   }
-  $_[4] .= $offset ? sprintf("%+03d%02d",$offset / 60, abs($offset % 60)) : 'Z';
+  $tmp .= $offset ? sprintf("%+03d%02d",$offset / 60, abs($offset % 60)) : 'Z';
+  $_[4] .= asn_encode_length(length $tmp);
+  $_[4] .= $tmp;
 }
 
 

@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: Debug.pm,v 1.3 2000/06/08 08:31:17 gbarr Exp $
+# $Id: Debug.pm,v 1.4 2000/08/03 17:07:02 gbarr Exp $
 
 ##
 ## just for debug :-)
@@ -78,9 +78,9 @@ sub asn_dump {
     last unless $pos < $length;
     
     my $start = $pos;
-    my($tb,$tag) = asn_decode_tag(substr($_[0],$pos));
+    my($tb,$tag) = asn_decode_tag(substr($_[0],$pos,10));
     $pos += $tb;
-    my($lb,$len) = asn_decode_length(substr($_[0],$pos));
+    my($lb,$len) = asn_decode_length(substr($_[0],$pos,10));
     $pos += $lb;
 
     if($tag == 0 && $len == 0) {
