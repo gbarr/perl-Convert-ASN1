@@ -1,6 +1,37 @@
+2001-06-11 14:13  Graham Barr
+
+	* lib/Convert/ASN1.pm:
+
+	Release 0.11
+	
+2001-06-11 14:04  Graham Barr
+
+	* lib/Convert/ASN1/_decode.pm, t/02seq.t:
+
+	Fix decode of REAL when it is not the last element of a sequence
+	
+2001-04-26 07:52  Graham Barr
+
+	* lib/Convert/ASN1.pm, t/05time.t, t/06bigint.t, t/funcs.pl:
+
+	Fix syntax to be compatible with perl5.004_04
+	Skip bigint tests on 5.004 as they trigger lots of warnings in Math::BigInt
+	
+2001-04-20 07:26  Graham Barr
+
+	* lib/Convert/ASN1.pm, lib/Convert/ASN1/_encode.pm, t/06bigint.t:
+
+	Fix some bigint encoding problems and add some tests
+	
+2001-04-20 00:00  Graham Barr
+
+	* Makefile.PL, lib/Convert/ASN1.pm:
+
+	Release 0.09
+	
 2001-04-19 23:52  Graham Barr
 
-	* lib/Convert/ASN1.pm, lib/Convert/ASN1.pod,
+	* MANIFEST, lib/Convert/ASN1.pm, lib/Convert/ASN1.pod,
 	lib/Convert/ASN1/_decode.pm, lib/Convert/ASN1/_encode.pm,
 	t/funcs.pl:
 
@@ -36,6 +67,12 @@
 
 	Useful debug enhancements
 	
+2001-02-05 22:36  Graham Barr
+
+	* MANIFEST:
+
+	Removed Convert-ASN1.ppd
+	
 2001-02-05 22:31  Graham Barr
 
 	* lib/Convert/ASN1/parser.pm:
@@ -44,13 +81,13 @@
 	
 2001-01-29 22:35  Graham Barr
 
-	* OldChanges:
+	* MANIFEST, OldChanges:
 
 	Move perforce changelog aside and now generate with cvs2cl
 	
 2000-05-03 13:24  Graham Barr
 
-	* Makefile.PL, README, mkparse, parser.y, examples/ldap,
+	* MANIFEST, Makefile.PL, README, mkparse, parser.y, examples/ldap,
 	examples/ldap-search, lib/Convert/ASN1.pm, lib/Convert/ASN1.pod,
 	lib/Convert/ASN1/Debug.pm, lib/Convert/ASN1/IO.pm,
 	lib/Convert/ASN1/_decode.pm, lib/Convert/ASN1/_encode.pm,

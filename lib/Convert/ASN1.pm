@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.10 2001/04/26 06:52:04 gbarr Exp $
+# $Id: ASN1.pm,v 1.11 2001/06/11 13:13:33 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -10,7 +10,7 @@ use Exporter;
 
 BEGIN {
   @ISA = qw(Exporter);
-  $VERSION = '0.10';
+  $VERSION = '0.11';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
