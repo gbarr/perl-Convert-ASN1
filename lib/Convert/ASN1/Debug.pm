@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: Debug.pm,v 1.1 2000/05/03 12:24:52 gbarr Exp $
+# $Id: Debug.pm,v 1.2 2000/05/22 20:56:27 gbarr Exp $
 
 ##
 ## just for debug :-)
@@ -172,7 +172,9 @@ BEGIN { undef &dump }
 sub dump {
   my $self = shift;
   
-  dump_op($_,"",{},1) for @{$self->{script}};
+  for (@{$self->{script}}) {
+    dump_op($_,"",{},1);
+  }
 }
 
 BEGIN { undef &dump_all }
@@ -181,7 +183,9 @@ sub dump_all {
   
   while(my($k,$v) = each %{$self->{tree}}) {
     print STDERR "$k:\n";
-    dump_op($_,"",{},1) for @$v;
+    for (@$v) {
+      dump_op($_,"",{},1);
+    }
   }
 }
 
