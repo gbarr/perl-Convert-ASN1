@@ -34,11 +34,15 @@ sub btest ($$) {
   $_[1]
 }
 
-use Data::Dumper;
 
 sub rtest ($$$) {
+  unless (eval { require Data::Dumper } ) {
+    print "ok $_[0] # skip need Data::Dumper\n";
+    return;
+  }
+
   local $Data::Dumper::Sortkeys = 1;
-  my $ok = Dumper($_[1]) eq Dumper($_[2]);
+  my $ok = Data::Dumper::Dumper($_[1]) eq Data::Dumper::Dumper($_[2]);
 
   unless ($ok) {
     printf "#line %d %s\n",(caller)[2,1];
