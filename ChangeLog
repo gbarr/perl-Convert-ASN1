@@ -1,3 +1,67 @@
+2003-05-12 18:45  Graham Barr
+
+	* lib/Convert/ASN1.pm:
+
+	Release 0.17
+	
+2003-05-12 18:45  Graham Barr
+
+	* MANIFEST:
+
+	Add new tests into MANIFEST
+	
+2003-05-12 18:06  Graham Barr
+
+	* t/funcs.pl:
+
+	Skip rtest if Data::Dumper is not available
+	
+2003-05-07 16:13  Graham Barr
+
+	* parser.y, lib/Convert/ASN1/parser.pm, t/04opt.t, t/funcs.pl:
+
+	Support OPTIONAL on SET OF and SEQUENCE OF
+	
+2003-05-07 10:26  Graham Barr
+
+	* lib/Convert/ASN1/_decode.pm, t/00prim.t:
+
+	Fix OID decoding
+	
+2003-05-06 22:47  Graham Barr
+
+	* t/14any.t:
+
+	Remove duplicate my
+	
+2003-05-06 22:29  Graham Barr
+
+	* parser.y, lib/Convert/ASN1.pm, lib/Convert/ASN1/_decode.pm,
+	lib/Convert/ASN1/_encode.pm, lib/Convert/ASN1/parser.pm, t/14any.t:
+
+	Add support for ANY DEFINED BY
+	Patch from Simon Wilkinson
+	
+2003-05-06 15:17  Graham Barr
+
+	* lib/Convert/ASN1/Debug.pm:
+
+	Fix debug output for OIDs
+	
+2003-05-06 13:40  Graham Barr
+
+	* parser.y, lib/Convert/ASN1.pm, lib/Convert/ASN1.pod,
+	lib/Convert/ASN1/parser.pm, t/08set.t, t/12der.t, t/13utf8.t:
+
+	CER and DER SET encoding
+	
+2003-05-06 12:07  Graham Barr
+
+	* t/13utf8.t, lib/Convert/ASN1.pm, lib/Convert/ASN1/_decode.pm,
+	lib/Convert/ASN1/_encode.pm:
+
+	utf8 support for perl >= 5.8
+	
 2002-08-20 01:00  Graham Barr
 
 	* lib/Convert/ASN1.pm:
