@@ -20,7 +20,7 @@
 %{
 package Convert::ASN1::parser;
 
-;# $Id: parser.y,v 1.4 2001/08/24 14:13:51 gbarr Exp $
+;# $Id: parser.y,v 1.5 2001/09/22 00:16:49 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -35,16 +35,17 @@ my $yydebug=0;
 my %yystate;
 
 my %base_type = (
-  BOOLEAN	    => [ asn_encode_tag(ASN_BOOLEAN),    opBOOLEAN ],
-  INTEGER	    => [ asn_encode_tag(ASN_INTEGER),    opINTEGER ],
-  BIT_STRING	    => [ asn_encode_tag(ASN_BIT_STR),    opBITSTR  ],
-  OCTET_STRING	    => [ asn_encode_tag(ASN_OCTET_STR),  opSTRING  ],
-  STRING	    => [ asn_encode_tag(ASN_OCTET_STR),  opSTRING  ],
-  NULL 		    => [ asn_encode_tag(ASN_NULL), 	 opNULL    ],
-  OBJECT_IDENTIFIER => [ asn_encode_tag(ASN_OBJECT_ID),  opOBJID   ],
-  REAL		    => [ asn_encode_tag(ASN_REAL), 	 opREAL    ],
-  ENUMERATED	    => [ asn_encode_tag(ASN_ENUMERATED), opINTEGER ],
-  ENUM		    => [ asn_encode_tag(ASN_ENUMERATED), opINTEGER ],
+  BOOLEAN	    => [ asn_encode_tag(ASN_BOOLEAN),		opBOOLEAN ],
+  INTEGER	    => [ asn_encode_tag(ASN_INTEGER),		opINTEGER ],
+  BIT_STRING	    => [ asn_encode_tag(ASN_BIT_STR),		opBITSTR  ],
+  OCTET_STRING	    => [ asn_encode_tag(ASN_OCTET_STR),		opSTRING  ],
+  STRING	    => [ asn_encode_tag(ASN_OCTET_STR),		opSTRING  ],
+  NULL 		    => [ asn_encode_tag(ASN_NULL),		opNULL    ],
+  OBJECT_IDENTIFIER => [ asn_encode_tag(ASN_OBJECT_ID),		opOBJID   ],
+  REAL		    => [ asn_encode_tag(ASN_REAL),		opREAL    ],
+  ENUMERATED	    => [ asn_encode_tag(ASN_ENUMERATED),	opINTEGER ],
+  ENUM		    => [ asn_encode_tag(ASN_ENUMERATED),	opINTEGER ],
+  'RELATIVE-OID'    => [ asn_encode_tag(ASN_RELATIVE_OID),	opROID	  ],
 
   SEQUENCE	    => [ asn_encode_tag(ASN_SEQUENCE | ASN_CONSTRUCTOR), opSEQUENCE ],
   SET               => [ asn_encode_tag(ASN_SET      | ASN_CONSTRUCTOR), opSET ],
@@ -57,12 +58,15 @@ my %base_type = (
   T61String         => [ asn_encode_tag(ASN_UNIVERSAL | 20), opSTRING ],
   VideotexString    => [ asn_encode_tag(ASN_UNIVERSAL | 21), opSTRING ],
   IA5String         => [ asn_encode_tag(ASN_UNIVERSAL | 22), opSTRING ],
+  UTCTime           => [ asn_encode_tag(ASN_UNIVERSAL | 23), opUTIME ],
+  GeneralizedTime   => [ asn_encode_tag(ASN_UNIVERSAL | 24), opGTIME ],
   GraphicString     => [ asn_encode_tag(ASN_UNIVERSAL | 25), opSTRING ],
   VisibleString     => [ asn_encode_tag(ASN_UNIVERSAL | 26), opSTRING ],
   ISO646String      => [ asn_encode_tag(ASN_UNIVERSAL | 26), opSTRING ],
   GeneralString     => [ asn_encode_tag(ASN_UNIVERSAL | 27), opSTRING ],
-  UTCTime           => [ asn_encode_tag(ASN_UNIVERSAL | 23), opUTIME ],
-  GeneralizedTime   => [ asn_encode_tag(ASN_UNIVERSAL | 24), opGTIME ],
+  CharacterString   => [ asn_encode_tag(ASN_UNIVERSAL | 28), opSTRING ],
+  UniversalString   => [ asn_encode_tag(ASN_UNIVERSAL | 28), opSTRING ],
+  BMPString         => [ asn_encode_tag(ASN_UNIVERSAL | 30), opSTRING ],
 
   CHOICE => [ '', opCHOICE ],
   ANY    => [ '', opANY ],
@@ -481,6 +485,8 @@ sub yylex {
 	    (?:OCTET|BIT)\s+STRING
 	   |
 	    OBJECT\s+IDENTIFIER
+	   |
+	    RELATIVE-OID
 	  )\b
 	|
 	  (\w+)

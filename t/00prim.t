@@ -202,3 +202,22 @@ while(($result,$val) = each %REAL) {
   ntest $test++, $val, $ret->{'real'};
 }
 
+##
+## RELATIVE-OID
+##
+
+my %ROID = (
+  pack("C*", 0x0D, 0x05, 0x01, 0x02, 0x03, 0x04, 0x05), "1.2.3.4.5",
+  pack("C*", 0x0D, 0x04, 0x02, 0x05, 0x83, 0x49),       "2.5.457",  
+);
+
+
+while(($result,$val) = each %ROID) {
+  print "# RELATIVE-OID $val\n";
+
+  btest $test++, $asn->prepare('roid RELATIVE-OID');
+  stest $test++, $result, $asn->encode(roid => $val);
+  btest $test++, $ret = $asn->decode($result);
+  stest $test++, $val, $ret->{'roid'};
+}
+

@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.16 2001/09/21 22:24:44 gbarr Exp $
+# $Id: ASN1.pm,v 1.17 2001/09/22 00:16:49 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -10,7 +10,7 @@ use Exporter;
 
 BEGIN {
   @ISA = qw(Exporter);
-  $VERSION = '0.14_01';
+  $VERSION = '0.14_02';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
@@ -20,7 +20,7 @@ BEGIN {
     const => [qw(ASN_BOOLEAN     ASN_INTEGER      ASN_BIT_STR      ASN_OCTET_STR
 		 ASN_NULL        ASN_OBJECT_ID    ASN_REAL         ASN_ENUMERATED
 		 ASN_SEQUENCE    ASN_SET          ASN_PRINT_STR    ASN_IA5_STR
-		 ASN_UTC_TIME    ASN_GENERAL_TIME
+		 ASN_UTC_TIME    ASN_GENERAL_TIME ASN_RELATIVE_OID
 		 ASN_UNIVERSAL   ASN_APPLICATION  ASN_CONTEXT      ASN_PRIVATE
 		 ASN_PRIMITIVE   ASN_CONSTRUCTOR  ASN_LONG_LEN     ASN_EXTENSION_ID ASN_BIT)],
 
@@ -36,7 +36,7 @@ BEGIN {
 
   @opName = qw(
     opUNKNOWN opBOOLEAN opINTEGER opBITSTR opSTRING opNULL opOBJID opREAL
-    opSEQUENCE opSET opUTIME opGTIME opUTF8 opANY opCHOICE
+    opSEQUENCE opSET opUTIME opGTIME opUTF8 opANY opCHOICE opROID
   );
 
   foreach my $l (\@opParts, \@opName) {
@@ -65,6 +65,7 @@ sub ASN_NULL 		() { 0x05 }
 sub ASN_OBJECT_ID 	() { 0x06 }
 sub ASN_REAL 		() { 0x09 }
 sub ASN_ENUMERATED	() { 0x0A }
+sub ASN_RELATIVE_OID	() { 0x0D }
 sub ASN_SEQUENCE 	() { 0x10 }
 sub ASN_SET 		() { 0x11 }
 sub ASN_PRINT_STR	() { 0x13 }

@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.10 2001/09/21 22:24:44 gbarr Exp $
+# $Id: _decode.pm,v 1.11 2001/09/22 00:16:49 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -29,6 +29,7 @@ my @decode = (
   \&_dec_utf8,
   undef, # ANY
   undef, # CHOICE
+  \&_dec_object_id,
 );
 
 my @ctr;
@@ -250,7 +251,8 @@ sub _dec_object_id {
 # $optn, $op, $stash, $var, $buf, $pos, $len
 
   my @data = unpack("w*",substr($_[4],$_[5],$_[6]));
-  splice(@data,0,1,int($data[0]/40),$data[0] % 40) if $data[0];
+  splice(@data,0,1,int($data[0]/40),$data[0] % 40)
+    if $_[1]->[cTYPE] == opOBJID and $data[0];
   $_[3] = join(".", @data);
   1;
 }

@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.10 2001/08/01 18:02:38 gbarr Exp $
+# $Id: _encode.pm,v 1.11 2001/09/22 00:16:49 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -28,7 +28,8 @@ my @encode = (
   \&_enc_time,
   \&_enc_utf8,
   \&_enc_any,
-  \&_enc_choice
+  \&_enc_choice,
+  \&_enc_object_id,
 );
 
 
@@ -140,12 +141,14 @@ sub _enc_object_id {
 
   my @data = ($_[3] =~ /(\d+)/g);
 
-  if(@data < 2) {
+  if ($_[1]->[cTYPE] == opOBJID) {
+    if(@data < 2) {
       @data = (0);
-  }
-  else {
+    }
+    else {
       my $first = $data[1] + ($data[0] * 40);
       splice(@data,0,2,$first);
+    }
   }
 
   my $l = length $_[4];

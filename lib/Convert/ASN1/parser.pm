@@ -5,7 +5,7 @@
 
 package Convert::ASN1::parser;
 
-;# $Id: parser.pm,v 1.5 2001/08/24 14:13:52 gbarr Exp $
+;# $Id: parser.pm,v 1.6 2001/09/22 00:16:49 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
@@ -20,16 +20,17 @@ my $yydebug=0;
 my %yystate;
 
 my %base_type = (
-  BOOLEAN	    => [ asn_encode_tag(ASN_BOOLEAN),    opBOOLEAN ],
-  INTEGER	    => [ asn_encode_tag(ASN_INTEGER),    opINTEGER ],
-  BIT_STRING	    => [ asn_encode_tag(ASN_BIT_STR),    opBITSTR  ],
-  OCTET_STRING	    => [ asn_encode_tag(ASN_OCTET_STR),  opSTRING  ],
-  STRING	    => [ asn_encode_tag(ASN_OCTET_STR),  opSTRING  ],
-  NULL 		    => [ asn_encode_tag(ASN_NULL), 	 opNULL    ],
-  OBJECT_IDENTIFIER => [ asn_encode_tag(ASN_OBJECT_ID),  opOBJID   ],
-  REAL		    => [ asn_encode_tag(ASN_REAL), 	 opREAL    ],
-  ENUMERATED	    => [ asn_encode_tag(ASN_ENUMERATED), opINTEGER ],
-  ENUM		    => [ asn_encode_tag(ASN_ENUMERATED), opINTEGER ],
+  BOOLEAN	    => [ asn_encode_tag(ASN_BOOLEAN),		opBOOLEAN ],
+  INTEGER	    => [ asn_encode_tag(ASN_INTEGER),		opINTEGER ],
+  BIT_STRING	    => [ asn_encode_tag(ASN_BIT_STR),		opBITSTR  ],
+  OCTET_STRING	    => [ asn_encode_tag(ASN_OCTET_STR),		opSTRING  ],
+  STRING	    => [ asn_encode_tag(ASN_OCTET_STR),		opSTRING  ],
+  NULL 		    => [ asn_encode_tag(ASN_NULL),		opNULL    ],
+  OBJECT_IDENTIFIER => [ asn_encode_tag(ASN_OBJECT_ID),		opOBJID   ],
+  REAL		    => [ asn_encode_tag(ASN_REAL),		opREAL    ],
+  ENUMERATED	    => [ asn_encode_tag(ASN_ENUMERATED),	opINTEGER ],
+  ENUM		    => [ asn_encode_tag(ASN_ENUMERATED),	opINTEGER ],
+  'RELATIVE-OID'    => [ asn_encode_tag(ASN_RELATIVE_OID),	opROID	  ],
 
   SEQUENCE	    => [ asn_encode_tag(ASN_SEQUENCE | ASN_CONSTRUCTOR), opSEQUENCE ],
   SET               => [ asn_encode_tag(ASN_SET      | ASN_CONSTRUCTOR), opSET ],
@@ -68,7 +69,7 @@ sub explicit {
   \@seq;
 }
 
-# 66 "y.tab.pl"
+# 70 "y.tab.pl"
 
 sub constWORD () { 1 }
 sub constCLASS () { 2 }
@@ -191,7 +192,7 @@ sub constYYFINAL () { 4 }
 
 
 sub constYYMAXTOKEN () { 18 }
-# 254 "y.tab.pl"
+# 258 "y.tab.pl"
 
 sub yyclearin { $yychar = -1; }
 sub yyerrok { $yyerrflag = 0; }
@@ -230,7 +231,7 @@ sub yy_err_recover
   else
   {
     return (1) if $yychar == 0;
-# 305 "y.tab.pl"
+# 309 "y.tab.pl"
 
     $yychar = -1;
     next yyloop;
@@ -262,7 +263,7 @@ yyloop: while(1)
       if ($yychar < 0)
       {
         if (($yychar = &yylex) < 0) { $yychar = 0; }
-# 344 "y.tab.pl"
+# 348 "y.tab.pl"
 
       }
       if (($yyn = $yysindex[$yystate]) && ($yyn += $yychar) >= 0 &&
@@ -302,13 +303,13 @@ my $label = "State$yyn";
 goto $label if exists $yystate{$label};
 last switch;
 State1: {
-# 86 "parser.y"
+# 90 "parser.y"
 
 { $yyval = { '' => $yyvs[$yyvsp-0] }; 
 last switch;
 } }
 State3: {
-# 91 "parser.y"
+# 95 "parser.y"
 
 {
 		  $yyval = { $yyvs[$yyvsp-2], [$yyvs[$yyvsp-0]] };
@@ -316,7 +317,7 @@ State3: {
 last switch;
 } }
 State4: {
-# 95 "parser.y"
+# 99 "parser.y"
 
 {
 		  $yyval=$yyvs[$yyvsp-3];
@@ -325,7 +326,7 @@ State4: {
 last switch;
 } }
 State5: {
-# 102 "parser.y"
+# 106 "parser.y"
 
 {
 		  $yyvs[$yyvsp-1]->[cTAG] = $yyvs[$yyvsp-3];
@@ -334,7 +335,7 @@ State5: {
 last switch;
 } }
 State11: {
-# 116 "parser.y"
+# 120 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('COMPONENTS', $yyvs[$yyvsp-0]);
@@ -342,7 +343,7 @@ State11: {
 last switch;
 } }
 State14: {
-# 126 "parser.y"
+# 130 "parser.y"
 
 {
 		  $yyvs[$yyvsp-0]->[cTAG] = $yyvs[$yyvsp-2];
@@ -352,7 +353,7 @@ State14: {
 last switch;
 } }
 State18: {
-# 139 "parser.y"
+# 143 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('SEQUENCE', $yyvs[$yyvsp-1]);
@@ -360,7 +361,7 @@ State18: {
 last switch;
 } }
 State19: {
-# 143 "parser.y"
+# 147 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('SET', $yyvs[$yyvsp-1]);
@@ -368,7 +369,7 @@ State19: {
 last switch;
 } }
 State20: {
-# 147 "parser.y"
+# 151 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('CHOICE', $yyvs[$yyvsp-1]);
@@ -376,7 +377,7 @@ State20: {
 last switch;
 } }
 State21: {
-# 153 "parser.y"
+# 157 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE] = ('ENUM');
@@ -384,7 +385,7 @@ State21: {
 last switch;
 } }
 State27: {
-# 166 "parser.y"
+# 170 "parser.y"
 
 {
 		  @{$yyval = []}[cTYPE] = ($yyvs[$yyvsp-0]);
@@ -392,19 +393,19 @@ State27: {
 last switch;
 } }
 State28: {
-# 171 "parser.y"
+# 175 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-0]; 
 last switch;
 } }
 State29: {
-# 172 "parser.y"
+# 176 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-1]; 
 last switch;
 } }
 State30: {
-# 176 "parser.y"
+# 180 "parser.y"
 
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
@@ -412,14 +413,6 @@ State30: {
 last switch;
 } }
 State31: {
-# 180 "parser.y"
-
-{
-		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
-		
-last switch;
-} }
-State32: {
 # 184 "parser.y"
 
 {
@@ -427,8 +420,16 @@ State32: {
 		
 last switch;
 } }
+State32: {
+# 188 "parser.y"
+
+{
+		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
+		
+last switch;
+} }
 State33: {
-# 190 "parser.y"
+# 194 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
@@ -437,19 +438,19 @@ State33: {
 last switch;
 } }
 State34: {
-# 197 "parser.y"
+# 201 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-0]; 
 last switch;
 } }
 State35: {
-# 198 "parser.y"
+# 202 "parser.y"
 
 { $yyval = $yyvs[$yyvsp-1]; 
 last switch;
 } }
 State36: {
-# 202 "parser.y"
+# 206 "parser.y"
 
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
@@ -457,14 +458,6 @@ State36: {
 last switch;
 } }
 State37: {
-# 206 "parser.y"
-
-{
-		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
-		
-last switch;
-} }
-State38: {
 # 210 "parser.y"
 
 {
@@ -472,8 +465,16 @@ State38: {
 		
 last switch;
 } }
+State38: {
+# 214 "parser.y"
+
+{
+		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
+		
+last switch;
+} }
 State39: {
-# 216 "parser.y"
+# 220 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-1]}[cOPT] = ($yyvs[$yyvsp-0]);
@@ -481,7 +482,7 @@ State39: {
 last switch;
 } }
 State43: {
-# 225 "parser.y"
+# 229 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
@@ -491,7 +492,7 @@ State43: {
 last switch;
 } }
 State45: {
-# 232 "parser.y"
+# 236 "parser.y"
 
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cTAG] = ($yyvs[$yyvsp-2]);
@@ -500,72 +501,72 @@ State45: {
 last switch;
 } }
 State46: {
-# 238 "parser.y"
+# 242 "parser.y"
 
 { $yyval = undef; 
 last switch;
 } }
 State47: {
-# 239 "parser.y"
+# 243 "parser.y"
 
 { $yyval = 1;     
 last switch;
 } }
 State48: {
-# 243 "parser.y"
-
-{ $yyval = undef; 
-last switch;
-} }
-State50: {
 # 247 "parser.y"
 
 { $yyval = undef; 
 last switch;
 } }
+State50: {
+# 251 "parser.y"
+
+{ $yyval = undef; 
+last switch;
+} }
 State51: {
-# 248 "parser.y"
+# 252 "parser.y"
 
 { $yyval = 1;     
 last switch;
 } }
 State52: {
-# 249 "parser.y"
+# 253 "parser.y"
 
 { $yyval = 0;     
 last switch;
 } }
 State53: {
-# 252 "parser.y"
-
-{
-last switch;
-} }
-State54: {
-# 253 "parser.y"
-
-{
-last switch;
-} }
-State55: {
 # 256 "parser.y"
 
 {
 last switch;
 } }
-State56: {
-# 259 "parser.y"
+State54: {
+# 257 "parser.y"
 
 {
 last switch;
 } }
-State57: {
+State55: {
 # 260 "parser.y"
 
 {
 last switch;
 } }
-# 607 "y.tab.pl"
+State56: {
+# 263 "parser.y"
+
+{
+last switch;
+} }
+State57: {
+# 264 "parser.y"
+
+{
+last switch;
+} }
+# 611 "y.tab.pl"
 
     } # switch
     $yyssp -= $yym;
@@ -584,7 +585,7 @@ last switch;
       if ($yychar < 0)
       {
         if (($yychar = &yylex) < 0) { $yychar = 0; }
-# 633 "y.tab.pl"
+# 637 "y.tab.pl"
 
       }
       return $yyvs[$yyvsp] if $yychar == 0;
@@ -605,7 +606,7 @@ last switch;
     $yyvs[++$yyvsp] = $yyval;
   } # yyloop
 } # yyparse
-# 264 "parser.y"
+# 268 "parser.y"
 
 
 my %reserved = (
@@ -826,6 +827,8 @@ sub yylex {
 	    (?:OCTET|BIT)\s+STRING
 	   |
 	    OBJECT\s+IDENTIFIER
+	   |
+	    RELATIVE-OID
 	  )\b
 	|
 	  (\w+)
@@ -890,7 +893,7 @@ sub yyerror {
 
 1;
 
-# 937 "y.tab.pl"
+# 943 "y.tab.pl"
 
 %yystate = ('State20','','State11','','State30','','State21','','State31',
 '','State50','','State32','','State14','','State51','','State33','',
