@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.18 2001/09/24 23:05:56 gbarr Exp $
+# $Id: ASN1.pm,v 1.19 2002/01/02 16:31:37 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -153,7 +153,7 @@ sub encode {
   my $buf = '';
   local $SIG{__DIE__};
   eval { _encode($self->{options}, $self->{script}, $stash, [], $buf) }
-    or do { warn $self->{error} = $@; undef }
+    or do { $self->{error} = $@; undef }
 }
 
 
