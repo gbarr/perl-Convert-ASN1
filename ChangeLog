@@ -1,3 +1,21 @@
+2003-10-08 15:29  Graham Barr
+
+	* lib/Convert/ASN1.pm:
+
+	Release 0.18
+	
+2003-10-08 15:28  Graham Barr
+
+	* MANIFEST, Makefile.PL, t/0-signature.t:
+
+	Use Module::Build to build Makefile and add SIGNATURE
+	
+2003-10-08 13:28  Graham Barr
+
+	* lib/Convert/: ASN1.pm, ASN1/_encode.pm:
+
+	Fix bug in encoding BIT STRINGS where chr() was causing an upgrade to UTF8
+	
 2003-05-12 18:45  Graham Barr
 
 	* lib/Convert/ASN1.pm:
