@@ -1,3 +1,7 @@
+Change 513 on 2000/05/09 by <gbarr@pobox.com> (Graham Barr)
+
+	Fix to asn_read for unit warning when first char of L is > 0x80
+
 Change 509 on 2000/05/04 by <gbarr@pobox.com> (Graham Barr)
 
 	Convert::ASN1::IO

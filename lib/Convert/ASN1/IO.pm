@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: IO.pm,v 1.2 2000/05/04 08:39:44 gbarr Exp $
+# $Id: IO.pm,v 1.3 2000/05/09 16:08:12 gbarr Exp $
 
 use strict;
 use Socket;
@@ -155,7 +155,7 @@ sub asn_read { # $fh, $buffer, $offset
 
     # May be a multi-byte length
     if($lch & 0x80) {
-      my $len = $ch & 0x7f;
+      my $len = $lch & 0x7f;
       unless ($len) {
 	$depth++;
 	next;
