@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.7 2001/09/06 17:41:23 gbarr Exp $
+# $Id: _decode.pm,v 1.8 2001/09/07 19:04:48 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -284,10 +284,86 @@ sub _dec_sequence {
 
 
 sub _dec_set {
-# 0      1    2       3     4     5     6
-# $optn, $op, $stash, $var, $buf, $pos, $len
+# 0      1    2       3     4     5     6     7
+# $optn, $op, $stash, $var, $buf, $pos, $len, $larr
 
- die "SET decode not implemented\n";
+  # decode SET OF the same as SEQUENCE OF
+  my $ch = $_[1]->[cCHILD];
+  goto &_dec_sequence if $_[1]->[cLOOP] or !defined($ch);
+
+  my ($optn, $pos, $larr) = @_[0,5,7];
+  my $stash = defined($_[3]) ? $_[2] : ($_[3]={});
+  my $end = $pos + $_[6];
+  my @done;
+
+  while ($pos < $end) {
+    my($tag,$len,$npos,$indef) = _decode_tl($_[4],$pos,$end,$larr)
+      or die "decode error";
+
+    my ($idx, $any, $done) = (-1);
+
+SET_OP:
+    foreach my $op (@$ch) {
+      $idx++;
+      if (length($op->[cTAG])) {
+	next unless $op->[cTAG] eq $tag;
+        my $var = $op->[cVAR];
+	&{$decode[$op->[cTYPE]]}(
+	  $optn,
+	  $op,
+	  $stash,
+	  # We send 1 if there is not var as if there is the decode
+	  # should be getting undef. So if it does not get undef
+	  # it knows it has no variable
+	  (defined($var) ? $stash->{$var} : 1),
+	  $_[4],$npos,$len,$indef ? $larr : []
+	);
+	$done = $idx;
+	last SET_OP;
+      }
+      elsif ($op->[cTYPE] == opANY) {
+	$any = $idx;
+      }
+      elsif ($op->[cTYPE] == opCHOICE) {
+	foreach my $cop (@{$op->[cCHILD]}) {
+	  if ($tag eq $cop->[cTAG]) {
+	    my $nstash = defined($var) ? ($stash->{$var}={}) : $stash;
+
+	    &{$decode[$cop->[cTYPE]]}(
+	      $optn,
+	      $cop,
+	      $nstash,
+	      $nstash->{$cop->[cVAR]},
+	      $_[4],$npos,$len,$indef ? $larr : []
+	    );
+	    $done = $idx;
+	    last SET_OP;
+	  }
+	}
+      }
+      else {
+	die "internal error";
+      }
+    }
+
+    if (!defined($done) and defined($any)) {
+      my $var = $ch->[$any][cVAR];
+      $stash->{$var} = substr($_[4],$pos,$len+$npos-$pos) if defined $var;
+      $done = $any;
+    }
+
+    die "decode error" if !defined($done) or $done[$done]++;
+
+    $pos = $npos + $len + $indef;
+  }
+
+  die "decode error" unless $end == $pos;
+
+  foreach my $idx (0..$#{$ch}) {
+    die "decode error" unless $done[$idx] or $ch->[$idx][cOPT];
+  }
+
+  1;
 }
 
 
@@ -379,6 +455,9 @@ sub _decode_tl {
   }
 
   return if $pos+$len+$indef > $end;
+
+  # return the tag, the length of the data, the position of the data
+  # and the number of extra bytes for indefinate encoding
 
   ($tag, $len, $pos, $indef);
 }
