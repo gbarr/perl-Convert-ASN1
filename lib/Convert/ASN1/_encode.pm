@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.3 2000/05/22 11:07:36 gbarr Exp $
+# $Id: _encode.pm,v 1.4 2000/06/08 08:31:17 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -317,9 +317,10 @@ sub _enc_choice {
     my $var = $op->[cVAR];
     if (exists $stash->{$var}) {
       _encode($_[0],[$op], $stash, $_[4]);
-      last;
+      return;
     }
   }
+  die "No value found for CHOICE\n";
 }
 
 

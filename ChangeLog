@@ -1,3 +1,15 @@
+Change 534 on 2000/06/05 by <gbarr@pobox.com> (Graham Barr)
+
+	Another syntax change in Debug.pm for 5.004 support
+
+Change 531 on 2000/05/30 by <gbarr@pobox.com> (Graham Barr)
+
+	Release 0.07
+
+Change 530 on 2000/05/30 by <gbarr@pobox.com> (Graham Barr)
+
+	Assert an error if there is nothing to encode for a CHOICE
+
 Change 528 on 2000/05/22 by <gbarr@pobox.com> (Graham Barr)
 
 	One more for 5.004

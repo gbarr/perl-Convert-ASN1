@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: Debug.pm,v 1.2 2000/05/22 20:56:27 gbarr Exp $
+# $Id: Debug.pm,v 1.3 2000/06/08 08:31:17 gbarr Exp $
 
 ##
 ## just for debug :-)
@@ -208,7 +208,9 @@ sub dump_op {
   print STDERR "]";
   if ($op->[cCHILD]) {
     print STDERR " ",scalar @{$op->[cCHILD]},"\n";
-    $line = dump_op($_,$indent . " ",$done,$line) for (@{$op->[cCHILD]});
+    for (@{$op->[cCHILD]}) {
+      $line = dump_op($_,$indent . " ",$done,$line);
+    }
   }
   else {
     print STDERR "\n";
