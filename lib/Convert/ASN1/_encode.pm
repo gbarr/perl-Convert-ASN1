@@ -1,7 +1,7 @@
 
 package Convert::ASN1;
 
-# $Id: _encode.pm,v 1.11 2001/09/22 00:16:49 gbarr Exp $
+# $Id: _encode.pm,v 1.12 2002/01/02 16:56:47 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -34,46 +34,47 @@ my @encode = (
 
 
 sub _encode {
-  my $optn  = shift;
-  my $ops   = shift;
-  my $stash = shift;
+  my ($optn, $ops, $stash, $path) = @_;
+  my $var;
 
   foreach my $op (@{$ops}) {
     if (defined(my $opt = $op->[cOPT])) {
       next unless defined $stash->{$opt};
     }
-    foreach my $var (defined($op->[cVAR]) ? $stash->{$op->[cVAR]} : undef) {
-      $_[0] .= $op->[cTAG];
-
-      die $op->[cVAR] unless defined($var) || !defined($op->[cVAR]);
-
-      &{$encode[$op->[cTYPE]]}(
-	$optn,
-	$op,
-	$stash,
-	$var,
-	$_[0],
-	$op->[cLOOP]
-      );
-
+    if (defined($var = $op->[cVAR])) {
+      push @$path, $var;
+      require Carp, Carp::croak(join(".", @$path)," is undefined")  unless defined $stash->{$var};
     }
+    $_[4] .= $op->[cTAG];
+
+    &{$encode[$op->[cTYPE]]}(
+      $optn,
+      $op,
+      $stash,
+      defined($var) ? $stash->{$var} : undef,
+      $_[4],
+      $op->[cLOOP],
+      $path,
+    );
+
+    pop @$path if defined $var;
   }
 
-  $_[0];
+  $_[4];
 }
 
 
 sub _enc_boolean {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   $_[4] .= pack("CC",1, $_[3] ? 0xff : 0);
 }
 
 
 sub _enc_integer {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
   if (abs($_[3]) >= 2**31) {
     my $os = i2osp($_[3], ref($_[3]) || $_[0]->{encode_bigint} || 'Math::BigInt');
     my $len = length $os;
@@ -97,8 +98,8 @@ sub _enc_integer {
 
 
 sub _enc_bitstring {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   if (ref($_[3])) {
     my $less = (8 - ($_[3]->[1] & 7)) & 7;
@@ -119,8 +120,8 @@ sub _enc_bitstring {
 
 
 sub _enc_string {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   $_[4] .= asn_encode_length(length $_[3]);
   $_[4] .= $_[3];
@@ -128,16 +129,16 @@ sub _enc_string {
 
 
 sub _enc_null {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   $_[4] .= chr(0);
 }
 
 
 sub _enc_object_id {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   my @data = ($_[3] =~ /(\d+)/g);
 
@@ -158,8 +159,8 @@ sub _enc_object_id {
 
 
 sub _enc_real {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   # Zero
   unless ($_[3]) {
@@ -225,8 +226,8 @@ sub _enc_real {
 
 
 sub _enc_sequence {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   if (my $ops = $_[1]->[cCHILD]) {
     my $l = length $_[4];
@@ -237,7 +238,10 @@ sub _enc_sequence {
       my $tag  = $op->[cTAG];
       my $loop = $op->[cLOOP];
 
+      push @{$_[6]}, -1;
+
       foreach my $var (@{$_[3]}) {
+	$_[6]->[-1]++;
 	$_[4] .= $tag;
 
 	&{$enc}(
@@ -246,12 +250,14 @@ sub _enc_sequence {
 	  $_[2], # $stash
 	  $var,  # $var
 	  $_[4], # $buf
-	  $loop  # $loop
+	  $loop, # $loop
+	  $_[6], # $path
 	);
       }
+      pop @{$_[6]};
     }
     else {
-      _encode($_[0],$_[1]->[cCHILD], defined($_[3]) ? $_[3] : $_[2] , $_[4]);
+      _encode($_[0],$_[1]->[cCHILD], defined($_[3]) ? $_[3] : $_[2], $_[6], $_[4]);
     }
     substr($_[4],$l,2) = asn_encode_length(length($_[4]) - $l - 2);
   }
@@ -265,8 +271,8 @@ sub _enc_sequence {
 my %_enc_time_opt = ( utctime => 1, withzone => 0, raw => 2);
 
 sub _enc_time {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   my $mode = $_enc_time_opt{$_[0]->{'encode_time'} || ''} || 0;
 
@@ -316,8 +322,8 @@ sub _enc_time {
 
 
 sub _enc_utf8 {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   $_[4] .= asn_encode_length(length $_[3]);
   $_[4] .= $_[3];
@@ -325,26 +331,29 @@ sub _enc_utf8 {
 
 
 sub _enc_any {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   $_[4] .= $_[3];
 }
 
 
 sub _enc_choice {
-# 0      1    2       3     4     5
-# $optn, $op, $stash, $var, $buf, $loop
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
 
   my $stash = defined($_[3]) ? $_[3] : $_[2];
   for my $op (@{$_[1]->[cCHILD]}) {
     my $var = $op->[cVAR];
     if (exists $stash->{$var}) {
-      _encode($_[0],[$op], $stash, $_[4]);
+      push @{$_[6]}, $var;
+      _encode($_[0],[$op], $stash, $_[6], $_[4]);
+      pop @{$_[6]};
       return;
     }
   }
-  die "No value found for CHOICE\n";
+  require Carp;
+  Carp::croak("No value found for CHOICE " . join(".", @{$_[6]}));
 }
 
 
