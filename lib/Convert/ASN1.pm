@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.21 2002/02/10 16:12:16 gbarr Exp $
+# $Id: ASN1.pm,v 1.22 2002/03/25 07:46:08 gbarr Exp $
 
 use 5.004;
 use strict;
@@ -13,7 +13,7 @@ use Exporter;
 
 BEGIN {
   @ISA = qw(Exporter);
-  $VERSION = '0.15_01';
+  $VERSION = '0.15_02';
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
@@ -128,17 +128,38 @@ sub prepare {
   my $asn  = shift;
 
   $self = $self->new unless ref($self);
-
-  my $tree = Convert::ASN1::parser::parse($asn);
+  my $tree;
+  if( ref($asn) eq 'GLOB' ){
+    local $/ = undef;
+    my $txt = <$asn>;
+    $tree = Convert::ASN1::parser::parse($txt);
+  } else {
+    $tree = Convert::ASN1::parser::parse($asn);
+  }
 
   unless ($tree) {
     $self->{error} = $@;
     return;
+    ### If $self has been set to a new object, not returning
+    ### this object here will destroy the object, so the caller
+    ### won't be able to get at the error.
   }
 
   $self->{tree} = _pack_struct($tree);
   $self->{script} = (values %$tree)[0];
   $self;
+}
+
+sub prepare_file {
+  my $self = shift;
+  my $asnp = shift;
+
+  local *ASN;
+  open( ASN, $asnp )
+      or do{ $self->{error} = $@; return; };
+  my $ret = $self->prepare( \*ASN );
+  close( ASN );
+  $ret;
 }
 
 # In XS the will convert the tree between perl and C structs

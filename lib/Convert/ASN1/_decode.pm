@@ -4,7 +4,7 @@
 
 package Convert::ASN1;
 
-# $Id: _decode.pm,v 1.13 2002/02/10 16:12:16 gbarr Exp $
+# $Id: _decode.pm,v 1.14 2002/03/25 07:46:08 gbarr Exp $
 
 BEGIN {
   local $SIG{__DIE__};
@@ -518,6 +518,7 @@ sub _dec_utf8 {
 
 sub _decode_tl {
   my($pos,$end,$larr) = @_[1,2,3];
+
   my $indef = 0;
 
   my $tag = substr($_[0], $pos++, 1);
@@ -561,16 +562,17 @@ sub _decode_tl {
 
 sub _scan_indef {
   my($pos,$end,$larr) = @_[1,2,3];
-  @$larr = ();
-  my @depth = ( $pos );
+  @$larr = ( $pos );
+  my @depth = ( \$larr->[0] );
 
   while(@depth) {
     return if $pos+2 > $end;
 
     if (substr($_[0],$pos,2) eq "\0\0") {
       my $end = $pos;
-      my $start = shift @depth;
-      unshift @$larr, $end-$start;
+      my $stref = shift @depth;
+      # replace pos with length = end - pos
+      $$stref = $end - $$stref;
       $pos += 2;
       next;
     }
@@ -579,7 +581,6 @@ sub _scan_indef {
 
     if((ord($tag) & 0x1f) == 0x1f) {
       my $b;
-      my $n=1;
       do {
 	$tag .= substr($_[0],$pos++,1);
 	$b = ord substr($tag,-1);
@@ -596,7 +597,9 @@ sub _scan_indef {
 	$pos += $len + unpack("N", "\0" x (4 - $len) . substr($_[0],$pos,$len));
       }
       else {
-        unshift @depth, $pos;
+        # reserve another list element
+        push @$larr, $pos; 
+        unshift @depth, \$larr->[-1];
       }
     }
     else {

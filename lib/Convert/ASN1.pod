@@ -155,14 +155,19 @@ The default is to use Math::BigInt.
 
 =head2 prepare ( ASN )
 
-Compile the given ASN.1 descripton. The syntax used is very close to ASN.1, but has
-a few differnces. If the ASN decribes only one macro then encode/decode can be
+Compile the given ASN.1 descripton which can be passed as a string
+or as a filehandle. The syntax used is very close to ASN.1, but has
+a few differences. If the ASN decribes only one macro then encode/decode can be
 called on this object. If ASN describes more than one ASN.1 macro then C<find>
-must be called.
+must be called. The method returns undef on error.
+
+=head2 prepare_file ( ASNPATH )
+
+Compile the ASN.1 description to be read from the specified pathname.
 
 =head2 find ( MACRO )
 
-Find a macro froma prepared ASN.1 description. Returns an object which can
+Find a macro from a prepared ASN.1 description. Returns an object which can
 be used for encode/decode.
 
 =head2 encode ( VARIABLES )
@@ -178,7 +183,7 @@ undef if there was an error.
 =head1 EXPORTS
 
 As well as providing an object interface for encoding/decoding PDUs Convert::ASN1
-also provides the follow functions.
+also provides the following functions.
 
 =head2 IO Functions
 
@@ -193,7 +198,7 @@ of the peer address when the socket is a connected socket, in these
 cases the empty string will be returned. This is the same behaviour
 as the C<recv> function in perl itself.
 
-It is reccomended that if the socket is of type SOCK_DGRAM then C<recv>
+It is recommended that if the socket is of type SOCK_DGRAM then C<recv>
 be called directly instead of calling C<asn_recv>.
 
 =item asn_read FH, BUFFER, OFFSET
@@ -223,7 +228,7 @@ Identical to calling C<syswrite> with 2 arguments, see L<perlfunc>
 
 C<asn_get> provides buffered IO. Because it needs a buffer FH must be a GLOB
 or a reference to a GLOB. C<asn_get> will use two entries in the hash element
-of the GLOB to use as it's buffer
+of the GLOB to use as its buffer:
 
   asn_buffer - input buffer
   asn_need   - number of bytes needed for the next element, if known
