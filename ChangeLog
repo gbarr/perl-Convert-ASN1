@@ -1,11 +1,23 @@
+2001-02-05 22:31  gbarr
+
+	* lib/Convert/ASN1/parser.pm:
+
+	Added CharacterString UniversalString BMPString
+	
+2001-01-29 22:35  gbarr
+
+	* OldChanges:
+
+	Move perforce changelog aside and now generate with cvs2cl
+	
 2000-05-03 13:24  gbarr
 
-	* MANIFEST, Makefile.PL, README, mkparse, parser.y, examples/ldap,
+	* Makefile.PL, README, mkparse, parser.y, examples/ldap,
 	examples/ldap-search, lib/Convert/ASN1.pm, lib/Convert/ASN1.pod,
 	lib/Convert/ASN1/Debug.pm, lib/Convert/ASN1/IO.pm,
 	lib/Convert/ASN1/_decode.pm, lib/Convert/ASN1/_encode.pm,
 	lib/Convert/ASN1/parser.pm, t/00prim.t, t/01tag.t, t/02seq.t,
 	t/03seqof.t, t/04opt.t, t/07io.t, t/funcs.pl:
-	
-	Initial revision
 
+	Initial revision
+	
