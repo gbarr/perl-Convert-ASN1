@@ -1,3 +1,14 @@
+Convert::ASN1 0.19 -- Mon Apr 18 19:40:32 CDT 2005
+
+Bug Fixes
+  * Fixed reading of packets with indefinite-length encodings
+
+Enhancements
+  * Add support for BCDString
+
+
+
+
 2003-10-08 15:29  Graham Barr
 
 	* lib/Convert/ASN1.pm:
