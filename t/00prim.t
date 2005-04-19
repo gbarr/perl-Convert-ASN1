@@ -6,7 +6,7 @@
 
 use Convert::ASN1 qw(:all);
 
-print "1..158\n";
+print "1..166\n";
 
 BEGIN { require 't/funcs.pl' }
 
@@ -229,5 +229,25 @@ while(($result,$val) = each %ROID) {
   stest $test++, $result, $asn->encode(roid => $val) or warn $asn->error;
   btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   stest $test++, $val, $ret->{'roid'};
+}
+
+
+##
+## BCDString
+##
+
+my %BCD = (
+  pack("C*", 0x04, 0x04, 0x12, 0x34, 0x56, 0x78), 12345678,
+  pack("C*", 0x04, 0x02, 0x56, 0x4f),             564,
+);
+
+
+while(($result,$val) = each %BCD) {
+  print "# BCDString $val\n";
+
+  btest $test++, $asn->prepare('bcd BCDString') or warn $asn->error;
+  stest $test++, $result, $asn->encode(bcd => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
+  stest $test++, $val, $ret->{'bcd'};
 }
 

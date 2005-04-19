@@ -35,6 +35,7 @@ my @encode = (
   \&_enc_any,
   \&_enc_choice,
   \&_enc_object_id,
+  \&_enc_bcd,
 );
 
 
@@ -394,5 +395,13 @@ sub _enc_choice {
 }
 
 
+sub _enc_bcd {
+# 0      1    2       3     4     5      6
+# $optn, $op, $stash, $var, $buf, $loop, $path
+  my $str = sprintf("%d",$_[3]);
+  $str .= "F" if length($str) & 1;
+  $_[4] .= asn_encode_length(length($str) / 2);
+  $_[4] .= pack("H*", $str);
+}
 1;
 

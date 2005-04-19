@@ -35,6 +35,7 @@ my @decode = (
   undef, # ANY
   undef, # CHOICE
   \&_dec_object_id,
+  \&_dec_bcd,
 );
 
 my @ctr;
@@ -107,7 +108,7 @@ sub _decode {
 	    next OP;
 	  }
 
-	  die "decode error " . unpack("H*",$tag) ."<=>" . unpack("H*",$op->[cTAG]);
+	  die "decode error " . unpack("H*",$tag) ."<=>" . unpack("H*",$op->[cTAG]), " ",$pos," ",$op->[cTYPE]," ",$op->[cVAR];
         }
       }
       else { # opTag length is zero, so it must be an ANY or CHOICE
@@ -659,5 +660,12 @@ sub _ctr_bitstring {
   [ join('', map { $_->[0] } @_), $_[-1]->[1] ]
 }
 
+sub _dec_bcd {
+# 0      1    2       3     4     5     6
+# $optn, $op, $stash, $var, $buf, $pos, $len
+
+  ($_[3] = unpack("H*", substr($_[4],$_[5],$_[6]))) =~ s/[fF]$//;
+  1;
+}
 1;
 

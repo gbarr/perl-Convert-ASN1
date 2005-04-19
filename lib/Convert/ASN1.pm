@@ -21,7 +21,7 @@ BEGIN {
   }
 
   @ISA = qw(Exporter);
-  $VERSION = "0.18";
+  $VERSION = "0.19";
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],
@@ -47,7 +47,7 @@ BEGIN {
 
   @opName = qw(
     opUNKNOWN opBOOLEAN opINTEGER opBITSTR opSTRING opNULL opOBJID opREAL
-    opSEQUENCE opSET opUTIME opGTIME opUTF8 opANY opCHOICE opROID
+    opSEQUENCE opSET opUTIME opGTIME opUTF8 opANY opCHOICE opROID opBCD
   );
 
   foreach my $l (\@opParts, \@opName) {

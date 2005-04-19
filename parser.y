@@ -73,6 +73,7 @@ my %base_type = (
   CharacterString   => [ asn_encode_tag(ASN_UNIVERSAL | 28), opSTRING ],
   UniversalString   => [ asn_encode_tag(ASN_UNIVERSAL | 28), opSTRING ],
   BMPString         => [ asn_encode_tag(ASN_UNIVERSAL | 30), opSTRING ],
+  BCDString         => [ asn_encode_tag(ASN_OCTET_STR), opBCD ],
 
   CHOICE => [ '', opCHOICE ],
   ANY    => [ '', opANY ],
