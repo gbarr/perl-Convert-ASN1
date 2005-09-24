@@ -5,10 +5,8 @@
 package Convert::ASN1;
 
 BEGIN {
-  unless (CHECK_UTF8) {
-    local $SIG{__DIE__};
-    eval { require bytes } and 'bytes'->import
-  }
+  local $SIG{__DIE__};
+  eval { require bytes and 'bytes'->import };
 }
 
 # These are the subs that do the decode, they are called with
