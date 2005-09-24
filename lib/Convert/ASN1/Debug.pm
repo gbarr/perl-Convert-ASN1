@@ -1,10 +1,8 @@
-# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# Copyright (c) 2000-2005 Graham Barr <gbarr@pobox.com>. All rights reserved.
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
-
-# $Id: Debug.pm,v 1.8 2003/05/06 14:17:43 gbarr Exp $
 
 ##
 ## just for debug :-)

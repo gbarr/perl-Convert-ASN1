@@ -22,7 +22,7 @@ sub MY::postamble {
 
   return <<POSTAMBLE;
 
-distdir : distsign
+mydist : manifest distsign dist
 
 run_byacc:
 	\$(PERL) mkparse parser.y lib/Convert/ASN1/parser.pm

@@ -7,7 +7,7 @@ a single pass, ASN1.pm can.
 Convert::ASN1 will parse ASN.1 descriptions and will encode from and
 decode to perl data structures using a hierarchy of references.
 
-Copyright (c) 2000-2002 Graham Barr. All rights reserved.
+Copyright (c) 2000-2005 Graham Barr. All rights reserved.
 This package is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
@@ -33,5 +33,3 @@ REPORTING BUGS
 If you find any bugs with Convert::ASN1, please report then via
 
   bugs-Convert-ASN1@rt.cpan.org
-
-$Id: README,v 1.4 2002/08/19 23:59:18 gbarr Exp $

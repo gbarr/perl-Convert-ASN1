@@ -3,13 +3,11 @@
 
 # 22 "parser.y"
 
-;# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+;# Copyright (c) 2000-2005 Graham Barr <gbarr@pobox.com>. All rights reserved.
 ;# This program is free software; you can redistribute it and/or
 ;# modify it under the same terms as Perl itself.
 
 package Convert::ASN1::parser;
-
-;# $Id: parser.pm,v 1.12 2003/05/07 15:13:28 gbarr Exp $
 
 use strict;
 use Convert::ASN1 qw(:all);
