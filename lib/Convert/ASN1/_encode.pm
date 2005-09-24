@@ -1,10 +1,8 @@
-# Copyright (c) 2000-2002 Graham Barr <gbarr@pobox.com>. All rights reserved.
+# Copyright (c) 2000-2005 Graham Barr <gbarr@pobox.com>. All rights reserved.
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 
 package Convert::ASN1;
-
-# $Id: _encode.pm,v 1.19 2003/10/08 12:28:09 gbarr Exp $
 
 BEGIN {
   unless (CHECK_UTF8) {
@@ -398,7 +396,7 @@ sub _enc_choice {
 sub _enc_bcd {
 # 0      1    2       3     4     5      6
 # $optn, $op, $stash, $var, $buf, $loop, $path
-  my $str = sprintf("%d",$_[3]);
+  my $str = ("$_[3]" =~ /^(\d+)/) ? $1 : "";
   $str .= "F" if length($str) & 1;
   $_[4] .= asn_encode_length(length($str) / 2);
   $_[4] .= pack("H*", $str);

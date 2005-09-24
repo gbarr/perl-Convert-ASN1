@@ -9,7 +9,7 @@ BEGIN { require 't/funcs.pl' }
 
 $^W=0 if $] < 5.005; # BigInt in 5.004 has undef issues
 
-print "1..59\n";
+print "1..67\n";
 
 btest 1, $asn = Convert::ASN1->new or warn $asn->error;
 btest 2, $asn->prepare(q(
@@ -105,5 +105,20 @@ while(($result,$val) = each %INTEGER) {
   btest $test++, $ret = $asn->decode($result) or warn $asn->error;
   ntest $test++, $val, $ret->{integer};
 
+}
+
+my %BCD = (
+  pack("C*", 0x04, 0x05, 0x10, 0x73, 0x74, 0x18, 0x24),	     2**30,
+  pack("C*", 0x04, 0x00),	     -2**30,
+);
+
+while(($result,$val) = each %BCD) {
+  print "# BCDString $val\n";
+
+  btest $test++, $asn->prepare('bcd BCDString') or warn $asn->error;
+  stest $test++, $result, $asn->encode(bcd => $val) or warn $asn->error;
+  btest $test++, $ret = $asn->decode($result) or warn $asn->error;
+  $val =~ s/\D.*//;
+  stest $test++, $val, $ret->{'bcd'};
 }
 
