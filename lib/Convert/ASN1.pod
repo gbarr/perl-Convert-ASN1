@@ -1,6 +1,6 @@
 =head1 NAME
 
-  Convert::ASN1 - ASN.1 Encode/Decode library
+Convert::ASN1 - ASN.1 Encode/Decode library
 
 =head1 SYNOPSYS
 
