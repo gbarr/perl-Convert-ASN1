@@ -114,7 +114,7 @@ sub _enc_bitstring {
 
   if (ref($_[3])) {
     my $less = (8 - ($_[3]->[1] & 7)) & 7;
-    my $len = ($_[3]->[1] + 7)/8;
+    my $len = ($_[3]->[1] + 7) >> 3;
     $_[4] .= asn_encode_length(1+$len);
     $_[4] .= chr($less);
     $_[4] .= substr($$vref, 0, $len);
