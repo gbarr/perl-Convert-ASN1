@@ -14,6 +14,8 @@ use Exporter;
 use constant CHECK_UTF8 => $] > 5.007;
 
 BEGIN {
+  local $SIG{__DIE__};
+  eval { require bytes and 'bytes'->import };
 
   if (CHECK_UTF8) {
     require Encode;
