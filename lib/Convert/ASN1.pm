@@ -23,7 +23,7 @@ BEGIN {
   }
 
   @ISA = qw(Exporter);
-  $VERSION = "0.19";
+  $VERSION = "0.20";
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],

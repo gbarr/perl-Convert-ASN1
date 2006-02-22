@@ -1,3 +1,14 @@
+Convert::ASN1 0.20 -- Tue Feb 21 18:47:43 CST 2006
+
+Bug Fixes
+ * Fixed issues with decoding when calling script contains use encoding 'utf8'
+ * Allow zero-length timestamps to be extracted
+ * Fix incorrect length encoding for bitstrings
+
+Enhancements
+ * Support encoding bigint's as BCD
+
+
 Convert::ASN1 0.19 -- Mon Apr 18 19:40:32 CDT 2005
 
 Bug Fixes
