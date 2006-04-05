@@ -27,7 +27,6 @@ OldChanges
 parser.y
 README
 SIGNATURE
-t/0-signature.t
 t/00prim.t
 t/01tag.t
 t/02seq.t
