@@ -188,6 +188,15 @@ sub registeroid {
   $self->{oidtable}{$oid}=$handler;
 }
 
+sub registertype {
+   my $self = shift;
+   my $def = shift;
+   my $type = shift;
+   my $handler = shift;
+
+   $self->{options}{handlers}{$def}{$type}=$handler;
+}
+
 # In XS the will convert the tree between perl and C structs
 
 sub _pack_struct { $_[0] }

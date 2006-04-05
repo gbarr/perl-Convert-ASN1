@@ -364,6 +364,7 @@ sub _enc_any {
   my $handler;
   if ($_[1]->[cDEFINE] && $_[2]->{$_[1]->[cDEFINE]}) {
     $handler=$_[0]->{oidtable}{$_[2]->{$_[1]->[cDEFINE]}};
+    $handler=$_[0]->{handlers}{$_[1]->[cVAR]}{$_[2]->{$_[1]->[cDEFINE]}} unless $handler;
   }
   if ($handler) {
     $_[4] .= $handler->encode($_[3]);

@@ -121,8 +121,10 @@ sub _decode {
 
 	    $len += $npos-$pos;
 
-	    $handler=($optn->{oidtable} && $op->[cDEFINE]) ?
-			$optn->{oidtable}{$stash->{$op->[cDEFINE]}} : undef;
+             if ($op->[cDEFINE]) {
+                $handler = $optn->{oidtable} && $optn->{oidtable}{$stash->{$op->[cDEFINE]}};
+                $handler ||= $optn->{handlers}{$op->[cVAR]}{$stash->{$op->[cDEFINE]}};
+             }
 
 	    ($seqof ? $seqof->[$idx++] : ref($stash) eq 'SCALAR' ? $$stash : $stash->{$var})
 	      = $handler ? $handler->decode(substr($buf,$pos,$len)) : substr($buf,$pos,$len);
