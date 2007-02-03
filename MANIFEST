@@ -11,6 +11,7 @@ inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Test/Builder.pm
+inc/Test/Builder/Module.pm
 inc/Test/More.pm
 lib/Convert/ASN1.pm
 lib/Convert/ASN1.pod
