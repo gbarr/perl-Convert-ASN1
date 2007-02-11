@@ -208,7 +208,8 @@ nitem	: WORD class plicit anyelem
 	;
 
 
-slist	: slist1		{ $$ = $1; }
+slist	:                       { $$ = []; }
+        | slist1		{ $$ = $1; }
 	| slist1 POSTRBRACE	{ $$ = $1; }
 	;
 

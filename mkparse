@@ -4,11 +4,11 @@
 
 my($source,$dest) = @ARGV;
 
-system qw(/usr/local/bin/byacc -P),$source;
+system qw(byacc -P),$source;
 
 open(OUT, ">$dest") or die "Cannot open $dest: $!\n";
 
-open(IN, "gcc -E -C  -x c y.tab.pl|");
+open(IN, "cpp y.tab.pl|");
 
 %var = ();
 %seen = ();
@@ -18,6 +18,8 @@ while(<IN>) {
 
   # In perl the stack size is not a problem
   next if /YYSTACKSIZE/;
+
+  next if /^# \d+ "(.*?)"/ and $1 ne "parser.y";
 
   # Replace variables with constant subs
   if(s/^\$([A-Z][A-Z_0-9]*)\s*=\s*(\d+)\s*;/sub const$1 () { $2 }/) {
