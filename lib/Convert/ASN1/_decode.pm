@@ -281,7 +281,7 @@ sub _dec_null {
 # 0      1    2       3     4     5     6
 # $optn, $op, $stash, $var, $buf, $pos, $len
 
-  $_[3] = 1;
+  $_[3] = exists($_[0]->{decode_null}) ? $_[0]->{decode_null} : 1;
   1;
 }
 

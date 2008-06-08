@@ -151,6 +151,11 @@ than 32 bits), they will be decoded into big integer objects. This option
 controls the big integer class into which the objects will be blessed.
 The default is to use Math::BigInt.
 
+=item null
+
+The value to decode ASN.1 NULL types into.
+If not set, it defaults to C<1>.
+
 =back
 
 =head2 prepare ( ASN )
