@@ -218,7 +218,7 @@ sub encode {
 
 
 # Encode tag value for encoding.
-# We assume that the tag has been correclty generated with asn_tag()
+# We assume that the tag has been correctly generated with asn_tag()
 
 sub asn_encode_tag {
   $_[0] >> 8
