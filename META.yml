@@ -1,0 +1,22 @@
+---
+abstract: 'Convert between perl data structures and ASN.1 encoded packets'
+author:
+  - 'Graham Barr <gbarr@cpan.org>'
+distribution_type: module
+generated_by: 'Module::Install version 0.75'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.3.html
+  version: 1.3
+name: Convert-ASN1
+no_index:
+  directory:
+    - inc
+    - t
+    - examples
+    - examples
+requires:
+  perl: 5.005
+resources:
+  repository: git://git.goingon.net/Convert-ASN1.git
+version: 0.21

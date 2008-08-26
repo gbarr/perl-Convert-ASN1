@@ -2,32 +2,23 @@
 
 use inc::Module::Install;
 
-name('Convert-ASN1');
-abstract('Convert between perl data structures and ASN.1 encoded packets');
-author('Graham Barr <gbarr@cpan.org>');
-version_from('lib/Convert/ASN1.pm');
-license('perl');
-requires( perl => 5.005 );
+perl_version    5.005;
 
-clean_files(qw(y.tab.pl));
+name         'Convert-ASN1';
+abstract     'Convert between perl data structures and ASN.1 encoded packets';
+author       'Graham Barr <gbarr@cpan.org>';
+version_from 'lib/Convert/ASN1.pm';
+license      'perl';
+sign         1;
 
-include_deps('Test::More');
+repository   'git://git.goingon.net/Convert-ASN1.git';
 
-check_nmake();      # check and download nmake.exe for Win32
+clean_files  qw(y.tab.pl);
 
-&Makefile->write;
-&Meta->write;
+include_deps 'Test::More';
 
-sub MY::postamble {
+check_nmake;      # check and download nmake.exe for Win32
 
-  return <<POSTAMBLE;
+auto_install_now;
 
-mydist : manifest distsign dist
-
-run_byacc:
-	\$(PERL) mkparse parser.y lib/Convert/ASN1/parser.pm
-
-POSTAMBLE
-
-}
-
+WriteAll;
