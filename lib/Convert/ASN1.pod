@@ -192,14 +192,14 @@ undef if there was an error.
 Register a handler for all ASN.1 elements
 that are C<DEFINED BY> the given OID.
 
-B<HANDLER> must be a Convert::ASN1 object, e.g. as returend by L</"find ( MACRO )">.
+B<HANDLER> must be a Convert::ASN1 object, e.g. as returned by L</"find ( MACRO )">.
 
 =head2 registertype ( NAME, OID, HANDLER )
 
-Register a handler for all ASN.1i elements named C<NAME>,
+Register a handler for all ASN.1 elements named C<NAME>,
 that are C<DEFINED BY> the given OID.
 
-B<HANDLER> must be a Convert::ASN1 object, e.g. as returend by L</"find ( MACRO )">.
+B<HANDLER> must be a Convert::ASN1 object, e.g. as returned by L</"find ( MACRO )">.
 
 =head1 EXPORTS
 
