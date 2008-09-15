@@ -19,4 +19,4 @@ requires:
   perl: 5.005
 resources:
   repository: git://git.goingon.net/Convert-ASN1.git
-version: 0.21
+version: 0.22
