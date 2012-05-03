@@ -106,7 +106,7 @@ sub _decode {
 	  die "decode error " . unpack("H*",$tag) ."<=>" . unpack("H*",$op->[cTAG]), " ",$pos," ",$op->[cTYPE]," ",$op->[cVAR]||'';
         }
       }
-      else { # opTag length is zero, so it must be an ANY or CHOICE
+      else { # opTag length is zero, so it must be an ANY, CHOICE or EXTENSIONS
 	
 	if ($op->[cTYPE] == opANY) {
 
@@ -227,6 +227,9 @@ sub _decode {
 	  }
 	  die "decode error" unless $op->[cEXT];
 	}
+	elsif ($op->[cTYPE] == opEXTENSIONS) {
+	    $pos = $end; # Skip over the rest
+        }
 	else {
 	  die "this point should never be reached";
 	}
@@ -482,6 +485,11 @@ SET_OP:
 	    last SET_OP;
 	  }
 	}
+      }
+      elsif ($op->[cTYPE] == opEXTENSIONS) {
+	  # EXTENSION MARKER takes up everything unknown
+	  $done = $idx;
+	  last SET_OP;
       }
       else {
 	die "internal error";
