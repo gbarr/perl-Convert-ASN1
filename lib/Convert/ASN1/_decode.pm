@@ -133,7 +133,7 @@ sub _decode {
 	    redo ANYLOOP if $seqof && $pos < $end;
 	  }
 	}
-	else {
+	elsif ($op->[cTYPE] == opCHOICE) {
 
 	  CHOICELOOP: {
 	    my($tag,$len,$npos,$indef) = _decode_tl($buf,$pos,$end,$larr)
@@ -226,6 +226,9 @@ sub _decode {
 	    }
 	  }
 	  die "decode error" unless $op->[cEXT];
+	}
+	else {
+	  die "this point should never be reached";
 	}
       }
     }
