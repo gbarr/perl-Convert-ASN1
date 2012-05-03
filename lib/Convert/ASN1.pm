@@ -4,8 +4,6 @@
 
 package Convert::ASN1;
 
-# $Id: ASN1.pm,v 1.29 2003/10/08 14:29:17 gbarr Exp $
-
 use 5.004;
 use strict;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS @opParts @opName $AUTOLOAD);
@@ -23,7 +21,6 @@ BEGIN {
   }
 
   @ISA = qw(Exporter);
-  $VERSION = "0.22";
 
   %EXPORT_TAGS = (
     io    => [qw(asn_recv asn_send asn_read asn_write asn_get asn_ready)],

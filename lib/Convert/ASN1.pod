@@ -468,11 +468,19 @@ More tests.
 
 =head1 AUTHOR
 
-Graham Barr <gbarr@pobox.com>, Report bugs via <bug-Convert-ASN1@rt.cpan.org>
+Graham Barr <gbarr@cpan.org>
+
+=head1 SUPPORT
+
+Report issues via github at https://github.com/gbarr/perl-Convert-ASN1/issues
+
+To contribute I encourage you to create a git fork of the repository at
+https://github.com/gbarr/perl-Convert-ASN1 do you work on a fresh branch
+created from master and submit a pull request
 
 =head1 COPYRIGHT
 
-Copyright (c) 2000-2005 Graham Barr <gbarr@pobox.com>. All rights reserved.
+Copyright (c) 2000-2012 Graham Barr <gbarr@cpan.org>. All rights reserved.
 This program is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.
 
