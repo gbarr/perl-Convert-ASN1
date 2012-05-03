@@ -49,4 +49,5 @@ t/11indef.t
 t/12der.t
 t/13utf8.t
 t/14any.t
+t/15ext.t
 t/funcs.pl
