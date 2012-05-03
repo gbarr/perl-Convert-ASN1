@@ -53,7 +53,7 @@ sub _decode {
 	TAGLOOP: {
 	  my($tag,$len,$npos,$indef) = _decode_tl($buf,$pos,$end,$larr)
 	    or do {
-	      next OP if $pos==$end and ($seqof || defined $op->[cOPT]);
+	      next OP if $pos==$end and ($seqof || defined $op->[cEXT]);
 	      die "decode error";
 	    };
 
@@ -99,14 +99,14 @@ sub _decode {
 
 	  }
 
-	  if ($seqof || defined $op->[cOPT]) {
+	  if ($seqof || defined $op->[cEXT]) {
 	    next OP;
 	  }
 
 	  die "decode error " . unpack("H*",$tag) ."<=>" . unpack("H*",$op->[cTAG]), " ",$pos," ",$op->[cTYPE]," ",$op->[cVAR]||'';
         }
       }
-      else { # opTag length is zero, so it must be an ANY or CHOICE
+      else { # opTag length is zero, so it must be an ANY, CHOICE or EXTENSIONS
 	
 	if ($op->[cTYPE] == opANY) {
 
@@ -114,7 +114,7 @@ sub _decode {
 
 	    my($tag,$len,$npos,$indef) = _decode_tl($buf,$pos,$end,$larr)
 	      or do {
-		next OP if $pos==$end and ($seqof || defined $op->[cOPT]);
+		next OP if $pos==$end and ($seqof || defined $op->[cEXT]);
 		die "decode error";
 	      };
 
@@ -133,12 +133,12 @@ sub _decode {
 	    redo ANYLOOP if $seqof && $pos < $end;
 	  }
 	}
-	else {
+	elsif ($op->[cTYPE] == opCHOICE) {
 
 	  CHOICELOOP: {
 	    my($tag,$len,$npos,$indef) = _decode_tl($buf,$pos,$end,$larr)
 	      or do {
-		next OP if $pos==$end and ($seqof || defined $op->[cOPT]);
+		next OP if $pos==$end and ($seqof || defined $op->[cEXT]);
 		die "decode error";
 	      };
 	    foreach my $cop (@{$op->[cCHILD]}) {
@@ -225,7 +225,13 @@ sub _decode {
 	      }
 	    }
 	  }
-	  die "decode error" unless $op->[cOPT];
+	  die "decode error" unless $op->[cEXT];
+	}
+	elsif ($op->[cTYPE] == opEXTENSIONS) {
+	    $pos = $end; # Skip over the rest
+        }
+	else {
+	  die "this point should never be reached";
 	}
       }
     }
@@ -480,6 +486,11 @@ SET_OP:
 	  }
 	}
       }
+      elsif ($op->[cTYPE] == opEXTENSIONS) {
+	  # EXTENSION MARKER takes up everything unknown
+	  $done = $idx;
+	  last SET_OP;
+      }
       else {
 	die "internal error";
       }
@@ -499,7 +510,7 @@ SET_OP:
   die "decode error" unless $end == $pos;
 
   foreach my $idx (0..$#{$ch}) {
-    die "decode error" unless $done[$idx] or $ch->[$idx][cOPT];
+    die "decode error" unless $done[$idx] or $ch->[$idx][cEXT];
   }
 
   1;

@@ -44,12 +44,13 @@ BEGIN {
   $EXPORT_TAGS{all} = \@EXPORT_OK;
 
   @opParts = qw(
-    cTAG cTYPE cVAR cLOOP cOPT cCHILD cDEFINE
+    cTAG cTYPE cVAR cLOOP cOPT cEXT cCHILD cDEFINE
   );
 
   @opName = qw(
     opUNKNOWN opBOOLEAN opINTEGER opBITSTR opSTRING opNULL opOBJID opREAL
     opSEQUENCE opSET opUTIME opGTIME opUTF8 opANY opCHOICE opROID opBCD
+    opEXTENSIONS
   );
 
   foreach my $l (\@opParts, \@opName) {

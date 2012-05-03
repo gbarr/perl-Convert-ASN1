@@ -42,6 +42,7 @@ sub _encode {
   my $var;
 
   foreach my $op (@{$ops}) {
+    next if $op->[cTYPE] == opEXTENSIONS;
     if (defined(my $opt = $op->[cOPT])) {
       next unless defined $stash->{$opt};
     }
