@@ -249,6 +249,10 @@ sitem	: WORD class plicit snitem
 		  @{$$=$3}[cTAG] = ($1);
 		  $$ = explicit($$) if $2;
 		}
+	| EXTENSION_MARKER
+		{
+		    @{$$=[]}[cTYPE] = 'EXTENSION_MARKER';
+		}
 	;
 
 optional :			{ $$ = undef; }
