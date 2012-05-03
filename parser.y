@@ -76,6 +76,8 @@ my %base_type = (
 
   CHOICE => [ '', opCHOICE ],
   ANY    => [ '', opANY ],
+
+  EXTENSION_MARKER => [ '', opEXTENSIONS ],
 );
 
 # Given an OP, wrap it in a SEQUENCE
@@ -220,6 +222,8 @@ slist	:                       { $$ = []; }
 		    $i->[cEXT] = 1 if $extension;
 		    push @{$$}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
 		  }
+		  my $e = []; $e->[cTYPE] = 'EXTENSION_MARKER';
+		  push @{$$}, $e if $extension;
 		}
 	| slist1 POSTRBRACE
 		{
@@ -231,6 +235,8 @@ slist	:                       { $$ = []; }
 		    $i->[cEXT] = 1 if $extension;
 		    push @{$$}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
 		  }
+		  my $e = []; $e->[cTYPE] = 'EXTENSION_MARKER';
+		  push @{$$}, $e if $extension;
 		}
 	;
 
