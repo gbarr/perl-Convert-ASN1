@@ -7,7 +7,7 @@
 use Convert::ASN1;
 BEGIN { require 't/funcs.pl' }
 
-print "1..25\n";
+print "1..27\n";
 
 
 # Encode a "version 1" message
@@ -67,3 +67,16 @@ ntest 22, 1, $ret->{integer};
 ntest 23, 0, $ret->{bool};
 stest 24, "A string", $ret->{str};
 btest 25, !defined($ret->{integer2});
+
+
+# OPTIONAL-ity check: integer2 is NOT optional during encode.
+btest 26, $asn->prepare(q(
+  SEQUENCE {
+    integer INTEGER,
+    bool BOOLEAN,
+    str STRING,
+    ...,
+    integer2 INTEGER
+  }
+)) or warn $asn->error;
+btest 27, !defined( $asn->encode(integer => 1, bool => 0, str => "A string") );
