@@ -216,6 +216,7 @@ slist	:                       { $$ = []; }
 		  $$ = [];
 		  for my $i (@{$1}) {
 		    $extension = 1 if $i->[cTYPE] eq 'EXTENSION_MARKER';
+		    $i->[cEXT] = $i->[cOPT];
 		    $i->[cEXT] = 1 if $extension;
 		    push @{$$}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
 		  }
@@ -226,6 +227,7 @@ slist	:                       { $$ = []; }
 		  $$ = [];
 		  for my $i (@{$1}) {
 		    $extension = 1 if $i->[cTYPE] eq 'EXTENSION_MARKER';
+		    $i->[cEXT] = $i->[cOPT];
 		    $i->[cEXT] = 1 if $extension;
 		    push @{$$}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
 		  }

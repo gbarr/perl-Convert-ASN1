@@ -467,6 +467,7 @@ State37: {
 		  $yyval = [];
 		  for my $i (@{$yyvs[$yyvsp-0]}) {
 		    $extension = 1 if $i->[cTYPE] eq 'EXTENSION_MARKER';
+		    $i->[cEXT] = $i->[cOPT];
 		    $i->[cEXT] = 1 if $extension;
 		    push @{$yyval}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
 		  }
@@ -474,12 +475,13 @@ State37: {
 last switch;
 } }
 State38: {
-# 224 "parser.y"
+# 225 "parser.y"
 {
 		  my $extension = 0;
 		  $yyval = [];
 		  for my $i (@{$yyvs[$yyvsp-1]}) {
 		    $extension = 1 if $i->[cTYPE] eq 'EXTENSION_MARKER';
+		    $i->[cEXT] = $i->[cOPT];
 		    $i->[cEXT] = 1 if $extension;
 		    push @{$yyval}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
 		  }
@@ -487,35 +489,35 @@ State38: {
 last switch;
 } }
 State39: {
-# 236 "parser.y"
+# 238 "parser.y"
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
 		
 last switch;
 } }
 State40: {
-# 240 "parser.y"
+# 242 "parser.y"
 {
 		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
 		
 last switch;
 } }
 State41: {
-# 244 "parser.y"
+# 246 "parser.y"
 {
 		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
 		
 last switch;
 } }
 State42: {
-# 250 "parser.y"
+# 252 "parser.y"
 {
 		  @{$yyval=$yyvs[$yyvsp-1]}[cOPT] = ($yyvs[$yyvsp-0]);
 		
 last switch;
 } }
 State46: {
-# 259 "parser.y"
+# 261 "parser.y"
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
 		  $yyval->[cOPT] = $yyvs[$yyvsp-3] if $yyval->[cOPT];
@@ -524,7 +526,7 @@ State46: {
 last switch;
 } }
 State48: {
-# 266 "parser.y"
+# 268 "parser.y"
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cTAG] = ($yyvs[$yyvsp-2]);
 		  $yyval = explicit($yyval) if $yyvs[$yyvsp-1];
@@ -532,64 +534,64 @@ State48: {
 last switch;
 } }
 State49: {
-# 271 "parser.y"
+# 273 "parser.y"
 {
 		    @{$yyval=[]}[cTYPE] = 'EXTENSION_MARKER';
 		
 last switch;
 } }
 State50: {
-# 276 "parser.y"
+# 278 "parser.y"
 { $yyval = undef; 
 last switch;
 } }
 State51: {
-# 277 "parser.y"
+# 279 "parser.y"
 { $yyval = 1;     
 last switch;
 } }
 State52: {
-# 281 "parser.y"
+# 283 "parser.y"
 { $yyval = undef; 
 last switch;
 } }
 State54: {
-# 285 "parser.y"
+# 287 "parser.y"
 { $yyval = undef; 
 last switch;
 } }
 State55: {
-# 286 "parser.y"
+# 288 "parser.y"
 { $yyval = 1;     
 last switch;
 } }
 State56: {
-# 287 "parser.y"
+# 289 "parser.y"
 { $yyval = 0;     
 last switch;
 } }
 State57: {
-# 290 "parser.y"
+# 292 "parser.y"
 {
 last switch;
 } }
 State58: {
-# 291 "parser.y"
+# 293 "parser.y"
 {
 last switch;
 } }
 State59: {
-# 294 "parser.y"
+# 296 "parser.y"
 {
 last switch;
 } }
 State60: {
-# 297 "parser.y"
+# 299 "parser.y"
 {
 last switch;
 } }
 State61: {
-# 298 "parser.y"
+# 300 "parser.y"
 {
 last switch;
 } }
@@ -629,7 +631,7 @@ last switch;
     $yyvs[++$yyvsp] = $yyval;
   } # yyloop
 } # yyparse
-# 302 "parser.y"
+# 304 "parser.y"
 
 my %reserved = (
   'OPTIONAL' 	=> constOPTIONAL(),
