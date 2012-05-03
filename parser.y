@@ -18,6 +18,7 @@
 %token POSTRBRACE 18
 %token DEFINED 19
 %token BY 20
+%token EXTENSION_MARKER 21
 
 %{
 # Copyright (c) 2000-2005 Graham Barr <gbarr@pobox.com>. All rights reserved.
@@ -75,6 +76,8 @@ my %base_type = (
 
   CHOICE => [ '', opCHOICE ],
   ANY    => [ '', opANY ],
+
+  EXTENSION_MARKER => [ '', opEXTENSIONS ],
 );
 
 # Given an OP, wrap it in a SEQUENCE
@@ -209,8 +212,32 @@ nitem	: WORD class plicit anyelem
 
 
 slist	:                       { $$ = []; }
-        | slist1		{ $$ = $1; }
-	| slist1 POSTRBRACE	{ $$ = $1; }
+        | slist1
+		{
+		  my $extension = 0;
+		  $$ = [];
+		  for my $i (@{$1}) {
+		    $extension = 1 if $i->[cTYPE] eq 'EXTENSION_MARKER';
+		    $i->[cEXT] = $i->[cOPT];
+		    $i->[cEXT] = 1 if $extension;
+		    push @{$$}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
+		  }
+		  my $e = []; $e->[cTYPE] = 'EXTENSION_MARKER';
+		  push @{$$}, $e if $extension;
+		}
+	| slist1 POSTRBRACE
+		{
+		  my $extension = 0;
+		  $$ = [];
+		  for my $i (@{$1}) {
+		    $extension = 1 if $i->[cTYPE] eq 'EXTENSION_MARKER';
+		    $i->[cEXT] = $i->[cOPT];
+		    $i->[cEXT] = 1 if $extension;
+		    push @{$$}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
+		  }
+		  my $e = []; $e->[cTYPE] = 'EXTENSION_MARKER';
+		  push @{$$}, $e if $extension;
+		}
 	;
 
 slist1	: sitem
@@ -247,6 +274,10 @@ sitem	: WORD class plicit snitem
 		{
 		  @{$$=$3}[cTAG] = ($1);
 		  $$ = explicit($$) if $2;
+		}
+	| EXTENSION_MARKER
+		{
+		    @{$$=[]}[cTYPE] = 'EXTENSION_MARKER';
 		}
 	;
 
@@ -525,6 +556,8 @@ sub yylex {
 	    \s*\]
 	|
 	  \((\d+)\)
+	|
+	  (\.\.\.)
 	)/sxgo
   ) {
 
@@ -559,6 +592,10 @@ sub yylex {
     if (defined $7) {
       $yylval = $+;
       return $NUMBER;
+    }
+
+    if (defined $8) {
+      return $EXTENSION_MARKER;
     }
 
     die "Internal error\n";
