@@ -210,8 +210,26 @@ nitem	: WORD class plicit anyelem
 
 
 slist	:                       { $$ = []; }
-        | slist1		{ $$ = $1; }
-	| slist1 POSTRBRACE	{ $$ = $1; }
+        | slist1
+		{
+		  my $extension = 0;
+		  $$ = [];
+		  for my $i (@{$1}) {
+		    $extension = 1 if $i->[cTYPE] eq 'EXTENSION_MARKER';
+		    $i->[cEXT] = 1 if $extension;
+		    push @{$$}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
+		  }
+		}
+	| slist1 POSTRBRACE
+		{
+		  my $extension = 0;
+		  $$ = [];
+		  for my $i (@{$1}) {
+		    $extension = 1 if $i->[cTYPE] eq 'EXTENSION_MARKER';
+		    $i->[cEXT] = 1 if $extension;
+		    push @{$$}, $i unless $i->[cTYPE] eq 'EXTENSION_MARKER';
+		  }
+		}
 	;
 
 slist1	: sitem
