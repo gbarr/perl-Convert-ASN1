@@ -18,6 +18,7 @@
 %token POSTRBRACE 18
 %token DEFINED 19
 %token BY 20
+%token EXTENSION_MARKER 21
 
 %{
 # Copyright (c) 2000-2005 Graham Barr <gbarr@pobox.com>. All rights reserved.
@@ -525,6 +526,8 @@ sub yylex {
 	    \s*\]
 	|
 	  \((\d+)\)
+	|
+	  (\.\.\.)
 	)/sxgo
   ) {
 
@@ -559,6 +562,10 @@ sub yylex {
     if (defined $7) {
       $yylval = $+;
       return $NUMBER;
+    }
+
+    if (defined $8) {
+      return $EXTENSION_MARKER;
     }
 
     die "Internal error\n";
