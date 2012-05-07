@@ -105,7 +105,7 @@ into the PDU as-is.
 
 By default UTCTime and GeneralizedTime will be encoded using the local
 time offset from UTC. This will over-ride that. It is an offset from UTC
-in seconds.  This option can be overriden by passing a reference to a
+in seconds.  This option can be overridden by passing a reference to a
 list of two values as the time value. The list should contain the time
 value and the offset from UTC in seconds.
 
