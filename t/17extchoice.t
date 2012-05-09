@@ -7,7 +7,7 @@
 use Convert::ASN1;
 BEGIN { require 't/funcs.pl' }
 
-print "1..22\n";
+print "1..19\n";
 
 
 # Encode a "version 1" message
@@ -57,7 +57,4 @@ btest 18, $asn->prepare(q(
     ...
   }
 )) or warn $asn->error;
-btest 19, $ret = $asn->decode($pdu) or warn $asn->error;
-btest 20, !defined($ret->{integer});
-btest 21, !defined($ret->{bool});
-btest 22, !defined($ret->{str});
+btest 19, !defined($ret = $asn->decode($pdu));

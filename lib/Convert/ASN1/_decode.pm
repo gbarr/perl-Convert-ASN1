@@ -141,6 +141,7 @@ sub _decode {
 		next OP if $pos==$end and ($seqof || defined $op->[cEXT]);
 		die "decode error";
 	      };
+	    my $extensions;
 	    foreach my $cop (@{$op->[cCHILD]}) {
 
 	      if ($tag eq $cop->[cTAG]) {
@@ -164,6 +165,11 @@ sub _decode {
 
 		redo CHOICELOOP if $seqof && $pos < $end;
 		next OP;
+	      }
+
+	      if ($cop->[cTYPE] == opEXTENSIONS) {
+		$extensions = 1;
+		next;
 	      }
 
 	      unless (length $cop->[cTAG]) {
@@ -223,6 +229,13 @@ sub _decode {
 		redo CHOICELOOP if $seqof && $pos < $end;
 		next OP;
 	      }
+	    }
+
+	    if ($pos < $end && $extensions) {
+	      $pos = $npos+$len+$indef;
+
+	      redo CHOICELOOP if $seqof && $pos < $end;
+	      next OP;
 	    }
 	  }
 	  die "decode error" unless $op->[cEXT];
