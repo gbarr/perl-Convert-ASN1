@@ -51,4 +51,5 @@ t/13utf8.t
 t/14any.t
 t/15extseq.t
 t/16extset.t
+t/16extchoice.t
 t/funcs.pl
