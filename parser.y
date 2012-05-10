@@ -208,6 +208,10 @@ nitem	: WORD class plicit anyelem
 		  @{$$=$4}[cVAR,cTAG] = ($1,$2);
 		  $$ = explicit($$) if $3;
 		}
+	| EXTENSION_MARKER
+		{
+		    @{$$=[]}[cTYPE] = 'EXTENSION_MARKER';
+		}
 	;
 
 

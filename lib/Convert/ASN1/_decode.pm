@@ -141,6 +141,7 @@ sub _decode {
 		next OP if $pos==$end and ($seqof || defined $op->[cEXT]);
 		die "decode error";
 	      };
+	    my $extensions;
 	    foreach my $cop (@{$op->[cCHILD]}) {
 
 	      if ($tag eq $cop->[cTAG]) {
@@ -164,6 +165,11 @@ sub _decode {
 
 		redo CHOICELOOP if $seqof && $pos < $end;
 		next OP;
+	      }
+
+	      if ($cop->[cTYPE] == opEXTENSIONS) {
+		$extensions = 1;
+		next;
 	      }
 
 	      unless (length $cop->[cTAG]) {
@@ -223,6 +229,13 @@ sub _decode {
 		redo CHOICELOOP if $seqof && $pos < $end;
 		next OP;
 	      }
+	    }
+
+	    if ($pos < $end && $extensions) {
+	      $pos = $npos+$len+$indef;
+
+	      redo CHOICELOOP if $seqof && $pos < $end;
+	      next OP;
 	    }
 	  }
 	  die "decode error" unless $op->[cEXT];
@@ -399,6 +412,7 @@ sub _dec_set {
   my $stash = defined($_[3]) ? $_[2] : ($_[3]={});
   my $end = $pos + $_[6];
   my @done;
+  my $extensions;
 
   while ($pos < $end) {
     my($tag,$len,$npos,$indef) = _decode_tl($_[4],$pos,$end,$larr)
@@ -487,9 +501,7 @@ SET_OP:
 	}
       }
       elsif ($op->[cTYPE] == opEXTENSIONS) {
-	  # EXTENSION MARKER takes up everything unknown
-	  $done = $idx;
-	  last SET_OP;
+	  $extensions = $idx;
       }
       else {
 	die "internal error";
@@ -502,6 +514,10 @@ SET_OP:
       $done = $any;
     }
 
+    if( !defined($done) && defined($extensions) ) {
+      $done = $extensions;
+    }
+
     die "decode error" if !defined($done) or $done[$done]++;
 
     $pos = $npos + $len + $indef;
@@ -510,7 +526,7 @@ SET_OP:
   die "decode error" unless $end == $pos;
 
   foreach my $idx (0..$#{$ch}) {
-    die "decode error" unless $done[$idx] or $ch->[$idx][cEXT];
+    die "decode error" unless $done[$idx] or $ch->[$idx][cEXT] or $ch->[$idx][cTYPE] == opEXTENSIONS;
   }
 
   1;
