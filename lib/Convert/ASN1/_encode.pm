@@ -381,6 +381,7 @@ sub _enc_choice {
 
   my $stash = defined($_[3]) ? $_[3] : $_[2];
   for my $op (@{$_[1]->[cCHILD]}) {
+    next if $op->[cTYPE] == opEXTENSIONS;
     my $var = defined $op->[cVAR] ? $op->[cVAR] : $op->[cCHILD]->[0]->[cVAR];
 
     if (exists $stash->{$var}) {
