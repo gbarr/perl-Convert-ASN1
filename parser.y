@@ -80,6 +80,13 @@ my %base_type = (
   EXTENSION_MARKER => [ '', opEXTENSIONS ],
 );
 
+my $tagdefault = 1; # 0:IMPLICIT , 1:EXPLICIT default
+
+# args: class,plicit
+sub need_explicit {
+  (defined($_[0]) && (defined($_[1])?$_[1]:$tagdefault));
+}
+
 # Given an OP, wrap it in a SEQUENCE
 
 sub explicit {
@@ -114,7 +121,7 @@ module  : WORD ASSIGN aitem
 aitem	: class plicit anyelem postrb
 		{
 		  $3->[cTAG] = $1;
-		  $$ = $2 ? explicit($3) : $3;
+		  $$ = need_explicit($1,$2) ? explicit($3) : $3;
 		}
 	| celem
 	;
@@ -139,7 +146,7 @@ selem	: seqset OF class plicit sselem optional
 		{
 		  $5->[cTAG] = $3;
 		  @{$$ = []}[cTYPE,cCHILD,cLOOP,cOPT] = ($1, [$5], 1, $6);
-		  $$ = explicit($$) if $4;
+		  $$ = explicit($$) if need_explicit($3,$4);
 		}
 	;
 
@@ -206,7 +213,7 @@ nlist1	: nitem
 nitem	: WORD class plicit anyelem
 		{
 		  @{$$=$4}[cVAR,cTAG] = ($1,$2);
-		  $$ = explicit($$) if $3;
+		  $$ = explicit($$) if need_explicit($2,$3);
 		}
 	| EXTENSION_MARKER
 		{
@@ -271,13 +278,13 @@ sitem	: WORD class plicit snitem
 		{
 		  @{$$=$4}[cVAR,cTAG] = ($1,$2);
 		  $$->[cOPT] = $1 if $$->[cOPT];
-		  $$ = explicit($$) if $3;
+		  $$ = explicit($$) if need_explicit($2,$3);
 		}
 	| celem
 	| class plicit onelem
 		{
 		  @{$$=$3}[cTAG] = ($1);
-		  $$ = explicit($$) if $2;
+		  $$ = explicit($$) if need_explicit($1,$2);
 		}
 	| EXTENSION_MARKER
 		{
@@ -352,6 +359,7 @@ my @stacked;
 
 sub parse {
   local(*asn) = \($_[0]);
+  $tagdefault = $_[1] eq 'EXPLICIT' ? 1 : 0;
   ($pos,$last_pos,@stacked) = ();
 
   eval {
