@@ -117,6 +117,15 @@ sub configure {
     Carp::croak("Unsupported encoding format '$opt{encoding}'");
   }
 
+  # IMPLICIT as defalt for backwards compatibility, even though it's wrong.
+  $self->{options}{tagdefault} = uc($opt{tagdefault} || 'IMPLICIT');
+
+  unless ($self->{options}{tagdefault} =~ /^(?:EXPLICIT|IMPLICIT)$/) {
+    require Carp;
+    Carp::croak("Default tagging must be EXPLICIT/IMPLICIT. Not $opt{tagdefault}");
+  }
+
+
   for my $type (qw(encode decode)) {
     if (exists $opt{$type}) {
       while(my($what,$value) = each %{$opt{$type}}) {
@@ -147,9 +156,9 @@ sub prepare {
   if( ref($asn) eq 'GLOB' ){
     local $/ = undef;
     my $txt = <$asn>;
-    $tree = Convert::ASN1::parser::parse($txt);
+    $tree = Convert::ASN1::parser::parse($txt,$self->{options}{tagdefault});
   } else {
-    $tree = Convert::ASN1::parser::parse($asn);
+    $tree = Convert::ASN1::parser::parse($asn,$self->{options}{tagdefault});
   }
 
   unless ($tree) {
