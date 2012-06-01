@@ -32,6 +32,7 @@ my %base_type = (
   'RELATIVE-OID'    => [ asn_encode_tag(ASN_RELATIVE_OID),	opROID	  ],
 
   SEQUENCE	    => [ asn_encode_tag(ASN_SEQUENCE | ASN_CONSTRUCTOR), opSEQUENCE ],
+  EXPLICIT	    => [ asn_encode_tag(ASN_SEQUENCE | ASN_CONSTRUCTOR), opEXPLICIT ],
   SET               => [ asn_encode_tag(ASN_SET      | ASN_CONSTRUCTOR), opSET ],
 
   ObjectDescriptor  => [ asn_encode_tag(ASN_UNIVERSAL |  7), opSTRING ],
@@ -72,7 +73,7 @@ sub explicit {
   my $op = shift;
   my @seq = @$op;
 
-  @seq[cTYPE,cCHILD,cVAR,cLOOP] = ('SEQUENCE',[$op],undef,undef);
+  @seq[cTYPE,cCHILD,cVAR,cLOOP] = ('EXPLICIT',[$op],undef,undef);
   @{$op}[cTAG,cOPT] = ();
 
   \@seq;
@@ -317,19 +318,19 @@ my $label = "State$yyn";
 goto $label if exists $yystate{$label};
 last switch;
 State1: {
-# 106 "parser.y"
+# 107 "parser.y"
 { $yyval = { '' => $yyvs[$yyvsp-0] }; 
 last switch;
 } }
 State3: {
-# 111 "parser.y"
+# 112 "parser.y"
 {
 		  $yyval = { $yyvs[$yyvsp-2], [$yyvs[$yyvsp-0]] };
 		
 last switch;
 } }
 State4: {
-# 115 "parser.y"
+# 116 "parser.y"
 {
 		  $yyval=$yyvs[$yyvsp-3];
 		  $yyval->{$yyvs[$yyvsp-2]} = [$yyvs[$yyvsp-0]];
@@ -337,7 +338,7 @@ State4: {
 last switch;
 } }
 State5: {
-# 122 "parser.y"
+# 123 "parser.y"
 {
 		  $yyvs[$yyvsp-1]->[cTAG] = $yyvs[$yyvsp-3];
 		  $yyval = need_explicit($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]) ? explicit($yyvs[$yyvsp-1]) : $yyvs[$yyvsp-1];
@@ -345,14 +346,14 @@ State5: {
 last switch;
 } }
 State11: {
-# 136 "parser.y"
+# 137 "parser.y"
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('COMPONENTS', $yyvs[$yyvsp-0]);
 		
 last switch;
 } }
 State14: {
-# 146 "parser.y"
+# 147 "parser.y"
 {
 		  $yyvs[$yyvsp-1]->[cTAG] = $yyvs[$yyvsp-3];
 		  @{$yyval = []}[cTYPE,cCHILD,cLOOP,cOPT] = ($yyvs[$yyvsp-5], [$yyvs[$yyvsp-1]], 1, $yyvs[$yyvsp-0]);
@@ -361,103 +362,103 @@ State14: {
 last switch;
 } }
 State18: {
-# 159 "parser.y"
+# 160 "parser.y"
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('SEQUENCE', $yyvs[$yyvsp-1]);
 		
 last switch;
 } }
 State19: {
-# 163 "parser.y"
+# 164 "parser.y"
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('SET', $yyvs[$yyvsp-1]);
 		
 last switch;
 } }
 State20: {
-# 167 "parser.y"
+# 168 "parser.y"
 {
 		  @{$yyval = []}[cTYPE,cCHILD] = ('CHOICE', $yyvs[$yyvsp-1]);
 		
 last switch;
 } }
 State21: {
-# 173 "parser.y"
+# 174 "parser.y"
 {
 		  @{$yyval = []}[cTYPE] = ('ENUM');
 		
 last switch;
 } }
 State22: {
-# 178 "parser.y"
-{ @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
-last switch;
-} }
-State23: {
 # 179 "parser.y"
 { @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
 last switch;
 } }
-State24: {
+State23: {
 # 180 "parser.y"
 { @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
 last switch;
 } }
+State24: {
+# 181 "parser.y"
+{ @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
+last switch;
+} }
 State25: {
-# 182 "parser.y"
+# 183 "parser.y"
 {
 		  @{$yyval = []}[cTYPE,cCHILD,cDEFINE] = ('ANY',undef,$yyvs[$yyvsp-0]);
 		
 last switch;
 } }
 State26: {
-# 185 "parser.y"
+# 186 "parser.y"
 { @{$yyval = []}[cTYPE] = $yyvs[$yyvsp-0]; 
 last switch;
 } }
 State27: {
-# 188 "parser.y"
+# 189 "parser.y"
 { $yyval=undef; 
 last switch;
 } }
 State28: {
-# 189 "parser.y"
+# 190 "parser.y"
 { $yyval=$yyvs[$yyvsp-0]; 
 last switch;
 } }
 State30: {
-# 195 "parser.y"
+# 196 "parser.y"
 { $yyval = $yyvs[$yyvsp-0]; 
 last switch;
 } }
 State31: {
-# 196 "parser.y"
+# 197 "parser.y"
 { $yyval = $yyvs[$yyvsp-1]; 
 last switch;
 } }
 State32: {
-# 200 "parser.y"
+# 201 "parser.y"
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
 		
 last switch;
 } }
 State33: {
-# 204 "parser.y"
+# 205 "parser.y"
 {
 		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
 		
 last switch;
 } }
 State34: {
-# 208 "parser.y"
+# 209 "parser.y"
 {
 		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
 		
 last switch;
 } }
 State35: {
-# 214 "parser.y"
+# 215 "parser.y"
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
 		  $yyval = explicit($yyval) if need_explicit($yyvs[$yyvsp-2],$yyvs[$yyvsp-1]);
@@ -465,19 +466,19 @@ State35: {
 last switch;
 } }
 State36: {
-# 219 "parser.y"
+# 220 "parser.y"
 {
 		    @{$yyval=[]}[cTYPE] = 'EXTENSION_MARKER';
 		
 last switch;
 } }
 State37: {
-# 225 "parser.y"
+# 226 "parser.y"
 { $yyval = []; 
 last switch;
 } }
 State38: {
-# 227 "parser.y"
+# 228 "parser.y"
 {
 		  my $extension = 0;
 		  $yyval = [];
@@ -493,7 +494,7 @@ State38: {
 last switch;
 } }
 State39: {
-# 240 "parser.y"
+# 241 "parser.y"
 {
 		  my $extension = 0;
 		  $yyval = [];
@@ -509,35 +510,35 @@ State39: {
 last switch;
 } }
 State40: {
-# 255 "parser.y"
+# 256 "parser.y"
 {
 		  $yyval = [ $yyvs[$yyvsp-0] ];
 		
 last switch;
 } }
 State41: {
-# 259 "parser.y"
+# 260 "parser.y"
 {
 		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
 		
 last switch;
 } }
 State42: {
-# 263 "parser.y"
+# 264 "parser.y"
 {
 		  push @{$yyval=$yyvs[$yyvsp-2]}, $yyvs[$yyvsp-0];
 		
 last switch;
 } }
 State43: {
-# 269 "parser.y"
+# 270 "parser.y"
 {
 		  @{$yyval=$yyvs[$yyvsp-1]}[cOPT] = ($yyvs[$yyvsp-0]);
 		
 last switch;
 } }
 State47: {
-# 278 "parser.y"
+# 279 "parser.y"
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cVAR,cTAG] = ($yyvs[$yyvsp-3],$yyvs[$yyvsp-2]);
 		  $yyval->[cOPT] = $yyvs[$yyvsp-3] if $yyval->[cOPT];
@@ -546,7 +547,7 @@ State47: {
 last switch;
 } }
 State49: {
-# 285 "parser.y"
+# 286 "parser.y"
 {
 		  @{$yyval=$yyvs[$yyvsp-0]}[cTAG] = ($yyvs[$yyvsp-2]);
 		  $yyval = explicit($yyval) if need_explicit($yyvs[$yyvsp-2],$yyvs[$yyvsp-1]);
@@ -554,64 +555,64 @@ State49: {
 last switch;
 } }
 State50: {
-# 290 "parser.y"
+# 291 "parser.y"
 {
 		    @{$yyval=[]}[cTYPE] = 'EXTENSION_MARKER';
 		
 last switch;
 } }
 State51: {
-# 295 "parser.y"
+# 296 "parser.y"
 { $yyval = undef; 
 last switch;
 } }
 State52: {
-# 296 "parser.y"
+# 297 "parser.y"
 { $yyval = 1;     
 last switch;
 } }
 State53: {
-# 300 "parser.y"
+# 301 "parser.y"
 { $yyval = undef; 
 last switch;
 } }
 State55: {
-# 304 "parser.y"
+# 305 "parser.y"
 { $yyval = undef; 
 last switch;
 } }
 State56: {
-# 305 "parser.y"
+# 306 "parser.y"
 { $yyval = 1;     
 last switch;
 } }
 State57: {
-# 306 "parser.y"
+# 307 "parser.y"
 { $yyval = 0;     
 last switch;
 } }
 State58: {
-# 309 "parser.y"
-{
-last switch;
-} }
-State59: {
 # 310 "parser.y"
 {
 last switch;
 } }
+State59: {
+# 311 "parser.y"
+{
+last switch;
+} }
 State60: {
-# 313 "parser.y"
+# 314 "parser.y"
 {
 last switch;
 } }
 State61: {
-# 316 "parser.y"
+# 317 "parser.y"
 {
 last switch;
 } }
 State62: {
-# 317 "parser.y"
+# 318 "parser.y"
 {
 last switch;
 } }
@@ -651,7 +652,7 @@ last switch;
     $yyvs[++$yyvsp] = $yyval;
   } # yyloop
 } # yyparse
-# 321 "parser.y"
+# 322 "parser.y"
 
 my %reserved = (
   'OPTIONAL' 	=> constOPTIONAL(),
@@ -730,11 +731,11 @@ sub compile_one {
       $op->[cTAG] = defined($op->[cTAG]) ? asn_encode_tag($op->[cTAG]): $ref->[0][cTAG];
     }
     $op->[cTAG] |= chr(ASN_CONSTRUCTOR)
-      if length $op->[cTAG] && ($op->[cTYPE] == opSET || $op->[cTYPE] == opSEQUENCE);
+      if length $op->[cTAG] && ($op->[cTYPE] == opSET || $op->[cTYPE] == opEXPLICIT || $op->[cTYPE] == opSEQUENCE);
 
     if ($op->[cCHILD]) {
       ;# If we have children we are one of
-      ;#  opSET opSEQUENCE opCHOICE
+      ;#  opSET opSEQUENCE opCHOICE opEXPLICIT
 
       compile_one($tree, $op->[cCHILD], defined($op->[cVAR]) ? $name . "." . $op->[cVAR] : $name);
 

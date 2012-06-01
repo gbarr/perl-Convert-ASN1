@@ -53,6 +53,7 @@ my %base_type = (
   'RELATIVE-OID'    => [ asn_encode_tag(ASN_RELATIVE_OID),	opROID	  ],
 
   SEQUENCE	    => [ asn_encode_tag(ASN_SEQUENCE | ASN_CONSTRUCTOR), opSEQUENCE ],
+  EXPLICIT	    => [ asn_encode_tag(ASN_SEQUENCE | ASN_CONSTRUCTOR), opEXPLICIT ],
   SET               => [ asn_encode_tag(ASN_SET      | ASN_CONSTRUCTOR), opSET ],
 
   ObjectDescriptor  => [ asn_encode_tag(ASN_UNIVERSAL |  7), opSTRING ],
@@ -93,7 +94,7 @@ sub explicit {
   my $op = shift;
   my @seq = @$op;
 
-  @seq[cTYPE,cCHILD,cVAR,cLOOP] = ('SEQUENCE',[$op],undef,undef);
+  @seq[cTYPE,cCHILD,cVAR,cLOOP] = ('EXPLICIT',[$op],undef,undef);
   @{$op}[cTAG,cOPT] = ();
 
   \@seq;
@@ -396,11 +397,11 @@ sub compile_one {
       $op->[cTAG] = defined($op->[cTAG]) ? asn_encode_tag($op->[cTAG]): $ref->[0][cTAG];
     }
     $op->[cTAG] |= chr(ASN_CONSTRUCTOR)
-      if length $op->[cTAG] && ($op->[cTYPE] == opSET || $op->[cTYPE] == opSEQUENCE);
+      if length $op->[cTAG] && ($op->[cTYPE] == opSET || $op->[cTYPE] == opEXPLICIT || $op->[cTYPE] == opSEQUENCE);
 
     if ($op->[cCHILD]) {
       ;# If we have children we are one of
-      ;#  opSET opSEQUENCE opCHOICE
+      ;#  opSET opSEQUENCE opCHOICE opEXPLICIT
 
       compile_one($tree, $op->[cCHILD], defined($op->[cVAR]) ? $name . "." . $op->[cVAR] : $name);
 

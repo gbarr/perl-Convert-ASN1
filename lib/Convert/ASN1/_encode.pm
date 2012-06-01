@@ -26,6 +26,7 @@ my @encode = (
   \&_enc_object_id,
   \&_enc_real,
   \&_enc_sequence,
+  \&_enc_sequence, # EXPLICIT is the same encoding as sequence
   \&_enc_sequence, # SET is the same encoding as sequence
   \&_enc_time,
   \&_enc_time,

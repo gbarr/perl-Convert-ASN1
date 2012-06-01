@@ -24,6 +24,7 @@ my @decode = (
   \&_dec_object_id,
   \&_dec_real,
   \&_dec_sequence,
+  \&_dec_explicit,
   \&_dec_set,
   \&_dec_time,
   \&_dec_time,
@@ -377,6 +378,22 @@ sub _dec_real {
 }
 
 
+sub _dec_explicit {
+# 0      1    2       3     4     5     6     7
+# $optn, $op, $stash, $var, $buf, $pos, $len, $larr
+
+  _decode(
+    $_[0], #optn
+    $_[1]->[cCHILD],   #ops
+    $_[2], #stash
+    $_[5], #pos
+    $_[5]+$_[6], #end
+    undef, #loop
+    $_[7],
+    $_[4], #buf
+  );
+  1;
+}
 sub _dec_sequence {
 # 0      1    2       3     4     5     6     7
 # $optn, $op, $stash, $var, $buf, $pos, $len, $larr

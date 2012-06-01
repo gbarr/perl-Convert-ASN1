@@ -46,7 +46,7 @@ BEGIN {
 
   @opName = qw(
     opUNKNOWN opBOOLEAN opINTEGER opBITSTR opSTRING opNULL opOBJID opREAL
-    opSEQUENCE opSET opUTIME opGTIME opUTF8 opANY opCHOICE opROID opBCD
+    opSEQUENCE opEXPLICIT opSET opUTIME opGTIME opUTF8 opANY opCHOICE opROID opBCD
     opEXTENSIONS
   );
 
@@ -260,16 +260,27 @@ sub asn_encode_length {
 
 sub decode {
   my $self  = shift;
+  my $ret;
 
   local $SIG{__DIE__};
-  my $ret = eval { 
+  eval {
     my (%stash, $result);
     my $script = $self->{script};
-    my $stash = (1 == @$script && !$self->{script}[0][cVAR]) ? \$result : ($result=\%stash);
+    my $stash = \$result;
+
+    while ($script) {
+      my $child = $script->[0] or last;
+      if (@$script > 1 or defined $child->[cVAR]) {
+        $result = $stash = \%stash;
+        last;
+      }
+      last if $child->[cTYPE] == opCHOICE;
+      $script = $child->[cCHILD];
+    }
 
     _decode(
 	$self->{options},
-	$script,
+	$self->{script},
 	$stash,
 	0,
 	length $_[0], 
@@ -277,12 +288,10 @@ sub decode {
 	{},
 	$_[0]);
 
-    $result;
-  };
-  if ($@) {
-    $self->{'error'} = $@;
-    return undef;
-  }
+    $ret = $result;
+    1;
+  } or $self->{'error'} = $@ || 'Unknown error';
+
   $ret;
 }
 
