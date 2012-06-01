@@ -66,9 +66,7 @@ sub _decode {
 	      # We send 1 if there is not var as if there is the decode
 	      # should be getting undef. So if it does not get undef
 	      # it knows it has no variable
-	      # the substr($$stash,0) is to avoid  'Modification of a read-only value attempted' errors
-	      # when $$stash is undef, assigning to $_[3] croaks
-	      ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : ref($stash) eq 'SCALAR' ? substr($$stash,0) : 1),
+	      ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : ref($stash) eq 'SCALAR' ? $$stash : 1),
 	      $buf,$npos,$len, $larr
 	    );
 
