@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+0.24 -- Mon Jun 04 17:11:08 CDT 2012
+  * spelling fix [gregor herrmann]
+  * Added tests for extension markers (fails currently) [Niels Laukens]
+  * Bugfix for extension markerss in SETs and CHOICEs [Niels Laukens]
+  * Skip attempting to encode opEXTENSIONS inside of CHOICE
+  * Support for default explicit tagging [Peter Mogensen]
+  * Added tests and doc for explicit tagging [Peter Mogensen]
+  * Add new opEXPLICIT for sequences that are inserted for EXPLICIT tags
+
 0.23 -- Thu May 03 16:32:46 CDT 2012
  * Added support for EXTENSION MARKERS (...) (Niels Laukens)
  * Switch to Dist::Zilla for building
