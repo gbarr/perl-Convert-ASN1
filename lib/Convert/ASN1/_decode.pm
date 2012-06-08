@@ -4,6 +4,9 @@
 
 package Convert::ASN1;
 
+use strict;
+use warnings;
+
 BEGIN {
   local $SIG{__DIE__};
   eval { require bytes and 'bytes'->import };
@@ -121,10 +124,11 @@ sub _decode {
 
 	    $len += $npos-$pos;
 
-             if ($op->[cDEFINE]) {
-                $handler = $optn->{oidtable} && $optn->{oidtable}{$stash->{$op->[cDEFINE]}};
-                $handler ||= $optn->{handlers}{$op->[cVAR]}{$stash->{$op->[cDEFINE]}};
-             }
+            my $handler;
+            if ($op->[cDEFINE]) {
+              $handler = $optn->{oidtable} && $optn->{oidtable}{$stash->{$op->[cDEFINE]}};
+              $handler ||= $optn->{handlers}{$op->[cVAR]}{$stash->{$op->[cDEFINE]}};
+            }
 
 	    ($seqof ? $seqof->[$idx++] : ref($stash) eq 'SCALAR' ? $$stash : $stash->{$var})
 	      = $handler ? $handler->decode(substr($buf,$pos,$len)) : substr($buf,$pos,$len);
@@ -481,6 +485,7 @@ SET_OP:
 	$any = $idx;
       }
       elsif ($op->[cTYPE] == opCHOICE) {
+	my $var = $op->[cVAR];
 	foreach my $cop (@{$op->[cCHILD]}) {
 	  if ($tag eq $cop->[cTAG]) {
 	    my $nstash = defined($var) ? ($stash->{$var}={}) : $stash;

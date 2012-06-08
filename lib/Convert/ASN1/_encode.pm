@@ -4,6 +4,9 @@
 
 package Convert::ASN1;
 
+use strict;
+use warnings;
+
 BEGIN {
   unless (CHECK_UTF8) {
     local $SIG{__DIE__};
@@ -302,6 +305,7 @@ sub _enc_time {
     return;
   }
 
+  my $time;
   my @time;
   my $offset;
   my $isgen = $_[1]->[cTYPE] == opGTIME;
