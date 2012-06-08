@@ -579,11 +579,19 @@ sub yylex {
     next if defined $1; # comment or whitespace
 
     if (defined $2 or defined $3) {
+      my $ret = $+;
+
       # A comma is not required after a '}' so to aid the
       # parser we insert a fake token after any '}'
-      push @stacked, $POSTRBRACE if defined $2 and $+ eq '}';
+      if ($ret eq '}') {
+        my $p   = pos($asn);
+        my @tmp = @stacked;
+        @stacked = ();
+        pos($asn) = $p if yylex() != $COMMA;    # swallow it
+        @stacked = (@tmp, $POSTRBRACE);
+      }
 
-      return $reserved{$yylval = $+};
+      return $reserved{$yylval = $ret};
     }
 
     if (defined $4) {
