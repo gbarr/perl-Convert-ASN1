@@ -70,7 +70,7 @@ One of 'BER' or 'DER'. The default is 'BER'
 =item tagdefault
 
 One of 'EXPLICIT' or 'IMPLICIT'.
-Default tagging conventions are normally given in the ASN.1 module definition (not supported by the parser). The ASN.1 spec states EXPLICIT tagging is the default, but this option has IMPLICIT tagging default for backward compatability reasons.
+Default tagging conventions are normally given in the ASN.1 module definition (not supported by the parser). The ASN.1 spec states EXPLICIT tagging is the default, but this option has IMPLICIT tagging default for backward compatibility reasons.
 
 =back
 
