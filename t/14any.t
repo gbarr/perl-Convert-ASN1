@@ -8,7 +8,7 @@ BEGIN { require 't/funcs.pl'}
 
 use Convert::ASN1;
 
-print "1..15\n";
+print "1..21\n";
 
 btest 1, $asn_str=Convert::ASN1->new or warn $asn->error;
 btest 2, $asn_str->prepare("string STRING") or warn $asn->error;
@@ -50,3 +50,19 @@ stest 12, $result, $asn->encode(type => "1.1.1.2",
 btest 13, $ret = $asn->decode($result) or warn $asn->error;
 ntest 14, 1, $ret->{content}->{integer};
 stest 15, "and a string", $ret->{content}->{str};
+
+# Decoding ANY with indefinite length must include the trailing terminator
+
+btest 16, $asn = Convert::ASN1->new or warn $asn->error;
+btest 17, $asn->prepare(q(
+        Test2 ::= ANY
+        Test1 ::= SEQUENCE OF ANY
+)) or warn $asn->error;
+
+$result = pack("H*","3080020109308002010900000000");
+
+btest 18, $ret = $asn->find('Test1')->decode($result);
+rtest 19, [pack("H*","020109"),pack("H*","30800201090000")], $ret;
+
+btest 20, $ret = $asn->find('Test2')->decode($result);
+stest 21, $result, $ret;

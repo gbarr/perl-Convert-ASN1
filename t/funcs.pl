@@ -42,6 +42,7 @@ sub rtest ($$$) {
   }
 
   local $Data::Dumper::Sortkeys = 1;
+  local $Data::Dumper::Useqq = 1;
   my $ok = Data::Dumper::Dumper($_[1]) eq Data::Dumper::Dumper($_[2]);
 
   unless ($ok) {

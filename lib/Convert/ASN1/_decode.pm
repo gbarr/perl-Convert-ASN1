@@ -122,7 +122,7 @@ sub _decode {
 		die "decode error";
 	      };
 
-	    $len += $npos-$pos;
+	    $len += $npos - $pos + $indef;
 
             my $handler;
             if ($op->[cDEFINE]) {
@@ -133,7 +133,7 @@ sub _decode {
 	    ($seqof ? $seqof->[$idx++] : ref($stash) eq 'SCALAR' ? $$stash : $stash->{$var})
 	      = $handler ? $handler->decode(substr($buf,$pos,$len)) : substr($buf,$pos,$len);
 
-	    $pos += $len + $indef;
+	    $pos += $len;
 
 	    redo ANYLOOP if $seqof && $pos < $end;
 	  }
