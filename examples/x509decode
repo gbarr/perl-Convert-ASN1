@@ -24,7 +24,6 @@ my $asn = Convert::ASN1->new;
 $asn->prepare(<<ASN1) or die "prepare: ", $asn->error;
 -- ASN.1 from RFC2459 and X.509(2001)
 -- Adapted for use with Convert::ASN1
--- $Id: x509decode,v 1.1 2002/02/10 16:41:28 gbarr Exp $
 
 -- attribute data types --
 
