@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+0.25 -- Fri Jun 08 19:31:59 CDT 2012
+  * fix a spelling mistake [gregor herrmann]
+  * Add use strict and fix errors
+  * Fix decoding of indefinite sequences with ANY
+  * POD additions for ANY
+  * EXPLICIT ops must pass their cVAR to their child op
+  * Swallow a , after a }
+
 0.24 -- Mon Jun 04 17:11:08 CDT 2012
   * spelling fix [gregor herrmann]
   * Added tests for extension markers (fails currently) [Niels Laukens]
