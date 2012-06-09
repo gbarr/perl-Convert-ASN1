@@ -43,9 +43,13 @@ sub rtest ($$$) {
 
   local $Data::Dumper::Sortkeys = 1;
   local $Data::Dumper::Useqq = 1;
-  my $ok = Data::Dumper::Dumper($_[1]) eq Data::Dumper::Dumper($_[2]);
+  my $expect = Data::Dumper::Dumper($_[1]);
+  my $got = Data::Dumper::Dumper($_[2]);
+  my $ok = $expect eq $got;
 
   unless ($ok) {
+    printf "#$_[0]: expecting %s\n", $expect;
+    printf "#$_[0]:       got %s\n", $got;
     printf "#line %d %s\n",(caller)[2,1];
     print "not ";
   }
