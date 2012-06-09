@@ -386,7 +386,7 @@ sub _dec_explicit {
 # 0      1    2       3     4     5     6     7
 # $optn, $op, $stash, $var, $buf, $pos, $len, $larr
 
-  local $_[1][cCHILD][0][cVAR] = $_[1][cVAR];
+  local $_[1][cCHILD][0][cVAR] = $_[1][cVAR] unless $_[1][cCHILD][0][cVAR];
 
   _decode(
     $_[0], #optn

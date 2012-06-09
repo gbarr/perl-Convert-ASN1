@@ -274,7 +274,7 @@ sub decode {
         $result = $stash = \%stash;
         last;
       }
-      last if $child->[cTYPE] == opCHOICE;
+      last if $child->[cTYPE] == opCHOICE or $child->[cLOOP];
       $script = $child->[cCHILD];
     }
 
