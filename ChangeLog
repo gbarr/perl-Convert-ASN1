@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+0.26 -- Sat Jun 09 13:30:16 CDT 2012
+  * Avoid Modification of a read-only value attempted errors
+  * dump Data::Dumper strings when rtest fails
+  * Add tests from Crypt::X509 that found the last Modification of a read-only value attempted error
+
 0.25 -- Fri Jun 08 19:31:59 CDT 2012
   * fix a spelling mistake [gregor herrmann]
   * Add use strict and fix errors
