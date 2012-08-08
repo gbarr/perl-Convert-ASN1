@@ -620,6 +620,8 @@ sub _dec_utf8 {
 sub _decode_tl {
   my($pos,$end,$larr) = @_[1,2,3];
 
+  return if $pos >= $end;
+
   my $indef = 0;
 
   my $tag = substr($_[0], $pos++, 1);
@@ -628,6 +630,7 @@ sub _decode_tl {
     my $b;
     my $n=1;
     do {
+      return if $pos >= $end;
       $tag .= substr($_[0],$pos++,1);
       $b = ord substr($tag,-1);
     } while($b & 0x80);

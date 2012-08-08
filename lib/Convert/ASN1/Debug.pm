@@ -81,6 +81,7 @@ sub asn_dump {
     
     my $start = $pos;
     my($tb,$tag,$tnum) = asn_decode_tag2(substr($_[0],$pos,10));
+    last unless defined $tb;
     $pos += $tb;
     my($lb,$len) = asn_decode_length(substr($_[0],$pos,10));
     $pos += $lb;
@@ -157,6 +158,7 @@ sub asn_dump {
     }
     $pos += $len;
   }
+  printf "Buffer contains %d extra bytes\n", $length - $pos if $pos < $length;
 
   select($ofh);
 }
