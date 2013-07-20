@@ -751,7 +751,7 @@ sub compile_one {
         ;# do not contain duplicate tags
         ;#}
 	if ($op->[cTYPE] == opSET) {
-	  ;# In case we do CER encoding we order the SET elements by thier tags
+	  ;# In case we do CER encoding we order the SET elements by their tags
 	  my @tags = map { 
 	    length($_->[cTAG])
 		? $_->[cTAG]
@@ -782,7 +782,7 @@ sub compile {
   ;# once references have been resolved, and also due to
   ;# flattening of COMPONENTS, it is possible for an op
   ;# to appear in multiple places. So once an op is
-  ;# compiled we bless it. This ensure we dont try to
+  ;# compiled we bless it. This ensure we don't try to
   ;# compile it again.
 
   while(my($k,$v) = each %$tree) {
