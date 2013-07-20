@@ -659,7 +659,7 @@ sub _decode_tl {
   return if $pos+$len+$indef > $end;
 
   # return the tag, the length of the data, the position of the data
-  # and the number of extra bytes for indefinate encoding
+  # and the number of extra bytes for indefinite encoding
 
   ($tag, $len, $pos, $indef);
 }
