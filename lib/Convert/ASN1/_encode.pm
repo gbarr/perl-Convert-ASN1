@@ -193,13 +193,13 @@ sub _enc_real {
 
   require POSIX;
 
-  # +oo (well we use HUGE_VAL as Infinity is not avaliable to perl)
+  # +oo (well we use HUGE_VAL as Infinity is not available to perl)
   if ($_[3] >= POSIX::HUGE_VAL()) {
     $_[4] .= pack("C*",0x01,0x40);
     return;
   }
 
-  # -oo (well we use HUGE_VAL as Infinity is not avaliable to perl)
+  # -oo (well we use HUGE_VAL as Infinity is not available to perl)
   if ($_[3] <= - POSIX::HUGE_VAL()) {
     $_[4] .= pack("C*",0x01,0x41);
     return;
@@ -231,7 +231,7 @@ sub _enc_real {
 
   _enc_integer(undef, undef, undef, $exponent, $eExp);
 
-  # $eExp will br prefixed by a length byte
+  # $eExp will be prefixed by a length byte
   
   if (5 > length $eExp) {
     $eExp =~ s/\A.//s;
