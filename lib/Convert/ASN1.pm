@@ -117,7 +117,7 @@ sub configure {
     Carp::croak("Unsupported encoding format '$opt{encoding}'");
   }
 
-  # IMPLICIT as defalt for backwards compatibility, even though it's wrong.
+  # IMPLICIT as default for backwards compatibility, even though it's wrong.
   $self->{options}{tagdefault} = uc($opt{tagdefault} || 'IMPLICIT');
 
   unless ($self->{options}{tagdefault} =~ /^(?:EXPLICIT|IMPLICIT)$/) {
