@@ -680,6 +680,7 @@ sub _scan_indef {
       $pos += 2;
       next;
     }
+    return if $pos >= $end;
 
     my $tag = substr($_[0], $pos++, 1);
 
