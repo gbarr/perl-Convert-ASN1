@@ -686,6 +686,7 @@ sub _scan_indef {
     if((unpack("C",$tag) & 0x1f) == 0x1f) {
       my $b;
       do {
+	return if $pos >= $end;
 	$tag .= substr($_[0],$pos++,1);
 	$b = ord substr($tag,-1);
       } while($b & 0x80);
