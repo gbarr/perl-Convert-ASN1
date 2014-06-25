@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+0.27 -- Wed Jun 25 13:47:28 CDT 2014
+  * Avoid recursion when encountering an invalid tag and length
+  * Avoid negative repetition counts (5.22 compatibility) [Alex Vandiver]
+  * Use pack/unpack instead of chr/org to avoid encoding issues
+
 0.26 -- Sat Jun 09 13:30:16 CDT 2012
   * Avoid Modification of a read-only value attempted errors
   * dump Data::Dumper strings when rtest fails
