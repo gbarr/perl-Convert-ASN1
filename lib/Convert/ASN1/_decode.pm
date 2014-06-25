@@ -80,7 +80,7 @@ sub _decode {
 	    next OP;
 	  }
 
-	  if ($tag eq ($op->[cTAG] | chr(ASN_CONSTRUCTOR))
+	  if ($tag eq ($op->[cTAG] | pack("C",ASN_CONSTRUCTOR))
 	      and my $ctr = $ctr[$op->[cTYPE]]) 
 	  {
 	    _decode(
@@ -207,7 +207,7 @@ sub _decode {
 		next OP;
 	      }
 
-	      if ($tag eq ($cop->[cTAG] | chr(ASN_CONSTRUCTOR))
+	      if ($tag eq ($cop->[cTAG] | pack("C",ASN_CONSTRUCTOR))
 		  and my $ctr = $ctr[$cop->[cTYPE]]) 
 	      {
 		my $nstash = $seqof
@@ -262,7 +262,7 @@ sub _dec_boolean {
 # 0      1    2       3     4     5     6
 # $optn, $op, $stash, $var, $buf, $pos, $len
 
-  $_[3] = ord(substr($_[4],$_[5],1)) ? 1 : 0;
+  $_[3] = unpack("C",substr($_[4],$_[5],1)) ? 1 : 0;
   1;
 }
 
@@ -272,7 +272,7 @@ sub _dec_integer {
 # $optn, $op, $stash, $var, $buf, $pos, $len
 
   my $buf = substr($_[4],$_[5],$_[6]);
-  my $tmp = ord($buf) & 0x80 ? chr(255) : chr(0);
+  my $tmp = unpack("C",$buf) & 0x80 ? pack("C",255) : pack("C",0);
   if ($_[6] > 4) {
       $_[3] = os2ip($buf, $_[0]->{decode_bigint} || 'Math::BigInt');
   } else {
@@ -287,7 +287,7 @@ sub _dec_bitstring {
 # 0      1    2       3     4     5     6
 # $optn, $op, $stash, $var, $buf, $pos, $len
 
-  $_[3] = [ substr($_[4],$_[5]+1,$_[6]-1), ($_[6]-1)*8-ord(substr($_[4],$_[5],1)) ];
+  $_[3] = [ substr($_[4],$_[5]+1,$_[6]-1), ($_[6]-1)*8-unpack("C",substr($_[4],$_[5],1)) ];
   1;
 }
 
@@ -339,7 +339,7 @@ sub _dec_real {
 
   $_[3] = 0.0, return unless $_[6];
 
-  my $first = ord(substr($_[4],$_[5],1));
+  my $first = unpack("C",substr($_[4],$_[5],1));
   if ($first & 0x80) {
     # A real number
 
@@ -351,7 +351,7 @@ sub _dec_real {
 
     if($expLen == 3) {
       $estart++;
-      $expLen = ord(substr($_[4],$_[5]+1,1));
+      $expLen = unpack("C",substr($_[4],$_[5]+1,1));
     }
     else {
       $expLen++;
@@ -462,7 +462,7 @@ SET_OP:
 	  $done = $idx;
 	  last SET_OP;
 	}
-	if ($tag eq ($op->[cTAG] | chr(ASN_CONSTRUCTOR))
+	if ($tag eq ($op->[cTAG] | pack("C",ASN_CONSTRUCTOR))
 	    and my $ctr = $ctr[$op->[cTYPE]]) 
 	{
 	  _decode(
@@ -502,7 +502,7 @@ SET_OP:
 	    $done = $idx;
 	    last SET_OP;
 	  }
-	  if ($tag eq ($cop->[cTAG] | chr(ASN_CONSTRUCTOR))
+	  if ($tag eq ($cop->[cTAG] | pack("C",ASN_CONSTRUCTOR))
 	      and my $ctr = $ctr[$cop->[cTYPE]]) 
 	  {
 	    my $nstash = defined($var) ? ($stash->{$var}={}) : $stash;
@@ -626,7 +626,7 @@ sub _decode_tl {
 
   my $tag = substr($_[0], $pos++, 1);
 
-  if((ord($tag) & 0x1f) == 0x1f) {
+  if((unpack("C",$tag) & 0x1f) == 0x1f) {
     my $b;
     my $n=1;
     do {
@@ -683,7 +683,7 @@ sub _scan_indef {
 
     my $tag = substr($_[0], $pos++, 1);
 
-    if((ord($tag) & 0x1f) == 0x1f) {
+    if((unpack("C",$tag) & 0x1f) == 0x1f) {
       my $b;
       do {
 	$tag .= substr($_[0],$pos++,1);

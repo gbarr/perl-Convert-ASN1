@@ -234,7 +234,7 @@ sub asn_encode_tag {
 	? pack("V",$_[0])
 	: substr(pack("V",$_[0]),0,3)
       : pack("v", $_[0])
-    : chr($_[0]);
+    : pack("C",$_[0]);
 }
 
 
@@ -299,7 +299,7 @@ sub decode {
 sub asn_decode_length {
   return unless length $_[0];
 
-  my $len = ord substr($_[0],0,1);
+  my $len = unpack("C",$_[0]);
 
   if($len & 0x80) {
     $len &= 0x7f or return (1,-1);
@@ -315,14 +315,14 @@ sub asn_decode_length {
 sub asn_decode_tag {
   return unless length $_[0];
 
-  my $tag = ord $_[0];
+  my $tag = unpack("C", $_[0]);
   my $n = 1;
 
   if(($tag & 0x1f) == 0x1f) {
     my $b;
     do {
       return if $n >= length $_[0];
-      $b = ord substr($_[0],$n,1);
+      $b = unpack("C",substr($_[0],$n,1));
       $tag |= $b << (8 * $n++);
     } while($b & 0x80);
   }
@@ -333,7 +333,7 @@ sub asn_decode_tag {
 sub asn_decode_tag2 {
   return unless length $_[0];
 
-  my $tag = ord $_[0];
+  my $tag = unpack("C",$_[0]);
   my $num = $tag & 0x1f;
   my $len = 1;
 
@@ -342,7 +342,7 @@ sub asn_decode_tag2 {
     my $b;
     do {
       return if $len >= length $_[0];
-      $b = ord substr($_[0],$len++,1);
+      $b = unpack("C",substr($_[0],$len++,1));
       $num = ($num << 7) + ($b & 0x7f);
     } while($b & 0x80);
   }
@@ -379,9 +379,9 @@ sub i2osp {
     while($num != 0) {
         my $r = $num % $base;
         $num = ($num-$r) / $base;
-        $result .= chr($r);
+        $result .= pack("C",$r);
     }
-    $result ^= chr(255) x length($result) if $neg;
+    $result ^= pack("C",255) x length($result) if $neg;
     return scalar reverse $result;
 }
 
@@ -392,8 +392,8 @@ sub os2ip {
     eval "require $biclass";
     my $base = $biclass->new(256);
     my $result = $biclass->new(0);
-    my $neg = ord($os) >= 0x80
-      and $os ^= chr(255) x length($os);
+    my $neg = unpack("C",$os) >= 0x80
+      and $os ^= pack("C",255) x length($os);
     for (unpack("C*",$os)) {
       $result = ($result * $base) + $_;
     }
