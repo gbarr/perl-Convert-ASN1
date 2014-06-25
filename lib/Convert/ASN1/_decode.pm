@@ -274,7 +274,7 @@ sub _dec_integer {
   my $buf = substr($_[4],$_[5],$_[6]);
   my $tmp = ord($buf) & 0x80 ? chr(255) : chr(0);
   if ($_[6] > 4) {
-      $_[3] = os2ip($tmp x (4-$_[6]) . $buf, $_[0]->{decode_bigint} || 'Math::BigInt');
+      $_[3] = os2ip($buf, $_[0]->{decode_bigint} || 'Math::BigInt');
   } else {
       # N unpacks an unsigned value
       $_[3] = unpack("l",pack("l",unpack("N", $tmp x (4-$_[6]) . $buf)));
@@ -645,7 +645,8 @@ sub _decode_tl {
     if ($len) {
       return if $pos+$len > $end ;
 
-      ($len,$pos) = (unpack("N", "\0" x (4 - $len) . substr($_[0],$pos,$len)), $pos+$len);
+      my $padding = $len < 4 ? "\0" x (4 - $len) : "";
+      ($len,$pos) = (unpack("N", $padding . substr($_[0],$pos,$len)), $pos+$len);
     }
     else {
       unless (exists $larr->{$pos}) {
@@ -697,7 +698,8 @@ sub _scan_indef {
       if ($len &= 0x7f) {
 	return if $pos+$len > $end ;
 
-	$pos += $len + unpack("N", "\0" x (4 - $len) . substr($_[0],$pos,$len));
+	my $padding = $len < 4 ? "\0" x (4 - $len) : "";
+	$pos += $len + unpack("N", $padding . substr($_[0],$pos,$len));
       }
       else {
         # reserve another list element
