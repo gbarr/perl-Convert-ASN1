@@ -2,7 +2,7 @@
 
 Convert::ASN1 - ASN.1 Encode/Decode library
 
-=head1 SYNOPSYS
+=head1 SYNOPSIS
 
   use Convert::ASN1;
 
