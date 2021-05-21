@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+  * Add github actions for repo testing and add new maintainer [Timothy Legge]
+  * typo fix [Adam Leskis]
+  * Fix test failures under Perl 5.26+ without '.' in @INC [Kent Fredric (KENTNL)]
+  * Correct a typo - SYNOPSIS [Shlomi Fish]
+  * unsafe decoding CVE-2013-7488 [Dana Jacobsen]
+  * Typo fixes from dsteinbrunner [David Steinbrunner]
+  * Add files via upload [Peter Sylvester]
+
 0.27 -- Wed Jun 25 13:47:28 CDT 2014
   * Avoid recursion when encountering an invalid tag and length
   * Avoid negative repetition counts (5.22 compatibility) [Alex Vandiver]
