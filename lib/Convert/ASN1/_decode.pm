@@ -680,12 +680,14 @@ sub _scan_indef {
       $pos += 2;
       next;
     }
+    return if $pos >= $end;
 
     my $tag = substr($_[0], $pos++, 1);
 
     if((unpack("C",$tag) & 0x1f) == 0x1f) {
       my $b;
       do {
+	return if $pos >= $end;
 	$tag .= substr($_[0],$pos++,1);
 	$b = ord substr($tag,-1);
       } while($b & 0x80);
