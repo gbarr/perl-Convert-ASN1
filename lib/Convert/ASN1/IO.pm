@@ -44,7 +44,7 @@ sub asn_recv { # $socket, $buffer, $flags
       }
     }
 
-    # If we can decode a tag and length we can detemine the length
+    # If we can decode a tag and length we can determine the length
     ($tb,$tmp) = asn_decode_tag(substr($buf,$pos));
     unless ($tb || $pos+$tb < length $buf) {
       next MORE if $n == length $buf;
