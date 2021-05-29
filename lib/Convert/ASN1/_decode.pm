@@ -94,8 +94,15 @@ sub _decode {
 	      $buf,
 	    );
 
-	    ($seqof ? $seqof->[$idx++] : defined($var) ? $stash->{$var} : ref($stash) eq 'SCALAR' ? $$stash : undef)
-		= &{$ctr}(@ctrlist);
+        ($seqof
+            ? $seqof->[$idx++] # = &{$ctr}(@ctrlist);
+                : defined($var)
+                    ? $stash->{$var} # = &{$ctr}(@ctrlist);
+                        : ref($stash) eq 'SCALAR'
+                            ? $$stash # = &{$ctr}(@ctrlist);
+                                : my $any ) # = &{$ctr}(@ctrlist) FIX #43
+        = &{$ctr}(@ctrlist);
+
 	    $pos = $npos+$len+$indef;
 
 	    redo TAGLOOP if $seqof && $pos < $end;
