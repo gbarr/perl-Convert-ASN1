@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.30 -- Sat May 29 21:56:29 ADT 2021
+
   * Fixes #43 - Perl 5.35.1 makes scalar assignment to undef a compile time error
 
 0.29 -- Mon May 24 18:27:46 ADT 2021
