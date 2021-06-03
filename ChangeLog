@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+0.31 -- Wed Jun 02 22:28:29 ADT 2021
+
+  * Official CPAN release of 0.30
+
 0.30 -- Sat May 29 21:56:29 ADT 2021
 
   * Fixes #43 - Perl 5.35.1 makes scalar assignment to undef a compile time error
