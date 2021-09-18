@@ -95,7 +95,7 @@ sub asn_dump {
     my $label = $type{sprintf("%02X",$tag & ~0x20)}
 		|| $type{sprintf("%02X",$tag & 0xC0)}
 		|| "[UNIVERSAL %d]";
-    printf $label, $tnum;
+    print "$label: $tnum";
 
     if ($tag & ASN_CONSTRUCTOR) {
       print " {\n";
