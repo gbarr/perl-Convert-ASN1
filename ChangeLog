@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+  * examples/x509decode: parameters are optional for AlgorithmIdentifier when using [ec]dsa algorithms
+  * t/19issue14.t: issue with warnings
+  * Fixes #44 Redundant argument in printf warning
+  * examples/x509decode: fix prototype error
+  * examples/ldap: fix asn1_dump not working
+
 0.31 -- Wed Jun 02 22:28:29 ADT 2021
 
   * Official CPAN release of 0.30
