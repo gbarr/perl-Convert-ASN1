@@ -40,7 +40,7 @@ rules.
 
 =head2 new ( [OPTIONS] )
 
-Contructor, creates a new object.
+Constructor, creates a new object.
 
 If given, B<OPTIONS> are the same ones as for L</"configure ( OPTIONS )"> below.
 
