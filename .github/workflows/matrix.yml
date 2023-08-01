@@ -6,16 +6,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ 'windows-latest']
-        perl: [ '5.32', '5.30', '5.28' ]
+        os: [ 'windows-latest', 'macos-latest']
+        perl: [ '5.34', '5.32', '5.30' ]
     name: Perl ${{ matrix.perl }} on ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up perl
-        uses: shogo82148/actions-setup-perl@v1.10.0
+        uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: ${{ matrix.perl }}
-          distribution: strawberry
       - run: perl -V
       - run: cpanm --installdeps .
       - run: prove -lv t
