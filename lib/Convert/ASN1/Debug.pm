@@ -49,12 +49,19 @@ my %type = (
       11	SET
       02	INTEGER
       03	BIT STRING
-      C0	[PRIVATE %d]
       04	STRING
-      40	[APPLICATION %d]
       05	NULL
       06	OBJECT ID
+    )
+  )
+);
+
+my %classes = (
+  split(/[\t\n]\s*/,
+    q(C0	[PRIVATE %d]
+      40	[APPLICATION %d]
       80	[CONTEXT %d]
+      00	[UNIVERSAL %d]
     )
   )
 );
@@ -93,9 +100,8 @@ sub asn_dump {
     printf $fmt. " %4d: %s",$start,$len,$indent;
 
     my $label = $type{sprintf("%02X",$tag & ~0x20)}
-		|| $type{sprintf("%02X",$tag & 0xC0)}
-		|| "[UNIVERSAL %d]";
-    printf "$label: $tnum";
+		|| sprintf($classes{sprintf("%02X",$tag & 0xC0)}, $tag & ~0xE0);
+    print "$label: $tnum";
 
     if ($tag & ASN_CONSTRUCTOR) {
       print " {\n";
